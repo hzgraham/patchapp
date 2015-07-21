@@ -1,0 +1,21 @@
+{% extends 'autopatch/index.html' %}
+
+{% block content %}
+<div class="MainContent">
+  <div class="content">
+    <article class="typicalArticle">
+      <header>
+	<h3>Some different patching related tasks</h3>
+      </header>
+      <div class="server_meta">
+	<li><a href="/autopatch/genlist/">Create an inventory</a></li>
+	<li><a>Update Prod host list</a></li>
+	<li><a>Update Stage host list</a></li>
+	<li><a>Update QA host list</a></li>
+	<li><a>Update Dev host list</a></li>
+	<li><a>Check Satellite and refresh outstanding packages needing updates</a></li>
+      </div>
+    </article>
+  </div>
+</div>
+{% endblock  %}

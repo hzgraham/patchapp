@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>AutoPatch for Easy Patching</title>
+    <meta charset="utf-8" />
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'autopatch/styles.css' %}" type="text/css" />
+    <meta name="viewport content = "width-device-width, initial-scale=1.0 />
+  </head>
+
+  <body class="body">
+    <header class="mainHead">
+      <img src="{% static 'autopatch/images/platypus2.png' %}" windth="700" height="144"/>
+      <h2 class='logoText'>AutoPatch Headquarters</h2>
+      <nav><ul>
+	  <li><a href='/autopatch/'>Main Page</a><li>
+	  <li><a href='/autopatch/prod/'>Prod</a></li>
+	  <li><a href='/autopatch/stage/'>Stage</a></li>
+	  <li><a href='/autopatch/qa/'>QA</a></li>
+	  <li><a href='/autopatch/dev/'>Dev</a></li>
+	  <li><a href='/autopatch/hostlist/'>All Hosts</a></li>
+	  <li><a href='/autopatch/tasks/'>Patching Tasks</a></li>
+      </ul></nav>
+    </header>
+    
+    {% block content %}
+
+    {% if latest_question_list %}
+
+    <div class="MainContent">
+      <div class="content">
+	<article class="typicalArticle">
+	    <h3>this is a server</h3>
+	    <content>
+	      <ul>
+		{% for question in latest_question_list %}
+		<li>
+		  <a href="{% url 'autopatch:post' post.id %}">{{ post.body }}</a>
+		</li>
+		{% endfor %}
+	      </ul>
+	      {% else %}
+	      <p>No polls are available.</p>
+	    </content>
+	</article>
+      </div>
+    </div>
+    {% endif %}
+    {% endblock %}
+    
+    
+    <footer class="mainFooter">
+      <p> copyright &copy; 2015</p>
+    </footer>
+  </body>
+
+</html>

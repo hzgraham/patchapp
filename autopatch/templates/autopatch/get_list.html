@@ -1,0 +1,50 @@
+{% extends "autopatch/index.html" %}
+
+{% block sidebar %}
+
+<ul>
+  <li><a href="/autopatch/">Cancel</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+
+<!-- <form action="/autopatch/genlist/" method="GET"> -->
+<!--   <ul> -->
+<!--     {{ form.as_ul }} -->
+<!--   </ul> -->
+
+<!--   <input type="submit" name="submit" value="Create List"> -->
+<!-- </form> -->
+
+<form action="#" method="get">
+  <input type="text" name="mytextbox" size="25"/>
+  <input type="submit" class="btn" value="Click" name="mybtn">
+</form>
+
+
+{% if manifests %}
+<ul>
+
+  <p>{{ manifests }}</p>
+
+</ul>
+{% else %}
+<p>Getting manifests did not work.</p>
+{% endif %}
+
+{% if url_list %}
+<ul>
+
+  <p>{{ url_list }}</p>
+  <h3>List of maint.yaml paths</h3>
+  <p>{{ paths }}</p>
+  <h3>MGMT parameters</h3>
+  <p>{{ mgmt }}</p>
+</ul>
+{% else %}
+<p>Getting full url_list did not work.</p>
+<p>{{check}}</p>
+{% endif %}
+
+{% endblock %}

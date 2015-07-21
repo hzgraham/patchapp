@@ -1,0 +1,22 @@
+
+{% extends "autopatch/index.html" %}
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
+
+{% block content %}
+
+{% for host in object_list %}
+{% if ".dev." in host.server %}
+<div class="MainContent">  
+  <div class="content">
+    <article class="typicalArticle">
+      <header>
+	<h3><a href="/autopatch/{{host.id}}">{{ host.server }}</a></h3>
+      </header>
+    </article>
+  </div>
+</div>
+{% endif %}
+{% endfor  %}
+{% endblock  %}

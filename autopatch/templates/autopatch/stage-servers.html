@@ -1,0 +1,16 @@
+
+{% extends "autopatch/index.html" %}
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
+
+{% block content %}
+
+{% for host in object_list %}
+{% if ".stage." in host.server %}
+<div class="content">
+	<h3><a href="/autopatch/{{host.id}}">{{ host.server }}</a></h3>
+</div>
+{% endif %}
+{% endfor  %}
+{% endblock  %}
