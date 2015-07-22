@@ -28,7 +28,7 @@ def GetList(request):
         html = myurl.read()
         soup = bs4.BeautifulSoup(html, "html.parser")
         for link in soup.findAll("a"):
-            if "ldap" and "stage" in link.string:
+            if ".com" in link.string:
                 path = link.get("href")
                 maint_path = manifests+"/"+link.string+'/maint.yaml'
                 syspatch_data = ModMaint().getMaint(maint_path)
