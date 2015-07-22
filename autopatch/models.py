@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 from django.utils import timezone
 import urllib
-from sgmllib import SGMLParser
+#from sgmllib import SGMLParser
 import parser
 
 class HostList():
@@ -18,15 +18,15 @@ class HostList():
              if item.startswith(('http', 'ftp', 'www'))])
         return url_list
 
-class URLLister(SGMLParser):
-    def reset(self):
-        SGMLParser.reset(self)
-        self.urls = []
+# class URLLister(SGMLParser):
+#     def reset(self):
+#         SGMLParser.reset(self)
+#         self.urls = []
 
-    def start_a(self, attrs):
-        href = [v for k, v in attrs if k=='href']
-        if href:
-            self.urls.extend(href)
+#     def start_a(self, attrs):
+#         href = [v for k, v in attrs if k=='href']
+#         if href:
+#             self.urls.extend(href)
 
 class Server(models.Model):
     server = models.CharField(max_length=256, null=True, blank=True)
