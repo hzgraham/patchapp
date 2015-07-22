@@ -8,4 +8,4 @@ GitPython>=1.0.1
 django-tagging>=0.4
 gitdb>=0.6.4
 virtualenv>=12.0.7
-BeautifulSoup>=3.2.1
+BeautifulSoup4==4.4.0
