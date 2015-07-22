@@ -9,7 +9,8 @@ from .forms import PostForm, EmailForm, ServerForm, HostListForm
 from django.core.context_processors import csrf
 from autopatch.utils import ModMaint
 import urllib
-import BeautifulSoup
+import urllib.request
+import bs4
 from time import sleep
 
 def GetList(request):
@@ -23,9 +24,9 @@ def GetList(request):
         paths = []
         mgmt = []
         host_list = HostList()
-        myurl = urllib.urlopen(manifests)
+        myurl = urllib.request.urlopen(manifests)
         html = myurl.read()
-        soup = BeautifulSoup.BeautifulSoup(html)
+        soup = bs4.BeautifulSoup(html, "html.parser")
         for link in soup.findAll("a"):
             if "ldap" and "stage" in link.string:
                 path = link.get("href")

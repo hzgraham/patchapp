@@ -1,9 +1,9 @@
-import urllib
+import urllib.request
 
 class ModMaint():
     def getMaint(self, url):
         syspatch = []
-        myurl = urllib.urlopen(url)
+        myurl = urllib.request.urlopen(url)
         lines = myurl.readlines()
         mgmt = None
         hostgroup = None
