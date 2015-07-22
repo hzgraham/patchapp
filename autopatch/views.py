@@ -9,7 +9,6 @@ from .forms import PostForm, EmailForm, ServerForm, HostListForm
 from django.core.context_processors import csrf
 from autopatch.utils import ModMaint
 import urllib
-import urllib2
 import BeautifulSoup
 from time import sleep
 
@@ -28,7 +27,7 @@ def GetList(request):
         html = myurl.read()
         soup = BeautifulSoup.BeautifulSoup(html)
         for link in soup.findAll("a"):
-            if ".com" in link.string:
+            if "ldap" and "stage" in link.string:
                 path = link.get("href")
                 maint_path = manifests+"/"+link.string+'/maint.yaml'
                 syspatch_data = ModMaint().getMaint(maint_path)
