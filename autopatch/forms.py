@@ -1,5 +1,5 @@
 from django import forms
-from models import Server
+from autopatch.models import Server
 
 class PostForm(forms.Form):
     content = forms.CharField(max_length=256)
