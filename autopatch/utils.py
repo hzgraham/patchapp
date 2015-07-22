@@ -1,5 +1,4 @@
 import urllib
-import urllib
 
 class ModMaint():
     def getMaint(self, url):
@@ -20,4 +19,7 @@ class ModMaint():
             if 'syspatch_skip' == i.split(":")[0]:
                 skip = i.split(":")[1].strip().split("\n")[0]
             syspatch = {'mgmt': mgmt, 'hostgroup': hostgroup, 'exclude': exclude, 'skip': skip}
+        print syspatch
+        if syspatch is not dict:
+            syspatch = {}
         return syspatch

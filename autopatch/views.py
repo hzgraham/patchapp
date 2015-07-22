@@ -31,18 +31,34 @@ def GetList(request):
             if ".com" in link.string:
                 path = link.get("href")
                 maint_path = manifests+"/"+link.string+'/maint.yaml'
-                syspatch = ModMaint().getMaint(maint_path)
-                #s = Server(server=link.string)
-                #if syspatch.get('mgmt'):
-                    #s.
-                mgmt.append(syspatch)
+                syspatch_data = ModMaint().getMaint(maint_path)
+                mgmt1 = syspatch_data.get('mgmt')
+                exclude1 = syspatch_data.get('exclude')
+                skip1 = syspatch_data.get('skip')
+                hostgroup1 = syspatch_data.get('hostgroup')
+                if not Server.objects.filter(server=link.string).exists():
+                    s = Server(server=link.string)
+                    s.server = link.string
+                    s.mgmt = mgmt1
+                    s.exclude = exclude1
+                    s.skip = skip1
+                    s.hostgroup = hostgroup1
+                else:
+                    s = Server(server=link.string)
+                    s.server = link.string
+                    s.mgmt = mgmt1
+                    s.exclude = exclude1
+                    s.skip = skip1
+                    s.hostgroup = hostgroup1
+                s.save()
+                #mgmt.append(syspatch)
                 #mgmt.append(syspatch.get('mgmt'))
                 #if not Server.objects.filter(server=link.string).exists():
                     #s = Server(server=link.string)
                     #s.save()
                 #url_list.append(link.get("href"))
                 url_list.append(link.string)
-                paths.append(maint_path)
+                #paths.append(maint_path)
             else:
                 pass
         context = {'manifests': manifests, 'url_list': url_list, 'check': "worked", 'paths': paths, 'mgmt': syspatch}
