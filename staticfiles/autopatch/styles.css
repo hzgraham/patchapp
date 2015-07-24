@@ -70,12 +70,15 @@ a:hover, a:active{
 }
 
 .content{
-    width: 70%;
-    float: right;
-    padding: 2% 2%;
+    width: 80%;
+    /*float: right;*/
+    margin-left: auto;
+    margin-right: auto;
+    /*text-align: center;*/
+    padding: 0% 2%;
     background-color: #f8f8f8;
     /*top right bottom left */
-    margin: 1% 0% 1% 1%;
+    /*margin: 1% 0% 1% 1%;*/
     border-radius: 7px;
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
