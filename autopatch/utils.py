@@ -18,9 +18,7 @@ class ModMaint():
         skip = None
         for i in lines:
             if b'syspatch_mgmt: IT-Platops' in i:
-                print(i)
             else:
-                print("not a byte")
             if b'syspatch_mgmt: IT-Platops' == i.split(b"\n")[0]:
                 mgmt = i.split(b":")[1].strip().split(b"\n")[0]
             if b'syspatch_hostgroup' == i.split(b":")[0]:
