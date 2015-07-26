@@ -23,6 +23,7 @@ def GetList(request):
     else:
         manifests = None
     if manifests:
+        Server.objects.all().delete()
         url_list = []
         paths = []
         mgmt = []
