@@ -13,6 +13,9 @@ import urllib.request
 import bs4
 from time import sleep
 
+from django.contrib.auth.backends import RemoteUserBackend
+
+
 def GetList(request):
     if(request.GET.get('mybtn')):
         #mypythoncode.mypythonfunction( int(request.GET.get('mytextbox')) )
