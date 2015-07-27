@@ -7,7 +7,7 @@
 {% block content %}
 
 {% for host in object_list %}
-{% if ".prod." in host.server or ".util." in host.server or ".dev." not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
+{% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
 <div class="MainContent">
   <div class="content">
     <article class="typicalArticle">
