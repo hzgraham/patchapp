@@ -5,18 +5,19 @@
 <link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
 
 {% block content %}
-
+<ul class="list-group">
 {% for host in object_list %}
 {% if ".dev" in host.server %}
 <div class="MainContent">  
-  <div class="content">
-    <article class="typicalArticle">
-      <header>
-	<h3><a href="/autopatch/{{host.id}}">{{ host.server }}</a></h3>
-      </header>
-    </article>
-  </div>
+  <li class="list-group-item">
+    <ul class="list-inline">
+      <a href="/autopatch/{{host.id}}">{{ host.server }}</a>
+      <li>syspatch_skip: {{ host.skip }}</li>
+      <li>hostgroup: {{ host.hostgroup }}</li>
+    </ul>
+  </li>
 </div>
 {% endif %}
 {% endfor  %}
+</ul>
 {% endblock  %}

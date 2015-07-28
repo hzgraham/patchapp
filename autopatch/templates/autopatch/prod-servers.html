@@ -5,18 +5,34 @@
 <link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
 
 {% block content %}
+<script type="text/javascript">
 
+  function goTo()
+  {
+  location.href = document.getElementById('link_id').value;
+  }
+</script>
+
+<h2> Search box </h2>
+<input type='text' id='link_id'>
+<input type='button' id='link' value='Search' onClick='javascript:goTo()'>
+
+<div class="MainContent">
+   <table class="table table-striped">
+<ul class="list-group">
 {% for host in object_list %}
 {% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
-<div class="MainContent">
-  <div class="content">
-    <article class="typicalArticle">
-      <header>
-	<h3><a href="/autopatch/{{host.id}}">{{ host.server }}</a></h3>
-      </header>
-    </article>
-  </div>
+
+    <li class="list-group-item">
+      <ul class="list-inline">
+	<a href="/autopatch/{{host.id}}">{{ host.server }}</a>
+	<li>syspatch_skip: {{ host.skip }}</li>
+	<li>hostgroup: {{ host.hostgroup }}</li>
+      </ul>
+    </li>
+
+  {% endif %}
+  {% endfor  %}
+</ul>
 </div>
-{% endif %}
-{% endfor  %}
 {% endblock  %}

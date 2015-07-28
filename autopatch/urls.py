@@ -2,7 +2,7 @@ from django.conf.urls import url, patterns, include
 from . import views
 #from django.views.generic import ListView
 from django.views.generic import ListView, DetailView
-from autopatch.models import Post
+from autopatch.models import Server, Post
 from django.conf.urls.static import static
 
 from django.conf import settings
@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'create/$', views.create),
     url(r'genlist/$', views.GetList),
     url(r'hostlist/$', views.AllHosts.as_view()),
+    #url(r'^{{ Server.server }}/$', views.DetailView.as_view(), name='detail'),
     #url(r'^archives/$', views.ArchiveView.as_view()),
     #url(r'^latestnews/$', views.LatestView.as_view()),
     #url(r'^$', views.index, name='index'),
