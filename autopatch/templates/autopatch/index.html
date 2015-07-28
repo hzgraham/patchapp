@@ -5,23 +5,53 @@
     <title>AutoPatch for Easy Patching</title>
     <meta charset="utf-8" />
     {% load staticfiles %}
-    <link rel="stylesheet" href="{% static 'autopatch/styles.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'autopatch/css/styles.css' %}" type="text/css" />
     <meta name="viewport content = "width-device-width, initial-scale=1.0 />
-  </head>
+  <!-- Bootstrap core CSS -->
+  <link href="{% static "autopatch/css/bootstrap-3.3.2.min.css" %}" rel="stylesheet">
 
+  <!-- Bootstrap theme -->
+      <link href="{% static "autopatch/css/bootstrap-theme-3.3.2.min.css" %}" rel="stylesh
+										  eet">
+
+      <!-- Bootstrap datetimepicker plugin -->
+      <link href="{% static "autopatch/css/bootstrap-datetimepicker-3.0.0.min.css" %}" rel
+	    ="stylesheet">
+
+      <!-- Custom CSS -->
+      <link href="{% static "autopatch/css/custom_base.css" %}" rel="stylesheet">
+
+      {% block extra-css %}
+      {% endblock %}
+  </head>
   <body class="body">
     <header class="mainHead">
       <img src="{% static 'autopatch/images/platypus2.png' %}" windth="700" height="144"/>
       <h2 class='logoText'>AutoPatch Headquarters</h2>
-      <nav><ul>
-	  <li><a href='/autopatch/'>Main Page</a><li>
-	  <li><a href='/autopatch/prod/'>Prod</a></li>
-	  <li><a href='/autopatch/stage/'>Stage</a></li>
-	  <li><a href='/autopatch/qa/'>QA</a></li>
-	  <li><a href='/autopatch/dev/'>Dev</a></li>
-	  <li><a href='/autopatch/hostlist/'>All Hosts</a></li>
-	  <li><a href='/autopatch/tasks/'>Patching Tasks</a></li>
-      </ul></nav>
+
+    <div class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+	<div class="navbar-header">
+	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	    <span class="sr-only">Toggle navigation</span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	  </button>
+	  <a class="navbar-brand" href="/autopatch/">Platops Patching</a>
+	</div>
+	<div class="navbar-collapse collapse">
+	  <ul class="nav navbar-nav">
+	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/prod/">Prod</a></li>
+	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/stage/">Stage</a></li>
+	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/qa/">QA</a></li>
+	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/dev/">Dev</a></li>
+	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/tasks/">Patching Tasks</a></li>
+	  </ul>
+	</div>
+      </div>
+    </div>
+
     </header>
     
     {% block content %}
@@ -53,6 +83,19 @@
     <footer class="mainFooter">
       <p> copyright &copy; 2015</p>
     </footer>
+
+
+       <!-- Bootstrap core JavaScript
+	    ================================================== -->
+       <!-- Placed at the end of the document so the pages load faster -->
+       <script src="{% static "autopatch/javascript/jquery-1.11.2.min.js" %}"></script>
+       <script src="{% static "autopatch/javascript/jquery.cookie-1.4.1.js" %}"></script>
+       <script src="{% static "autopatch/javascript/ajax_config.js" %}"></script>
+       <script src="{% static "autopatch/javascript/moment-with-langs-2.7.0.min.js" %}"></script>
+       <script src="{% static "autopatch/javascript/bootstrap-3.3.2.min.js" %}"></script>
+       <script src="{% static "autopatch/javascript/bootstrap-datetimepicker-3.0.0.min.js" %}"></script>
+       {% block extra-scripts %}
+       {% endblock %}
   </body>
 
 </html>
