@@ -5,7 +5,7 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 from .models import Choice,Question,Post,Server,HostList
 from django.utils import timezone
-from .forms import PostForm, EmailForm, ServerForm, HostListForm
+from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm
 from django.core.context_processors import csrf
 from autopatch.utils import ModMaint
 import urllib
@@ -100,6 +100,12 @@ def create(request):
     args.update(csrf(request))
     args['form'] = form
     return render_to_response('autopatch/create_server.html', args)
+
+def login(request):
+    if request.Post:
+        form = LoginForm(request.Post)
+        if form.is_valid():
+            pass
 
 def post_form_upload(request):
     if request.method == 'GET':

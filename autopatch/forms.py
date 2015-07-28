@@ -11,6 +11,10 @@ class PostForm(forms.Form):
 class EmailForm(forms.Form):
     email = forms.EmailField(max_length=256)
 
+class LoginForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput())
+    loginname = forms.CharField(max_length=256)
+
 class ServerForm(forms.ModelForm):
 
     class Meta:
