@@ -1,0 +1,20 @@
+{% extends "autopatch/index.html" %}
+
+{% block sidebar %}
+
+<ul>
+  <li><a href="/autopatch/">Cancel</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+
+{% if params %}
+<p> This is the params </p>
+<p>{{ params }}</p>
+
+{% else %}
+<p>Getting full server list did not work.</p>
+{% endif %}
+
+{% endblock %}

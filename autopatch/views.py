@@ -8,13 +8,27 @@ from django.utils import timezone
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm
 from django.core.context_processors import csrf
 from autopatch.utils import ModMaint
-import urllib
-import urllib.request
-import bs4
 from time import sleep
-
 from django.contrib.auth.backends import RemoteUserBackend
+import urllib, bs4, urllib.request, csv
 
+def CreateCSV(request):
+    s = []
+    q = []
+    if(request.GET.get('mybtn')):
+        servers = Server.objects.all().order_by("server")
+        for host in Server.objects.all():
+            s.append(host.server)
+        #for host in servers:
+    params = ModMaint().genCSV()
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="patching.csv"'
+    writer = csv.writer(response)
+    for each in params:
+        writer.writerow(each)
+    #context = {'params': params}
+    #return render(request, 'autopatch/create_csv.html', context)
+    return response
 
 def GetList(request):
     if(request.GET.get('mybtn')):
@@ -75,19 +89,6 @@ class AllHosts(generic.ListView):
     def get_queryset(self):
         return Server.objects.all().order_by("server")
 
-# def GetList(request):
-#     if request.GET:
-#         form = HostListForm(request.GET)
-#         if form.is_valid():
-#             #form.save()
-#             return HttpResponseRedirect('/autopatch/hostlist/')
-#     else:
-#         form = HostListForm()
-#     args = {}
-#     args['form'] = form
-#     return render_to_response('autopatch/get_list.html', args)
-#     #return HostList.get_urls_from(args).order_by('server')
-
 def create(request):
     if request.POST:
         form = ServerForm(request.POST)
@@ -107,29 +108,9 @@ def login(request):
         if form.is_valid():
             pass
 
-def post_form_upload(request):
-    if request.method == 'GET':
-        form = PostForm()
-    else:
-        form = PostForm(request.POST)
-        if form.is_valid():
-            content = form.cleaned_data['content']
-            created_at = form.cleaned_data['created_at']
-            post = m.Post.objects.create(content=content,
-                                         created_at=created_at)
-            return HttpResponseRedirect(reverse('post_detail',
-                                               kwargs={'post_id': post.id}))
-
-    return render(request, 'autopatch/post_form_upload.html', {
-        'form': form,
-        })
-
 def Home(request):
-    form = EmailForm()
-    template = 'autopatch/home.html'
-    context = {"form": form,}
-    return render(request, template, context)
-
+    template = 'autopatch/base.html'
+    return render(request, template)
 
 class IndexView(generic.ListView):
     template_name = 'autopatch/index.html'

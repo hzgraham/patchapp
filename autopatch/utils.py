@@ -1,6 +1,7 @@
 import urllib.request
 from django.http import Http404
 import urllib.error
+from .models import Server
 
 class ModMaint():
     def getMaint(self, url):
@@ -29,3 +30,14 @@ class ModMaint():
         #if syspatch is not dict:
             #syspatch = {}
         return syspatch
+
+    def genCSV(self):
+        s = []
+        params = []
+        for host in Server.objects.all():
+            hostname = host.server
+            exclude = host.exclude
+            skip = host.skip
+            hostgroup = host.hostgroup
+            params.append([hostname, exclude, skip, hostgroup])
+        return params
