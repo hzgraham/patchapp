@@ -2,15 +2,21 @@
 {% extends "autopatch/index.html" %}
 {% load staticfiles %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
-
 {% block content %}
-
-{% for host in object_list %}
-{% if ".stage." in host.server %}
-<div class="content">
-	<h3><a href="/autopatch/{{host.id}}">{{ host.server }}</a></h3>
+<div class="MainContent">
+  <table class="table table-striped">
+    <ul class="list-group">
+      {% for host in object_list %}
+      {% if ".stage." in host.server %}
+      <li class="list-group-item">
+	<ul class="list-inline">
+	  <a href="/autopatch/{{host.id}}">{{ host.server }}</a>
+	  <li>syspatch_skip: {{ host.skip }}</li>
+	  <li>hostgroup: {{ host.hostgroup }}</li>
+	</ul>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
 </div>
-{% endif %}
-{% endfor  %}
 {% endblock  %}
