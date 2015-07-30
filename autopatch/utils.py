@@ -27,7 +27,7 @@ class ModMaint():
             if b'syspatch_skip' == i.split(b":")[0]:
                 skip = i.split(b":")[1].strip().split(b"\n")[0]
             syspatch = {'mgmt': mgmt, 'hostgroup': hostgroup, 'exclude': exclude, 'skip': skip}
-        print(syspatch)
+        #print(syspatch)
             #if syspatch is not dict:
             #syspatch = {}
         return syspatch
