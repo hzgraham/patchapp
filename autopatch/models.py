@@ -31,9 +31,8 @@ class HostList():
 class Server(models.Model):
     server = models.CharField(max_length=256, null=True, blank=True)
     exclude = models.TextField(max_length=256, null=True, blank=True)
-    skip = models.IntegerField(default=0, null=True, blank=True)
+    skip = models.CharField(max_length=25, null=True, blank=True)
     hostgroup = models.CharField(max_length=50, null=True, blank=True)
-
     def __unicode__(self):
         return self.server
 

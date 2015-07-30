@@ -79,7 +79,7 @@ def GetList(request):
                 #paths.append(maint_path)
             else:
                 pass
-        context = {'manifests': manifests, 'url_list': url_list, 'check': "worked", 'paths': paths, 'mgmt': syspatch_data}
+        context = {'manifests': manifests, 'url_list': url_list, 'check': "worked", 'paths': paths, 'mgmt1': mgmt1, 'skip1': skip1}
     else:
         context = {'manifests': manifests}
     return render(request, 'autopatch/get_list.html', context)
