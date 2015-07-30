@@ -1,22 +1,33 @@
-
 {% extends "autopatch/index.html" %}
-{% load staticfiles %}
-
 {% block content %}
-<div class="MainContent">
-  <table class="table table-striped">
-    <ul class="list-group">
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Stage Servers</div>
+  <div class="panel-body">
+    <p>Stage environment servers and Syspatch parameters</p>
+  </div>
+  <!-- Table -->
+  <table id="myTable" class="tablesorter" border="1">
+    <thead>
+      <tr>
+	<th>Server Name</th>
+	<th>Skip Patching</th>
+	<th>Group Owner</th>
+	<th>Exclude Packages</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for host in object_list %}
       {% if ".stage." in host.server %}
-      <li class="list-group-item">
-	<ul class="list-inline">
-	  <a href="/autopatch/{{host.id}}">{{ host.server }}</a>
-	  <li>syspatch_skip: {{ host.skip }}</li>
-	  <li>hostgroup: {{ host.hostgroup }}</li>
-	</ul>
-      </li>
+      <tr>
+	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
+	<td>{{ host.skip }}</td>
+	<td>{{ host.hostgroup }}</td>
+	<td>{{ host.exclude }}</td>
+      </tr>
       {% endif %}
       {% endfor %}
-    </ul>
+    </tbody>
+  </table>
 </div>
 {% endblock  %}

@@ -1,12 +1,6 @@
-
 {% extends "autopatch/index.html" %}
-{% load staticfiles %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
-
 {% block content %}
 <script type="text/javascript">
-
   function goTo()
   {
   location.href = document.getElementById('link_id').value;
@@ -17,22 +11,34 @@
 <input type='text' id='link_id'>
 <input type='button' id='link' value='Search' onClick='javascript:goTo()'>
 
-<div class="MainContent">
-   <table class="table table-striped">
-<ul class="list-group">
-{% for host in object_list %}
-{% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
-
-    <li class="list-group-item">
-      <ul class="list-inline">
-	<a href="/autopatch/{{host.id}}">{{ host.server }}</a>
-	<li>syspatch_skip: {{ host.skip }}</li>
-	<li>hostgroup: {{ host.hostgroup }}</li>
-      </ul>
-    </li>
-
-  {% endif %}
-  {% endfor  %}
-</ul>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Prod Servers</div>
+  <div class="panel-body">
+    <p>Prod environment servers and Syspatch parameters</p>
+  </div>
+  <!-- Table -->
+  <table id="myTable" class="tablesorter" border="1">
+    <thead>
+      <tr>
+	<th>Server Name</th>
+	<th>Skip Patching</th>
+	<th>Group Owner</th>
+	<th>Exclude Packages</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for host in object_list %}
+      {% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
+      <tr>
+	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
+	<td>{{ host.skip }}</td>
+	<td>{{ host.hostgroup }}</td>
+	<td>{{ host.exclude }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock  %}

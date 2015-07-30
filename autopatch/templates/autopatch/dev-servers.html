@@ -5,6 +5,37 @@
 <link rel="stylesheet" type="text/css" href="{% static 'autopatch/styles.css' %}" />
 
 {% block content %}
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Dev Servers</div>
+  <div class="panel-body">
+    <p>Dev environment servers and Syspatch parameters</p>
+  </div>
+  <!-- Table -->
+  <table id="myTable" class="tablesorter" border="1">
+    <thead>
+      <tr>
+	<th>Server Name</th>
+	<th>Skip Patching</th>
+	<th>Group Owner</th>
+	<th>Exclude Packages</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for host in object_list %}
+      {% if ".dev" in host.server %}
+      <tr>
+	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
+	<td>{{ host.skip }}</td>
+	<td>{{ host.hostgroup }}</td>
+	<td>{{ host.exclude }}</td>
+      </tr>
+      {% endif %}
+      {% endfor  %}
+    </tbody>
+  </table>
+</div>
+<!--
 <ul class="list-group">
 {% for host in object_list %}
 {% if ".dev" in host.server %}
@@ -20,4 +51,5 @@
 {% endif %}
 {% endfor  %}
 </ul>
+-->
 {% endblock  %}
