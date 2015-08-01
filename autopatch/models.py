@@ -50,6 +50,10 @@ class Question(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
+
+class Counter(models.Model):
+    env = models.CharField(max_length=128)
+    total = models.IntegerField(default=0)
     
 class Choice(models.Model):
     question = models.ForeignKey(Question)
