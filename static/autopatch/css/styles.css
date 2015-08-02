@@ -117,6 +117,10 @@ a:hover, a:active{
     margin: 2% auto;
     color: #fff;
 }
-
-
-
+/* Sortable tables */
+table.sortable thead {
+    background-color:#eee;
+    color:#666666;
+    font-weight: bold;
+    cursor: default;
+}
