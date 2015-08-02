@@ -1,9 +1,12 @@
-import urllib.request
+import urllib.request, urllib.error, git
 from django.http import Http404
-import urllib.error
 from .models import Server,Hosttotal
 
 class ModMaint():
+    def parseGit(self, manifests):
+        repo = git.Repo.clone_from(manifests,'autopatch/manifests')
+        print("this is the repo: ",repo)
+
     def getMaint(self, url):
         syspatch = {}
         lines = []

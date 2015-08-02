@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'hostlist/$', views.AllHosts.as_view()),
     url(r'^tasks/', views.TasksView.as_view()),
     url(r'^csv/', views.CreateCSV),
+    url(r'^git/', views.Git),
 ]
