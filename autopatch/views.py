@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.core.urlresolvers import reverse
-from .models import Choice,Question,Post,Server,HostList
+from .models import Server,Hosttotal
 from django.utils import timezone
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm
 from django.core.context_processors import csrf
@@ -29,6 +29,11 @@ def CreateCSV(request):
     #context = {'params': params}
     #return render(request, 'autopatch/create_csv.html', context)
     return response
+
+def devTotal(request):
+    if(request.GET.get('mybtn')):
+        ModMaint().hostCount("Dev")
+    template_name = 'autopatch/dev-servers.html'
 
 def GetList(request):
     if(request.GET.get('mybtn')):
@@ -115,7 +120,7 @@ def Home(request):
 class IndexView(generic.ListView):
     template_name = 'autopatch/index.html'
     context_object_name = 'latest_question_list'
-    queryset=Post.objects.all().order_by("-date")[:10]
+    #queryset=Post.objects.all().order_by("-date")[:10]
     def get_queryset(self):
         """Return the last five published questions."""
         # return Question.objects.order_by('-pub_date')[:5]
@@ -149,11 +154,32 @@ class QAView(generic.ListView):
     def get_queryset(self):
         return Server.objects.all().order_by("server")
 
-class DevView(generic.ListView):
-    template_name = 'autopatch/dev-servers.html'
-    queryset=Server.objects.all().order_by("server")
-    def get_queryset(self):
-        return Server.objects.all().order_by('server')
+def DevView(request):
+    dev_list = Server.objects.all().order_by('server')
+    env = "Dev"
+    total = ModMaint().hostCount(env)
+    devtotal = total.get("total")
+    # if Hosttotal.objects.filter(env="Dev"):
+    #     host = Hosttotal(env="Dev")
+    #     total = host.total
+    #     env = host.env
+    # else:
+    #     total = 0
+    context = {'dev_list': dev_list, 'total': devtotal, 'env': env}
+    return render(request, 'autopatch/dev-servers.html', context)
+
+# class DevView(generic.ListView):
+#     context = []
+#     template_name = 'autopatch/dev-servers.html'
+#     if Hosttotal.objects.filter(env="Dev"):
+#         host = Hosttotal(env="Dev")
+#         total = host.total
+#     else:
+#         total = 0
+#     context = {'total': total}
+#     def get_queryset(self):
+#         #return Server.objects.all().order_by('server'),total
+#         return Server.objects.all().order_by('server'),context
 
 # Create your views here.
 def index(request):

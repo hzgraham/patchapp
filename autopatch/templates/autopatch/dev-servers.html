@@ -10,6 +10,8 @@
   <div class="panel-heading">Dev Servers</div>
   <div class="panel-body">
     <p>Dev environment servers and Syspatch parameters</p>
+    <form action="/autopatch/dev/" method="get"><input type="submit" class="btn" value="Get Total Number of Dev Hosts" name="mybtn"></form>
+    <p> total {{ total }} env: {{ env }}</p>
   </div>
   <!-- Table -->
   <table id="myTable" class="tablesorter" border="1">

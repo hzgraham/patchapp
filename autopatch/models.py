@@ -27,6 +27,11 @@ class HostList():
 #         href = [v for k, v in attrs if k=='href']
 #         if href:
 #             self.urls.extend(href)
+class Hosttotal(models.Model):
+    env = models.CharField(max_length=128)
+    total = models.IntegerField(default=0)
+    def __unicode__(self):
+        return self.hosttotal
 
 class Server(models.Model):
     server = models.CharField(max_length=256, null=True, blank=True)
@@ -51,23 +56,7 @@ class Question(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
 
-class Counter(models.Model):
-    env = models.CharField(max_length=128)
-    total = models.IntegerField(default=0)
     
-class Choice(models.Model):
-    question = models.ForeignKey(Question)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-
-
-class Post(models.Model):
-    title = models.CharField(max_length=140)
-    body = models.TextField()
-    date = models.DateTimeField()
-    def __unicode__(self):
-        return self.title
-
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
     def __unicode__(self):

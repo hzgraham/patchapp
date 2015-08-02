@@ -1,7 +1,7 @@
 import urllib.request
 from django.http import Http404
 import urllib.error
-from .models import Server
+from .models import Server,Hosttotal
 
 class ModMaint():
     def getMaint(self, url):
@@ -42,3 +42,17 @@ class ModMaint():
             hostgroup = host.hostgroup
             params.append([hostname, exclude, skip, hostgroup])
         return params
+
+    def hostCount(self, env):
+        Hosttotal.objects.all().filter(env=env).delete()
+        total = {}
+        t = Hosttotal(env=env)
+        t.env = "Dev"
+        t.total = 10
+        total = {'env': t.env, 'total': t.total}
+        t.save()
+        return total
+        #if not Hostcount.objects.filter(env="Dev").exists():
+        #    print("no hosts in dev")
+        #else:
+        #    print("hosts in dev")
