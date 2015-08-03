@@ -9,7 +9,8 @@ class ModMaint():
             repo = git.Repo.clone_from(manifests,'autopatch/manifests')
             print("this is the repo: ",repo)
         else:
-            #shutil.rmtree(git_path)
+            shutil.rmtree(git_path)
+            repo = git.Repo.clone_from(manifests,'autopatch/manifests')
             print("The path already exists",git_path)
         host_paths = []
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
