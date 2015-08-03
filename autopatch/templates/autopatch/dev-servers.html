@@ -24,7 +24,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for host in object_list %}
+      {% for host in dev_list %}
       {% if ".dev" in host.server %}
       <tr>
 	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
