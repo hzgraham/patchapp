@@ -179,8 +179,11 @@ def DevView(request):
     dev_list = Server.objects.all().order_by('server')
     env = "Dev"
     field = ".dev"
-    total = ModMaint().hostCount(env, field)
-    devtotal = total.get("total")
+    if(request.GET.get('mybtn')):
+        total = ModMaint().hostCount(env, field)
+        devtotal = total.get("total")
+    else:
+        devtotal = 0
     # if Hosttotal.objects.filter(env="Dev"):
     #     host = Hosttotal(env="Dev")
     #     total = host.total
