@@ -162,10 +162,18 @@ class StageView(generic.ListView):
     def get_queryset(self):
         return Server.objects.all().order_by("server")
 
-class QAView(generic.ListView):
-    template_name = 'autopatch/qa-servers.html'
-    def get_queryset(self):
-        return Server.objects.all().order_by("server")
+# class QAView(generic.ListView):
+#     template_name = 'autopatch/qa-servers.html'
+#     def get_queryset(self):
+#         return Server.objects.all().order_by("server")
+def QAView(request):
+    qa_list = Server.objects.all().order_by('server')
+    env = "QA"
+    field = ".qa."
+    total = ModMaint().hostCount(env, field)
+    qatotal = total.get("total")
+    context = {'qa_list': qa_list, 'total': qatotal, 'env': env}
+    return render(request, 'autopatch/qa-servers.html', context)
 
 def DevView(request):
     dev_list = Server.objects.all().order_by('server')

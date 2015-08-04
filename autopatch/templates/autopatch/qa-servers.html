@@ -5,6 +5,9 @@
   <div class="panel-heading">QA Servers</div>
   <div class="panel-body">
     <p>QA environment servers and Syspatch parameters</p>
+    <form action="/autopatch/qa/" method="get"><input type="submit" class="btn" value="Get Total Number of QA Hosts" name="mybtn"></form>
+    <p> Environment: {{ env }}</p>
+    <p> Total Number of Hosts: {{ total }}</p>
   </div>
   <!-- Table -->
   <table id="myTable" class="tablesorter" border="1">
@@ -17,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for host in object_list %}
+      {% for host in qa_list %}
       {% if ".qa." in host.server %}
       <tr>
 	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>

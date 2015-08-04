@@ -95,16 +95,13 @@ class ModMaint():
             s = each.server
             if field in s:
                 total += 1
-                print("servername: ",s)
+                #print("servername: ",s)
             else:
-                print("Not a server in: ",env)
+                #print("Not a server in: ",env)
+                pass
         t = Hosttotal(env=env)
         t.env = env
         t.total = total
         total = {'env': t.env, 'total': t.total}
         t.save()
         return total
-        #if not Hostcount.objects.filter(env="Dev").exists():
-        #    print("no hosts in dev")
-        #else:
-        #    print("hosts in dev")
