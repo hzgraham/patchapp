@@ -7,7 +7,6 @@
       <header>
 	<h2><a href="/autopatch/{{server.id}}">{{ server.server }}</a></h2>
       </header>
-      <h4>Comments:</h4>
       <div class="server_meta">
 	<h4>The maint.yaml syspatch_* parameters:</h4>
 	<li>yum_excludes: {{ server.exclude }}</li>
@@ -15,9 +14,9 @@
       <div class = "server_body">
 	<li>syspatch_skip: {{ server.skip }}</li>
 	<li>hostgroup: {{ server.hostgroup }}</li>
+	<li>Host skipped - 1(True) or 2(False): {{ server.skip }}</li>
+	<li>Comments about this host: {{ server.comments }}</li>
       </div>
-      <p>{{ server.skip }} whether server is skipped or not</p>
-      <p><a href="/autopatch/like/{{ server.id }}">Skip</a></p>
     </article>
   </div>
 </div>

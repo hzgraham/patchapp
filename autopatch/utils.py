@@ -37,6 +37,8 @@ class ModMaint():
                             #     skip = 'TRUE'
                             # elif i.split(":")[1].strip().split("\n")[0] is '0':
                             #     z = 'FALSE
+                        if 'syspatch_comment' == i.split(":")[0]:
+                            comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
                     print("servername: ",servername)
                     s = Server(server=servername)
@@ -45,6 +47,7 @@ class ModMaint():
                     s.exclude = exclude
                     s.skip = skip
                     s.hostgroup = hostgroup
+                    s.comments = comments
                     print("server: ",s.server)
                     s.save()
                 myfile.close()
