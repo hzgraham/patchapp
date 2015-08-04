@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^$', views.Home ),
     url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
     url(r'^prod/$', views.ProdView.as_view()),
-    url(r'^stage/$', views.StageView.as_view()),
+    url(r'^stage/$', views.StageView),
     url(r'^qa/$', views.QAView),
     url(r'^dev/$', views.DevView),
     url(r'^home/$', views.Home, name='Home'),

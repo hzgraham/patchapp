@@ -5,6 +5,9 @@
   <div class="panel-heading">Stage Servers</div>
   <div class="panel-body">
     <p>Stage environment servers and Syspatch parameters</p>
+    <form action="/autopatch/stage/" method="get"><input type="submit" class="btn" value="Get Total Number of Stage Hosts" name="mybtn"></form>
+    <p> Environment: {{ env }}</p>
+    <p> Total Number of Hosts: {{ total }}</p>
   </div>
   <!-- Table -->
   <table id="myTable" class="tablesorter" border="1">
@@ -17,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for host in object_list %}
+      {% for host in stage_list %}
       {% if ".stage." in host.server %}
       <tr>
 	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>

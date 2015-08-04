@@ -157,10 +157,20 @@ class ProdView(generic.ListView):
     def get_queryset(self):
         return Server.objects.all().order_by("server")
 
-class StageView(generic.ListView):
-    template_name = 'autopatch/stage-servers.html'
-    def get_queryset(self):
-        return Server.objects.all().order_by("server")
+def StageView(request):
+    stage_list = Server.objects.all().order_by('server')
+    env = "Stage"
+    field = ".stage."
+    if Hosttotal.objects.filter(env=env).exists():
+        h = Hosttotal.objects.get(env=env)
+        stagetotal = h.total
+    else:
+        stagetotal = None
+    if(request.GET.get('mybtn')):
+        total = ModMaint().hostCount(env, field)
+        stagetotal = total.get("total")
+    context = {'stage_list': stage_list, 'total': stagetotal, 'env': env}
+    return render(request, 'autopatch/stage-servers.html', context)
 
 # class QAView(generic.ListView):
 #     template_name = 'autopatch/qa-servers.html'
@@ -170,8 +180,14 @@ def QAView(request):
     qa_list = Server.objects.all().order_by('server')
     env = "QA"
     field = ".qa."
-    total = ModMaint().hostCount(env, field)
-    qatotal = total.get("total")
+    if Hosttotal.objects.filter(env=env).exists():
+        h = Hosttotal.objects.get(env=env)
+        qatotal = h.total
+    else:
+        qatotal = None
+    if(request.GET.get('mybtn')):
+        total = ModMaint().hostCount(env, field)
+        qatotal = total.get("total")
     context = {'qa_list': qa_list, 'total': qatotal, 'env': env}
     return render(request, 'autopatch/qa-servers.html', context)
 
@@ -179,9 +195,11 @@ def DevView(request):
     dev_list = Server.objects.all().order_by('server')
     env = "Dev"
     field = ".dev"
-    devttotal = 0
-    h = Hosttotal.objects.get(env=env)
-    devtotal = h.total
+    if Hosttotal.objects.filter(env=env).exists():
+        h = Hosttotal.objects.get(env=env)
+        devtotal = h.total
+    else:
+        devtotal = None
     if(request.GET.get('mybtn')):
         total = ModMaint().hostCount(env, field)
         devtotal = total.get("total")
