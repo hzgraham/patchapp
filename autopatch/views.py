@@ -170,7 +170,8 @@ class QAView(generic.ListView):
 def DevView(request):
     dev_list = Server.objects.all().order_by('server')
     env = "Dev"
-    total = ModMaint().hostCount(env)
+    field = ".dev"
+    total = ModMaint().hostCount(env, field)
     devtotal = total.get("total")
     # if Hosttotal.objects.filter(env="Dev"):
     #     host = Hosttotal(env="Dev")

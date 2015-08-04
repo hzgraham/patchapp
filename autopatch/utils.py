@@ -88,12 +88,19 @@ class ModMaint():
             params.append([hostname, exclude, skip, hostgroup])
         return params
 
-    def hostCount(self, env):
+    def hostCount(self, env, field):
         Hosttotal.objects.all().filter(env=env).delete()
-        total = {}
+        total = 0
+        for each in Server.objects.all().order_by("server"):
+            s = each.server
+            if field in s:
+                total += 1
+                print("servername: ",s)
+            else:
+                print("Not a server in: ",env)
         t = Hosttotal(env=env)
-        t.env = "Dev"
-        t.total = 10
+        t.env = env
+        t.total = total
         total = {'env': t.env, 'total': t.total}
         t.save()
         return total
