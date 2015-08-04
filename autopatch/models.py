@@ -38,6 +38,7 @@ class Server(models.Model):
     exclude = models.TextField(max_length=256, null=True, blank=True)
     skip = models.CharField(max_length=25, null=True, blank=True)
     hostgroup = models.CharField(max_length=50, null=True, blank=True)
+    comments = models.TextField(max_length=256, null=True, blank=True)
     def __unicode__(self):
         return self.server
 
