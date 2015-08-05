@@ -83,12 +83,13 @@ class ModMaint():
 
     def genCSV(self):
         s = []
-        params = []
+        params = [['Hostname','Excluded packages','Skip','Hostgroup','Comments','Pastebin Link (If Errors Are Present)']]
         for host in Server.objects.all():
             hostname = host.server
             exclude = host.exclude
             skip = host.skip
             hostgroup = host.hostgroup
+            comments = host.comments
             params.append([hostname, exclude, skip, hostgroup])
         return params
 
