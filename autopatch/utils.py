@@ -100,12 +100,12 @@ class ModMaint():
             if env is "Prod":
                 if ".prod." in s or ".util" in s:
                     total += 1
-                    print("1st check servername: ",s)
+                    #print("1st check servername: ",s)
                 elif ".dev" not in s and  ".stage." not in s and ".qa." not in s:
                     total += 1
-                    print("2nd check servername: ",s)
+                    #print("2nd check servername: ",s)
                 else:
-                    print(s,"Not a server in: ",env)
+                    #print(s,"Not a server in: ",env)
                     pass
             else:
                 if field in s:
