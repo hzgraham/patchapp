@@ -34,10 +34,10 @@
       {% for host in prod_list %}
       {% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
       <tr>
-	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
-	<td>{{ host.skip }}</td>
-	<td>{{ host.hostgroup }}</td>
-	<td>{{ host.exclude }}</td>
+	<td align="center"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
+	<td align="center">{{ host.skip }}</td>
+	<td align="center">{{ host.hostgroup }}</td>
+	<td align="center">{{ host.exclude }}</td>
       </tr>
       {% endif %}
       {% endfor %}
