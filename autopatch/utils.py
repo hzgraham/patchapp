@@ -20,6 +20,7 @@ class ModMaint():
             hostgroup = ''
             exclude = ''
             skip = ''
+            comments = ''
             pathname = each+'/maint.yaml'
             if os.path.exists(pathname):
                 with open(pathname, 'rt') as myfile:
@@ -96,12 +97,23 @@ class ModMaint():
         total = 0
         for each in Server.objects.all().order_by("server"):
             s = each.server
-            if field in s:
-                total += 1
-                #print("servername: ",s)
+            if env is "Prod":
+                if ".prod." in s or ".util" in s:
+                    total += 1
+                    print("1st check servername: ",s)
+                elif ".dev" not in s and  ".stage." not in s and ".qa." not in s:
+                    total += 1
+                    print("2nd check servername: ",s)
+                else:
+                    print(s,"Not a server in: ",env)
+                    pass
             else:
-                #print("Not a server in: ",env)
-                pass
+                if field in s:
+                    total += 1
+                    #print("servername: ",s)
+                else:
+                    #print("Not a server in: ",env)
+                    pass
         t = Hosttotal(env=env)
         t.env = env
         t.total = total

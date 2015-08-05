@@ -16,6 +16,9 @@
   <div class="panel-heading">Prod Servers</div>
   <div class="panel-body">
     <p>Prod environment servers and Syspatch parameters</p>
+    <form action="/autopatch/prod/" method="get"><input type="submit" class="btn" value="Get Total Number of Prod Hosts" name="mybtn"></form>
+    <p> Environment: {{ env }}</p>
+    <p> Total Number of Hosts: {{ total }}</p>
   </div>
   <!-- Table -->
   <table id="myTable" class="tablesorter" border="1">
@@ -28,7 +31,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for host in object_list %}
+      {% for host in prod_list %}
       {% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
       <tr>
 	<td><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>

@@ -152,10 +152,20 @@ class TasksView(generic.ListView):
     def get_queryset(self):
         return Server.objects.all().order_by("server")
 
-class ProdView(generic.ListView):
-    template_name = 'autopatch/prod-servers.html'
-    def get_queryset(self):
-        return Server.objects.all().order_by("server")
+def ProdView(request):
+    prod_list = Server.objects.all().order_by('server')
+    env = "Prod"
+    field = ".prod."
+    if Hosttotal.objects.filter(env=env).exists():
+        h = Hosttotal.objects.get(env=env)
+        prodtotal = h.total
+    else:
+        prodtotal = None
+    if(request.GET.get('mybtn')):
+        total = ModMaint().hostCount(env, field)
+        prodtotal = total.get("total")
+    context = {'prod_list': prod_list, 'total': prodtotal, 'env': env}
+    return render(request, 'autopatch/prod-servers.html', context)
 
 def StageView(request):
     stage_list = Server.objects.all().order_by('server')
