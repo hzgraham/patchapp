@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^tasks/', views.TasksView.as_view()),
     url(r'^csv/', views.CreateCSV),
     url(r'^git/', views.Git),
+    url(r'^devsat/', views.DevSat),
 ]

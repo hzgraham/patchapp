@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.core.urlresolvers import reverse
+from django.template import RequestContext
 from .models import Server,Hosttotal
 from django.utils import timezone
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm
@@ -11,6 +12,8 @@ from autopatch.utils import ModMaint
 from time import sleep
 from django.contrib.auth.backends import RemoteUserBackend
 import urllib, bs4, urllib.request, csv
+from xmlrpc import client, server
+import xmlrpc.client, xmlrpc.server
 
 def CreateCSV(request):
     s = []
@@ -119,6 +122,24 @@ def create(request):
     args.update(csrf(request))
     args['form'] = form
     return render_to_response('autopatch/create_server.html', args)
+
+def DevSat(request):
+    URL = "https:///rpc/api"
+    context = {}
+    if request.POST:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['loginname']
+            pswd = form.cleaned_data['password']
+            client = xmlrpc.client.Server(URL, verbose=0)
+            session = client.auth.login(user, pswd)
+            name = ''
+            data = client.system.getId(session, name)
+            getid = data[0].get('id')
+            context = {'getid': getid}
+            client.auth.logout(session)
+    return render_to_response('autopatch/patching-tasks.html', context,
+                              context_instance=RequestContext(request))
 
 def login(request):
     if request.Post:

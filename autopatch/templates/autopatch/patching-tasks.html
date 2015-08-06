@@ -14,9 +14,26 @@
 	  <input type="submit" class="btn" value="Enter a Git repo to clone" name="mybtn">
 	  <input type="text" name="gitpath" size="50"/>
 	</form>
+
+	<form action="/autopatch/devsat/" method="post">{% csrf_token %}
+	  <p><label for="id_loginname">Login:</label>
+	    <input id="id_loginname" type="text" name="loginname" maxlength="100" /></p>
+	  <p><label for="id_password">Password:</label>
+	    <input type="password" name="password" id="id_password" /></p>
+	  <!--<ul>
+	    {{ form.as_ul }}
+	  </ul>-->
+	  <input type="submit" name="submit" value="Dev Sat Info">
+	</form>
+	{% if getid %}
+	<ul><p>This be the Server ID: {{ getid }}</p></ul>
+	{% else %}
+	<ul><p>Couldn't get the server ID</p></ul>
+	{% endif %}
       </div>
       <ul class="nav nav-pills nav-stacked">
-	<li role="presentation"><a href="#">Update Satellite Info</a></li>
+	<!--<li role="presentation"><a href="#">Update Satellite Info</a></li>-->
+	<li role="presentation"><a><form action="/autopatch/csv/" method="get"><input type="submit" class="btn" value="Create a .csv file" name="mybtn"></form></a></li>
 	<li role="presentation"><a href="#">Sort Git Data</a></li>
       </ul>
     </article>
