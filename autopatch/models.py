@@ -33,6 +33,13 @@ class Hosttotal(models.Model):
     def __unicode__(self):
         return self.hosttotal
 
+class Errata(models.Model):
+    RHEA = models.CharField(max_length=128, null=True, blank=True)
+    RHSA = models.CharField(max_length=128, null=True, blank=True)
+    RHBA = models.CharField(max_length=128, null=True, blank=True)
+    def __unicode__(self):
+        return self.server
+
 class Server(models.Model):
     server = models.CharField(max_length=256, null=True, blank=True)
     exclude = models.TextField(max_length=256, null=True, blank=True)

@@ -1,5 +1,5 @@
 from django import forms
-from autopatch.models import Server
+from autopatch.models import Server, Errata
 
 class PostForm(forms.Form):
     content = forms.CharField(max_length=256)
@@ -16,6 +16,12 @@ class LoginForm(forms.Form):
     loginname = forms.CharField(max_length=256)
     satellite = forms.CharField(max_length=256)
     hostname = forms.CharField(max_length=256)
+
+class ErrataForm(forms.ModelForm):
+
+    class Meta:
+        model = Errata
+        fields = "__all__"
 
 class ServerForm(forms.ModelForm):
 
