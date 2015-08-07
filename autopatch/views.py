@@ -124,28 +124,23 @@ def create(request):
     return render_to_response('autopatch/create_server.html', args)
 
 def DevSat(request):
-    URL = "https:///rpc/api"
+    #URL = "https:///rpc/api"
     context = {}
     if request.POST:
         form = LoginForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
+            URL = form.cleaned_data['satellite']
+            name = form.cleaned_data['hostname']
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
-            name = ''
             data = client.system.getId(session, name)
             getid = data[0].get('id')
             context = {'getid': getid}
             client.auth.logout(session)
     return render_to_response('autopatch/patching-tasks.html', context,
                               context_instance=RequestContext(request))
-
-def login(request):
-    if request.Post:
-        form = LoginForm(request.Post)
-        if form.is_valid():
-            pass
 
 def Home(request):
     template = 'autopatch/base.html'

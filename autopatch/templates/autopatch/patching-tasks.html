@@ -14,8 +14,12 @@
 	  <input type="submit" class="btn" value="Enter a Git repo to clone" name="mybtn">
 	  <input type="text" name="gitpath" size="50"/>
 	</form>
-
+	<h4>Enter the following details to get the IDs of the specified hostname from Satellite:</h4>
 	<form action="/autopatch/devsat/" method="post">{% csrf_token %}
+	  <p><label for="id_satellite">Satellite FQDN:</label>
+	    <input id="id_satellite" type="text" name="satellite" maxlength="100" /></p>
+	  <p><label for="id_hostname">Servername in Satellite:</label>
+	    <input id="id_hostname" type="text" name="hostname" maxlength="100" /></p>
 	  <p><label for="id_loginname">Login:</label>
 	    <input id="id_loginname" type="text" name="loginname" maxlength="100" /></p>
 	  <p><label for="id_password">Password:</label>
