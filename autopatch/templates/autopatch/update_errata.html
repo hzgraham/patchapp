@@ -1,0 +1,25 @@
+{% extends "autopatch/index.html" %}
+
+{% block content %}
+<ul>
+  <li><a href="/autopatch/tasks/">&#8617; Back to Patching Tasks</a></li>
+</ul>
+<!-- form for updating latest desired errata -->
+<form action="/autopatch/errata/" method="post">{% csrf_token %}
+  <ul>
+    {{ form.as_ul }}
+  </ul>
+  <input type="submit" name="submit" value="Update Errata">
+</form>
+{% if RHEA %}
+<p>
+<ul>
+  <h4 style="text-decoration: underline;">
+    Current Errata Levels
+  </h4>
+  <li>RHEA: {{ RHEA }}</li>
+  <li>RHSA: {{ RHSA }}</li>
+  <li>RHBA: {{ RHBA }}</li>
+</ul>
+{% endif %}
+{% endblock %}

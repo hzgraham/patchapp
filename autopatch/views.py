@@ -4,16 +4,18 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from .models import Server,Hosttotal
 from django.utils import timezone
-from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm
+
 from django.core.context_processors import csrf
-from autopatch.utils import ModMaint
 from time import sleep
 from django.contrib.auth.backends import RemoteUserBackend
 import urllib, bs4, urllib.request, csv
 from xmlrpc import client, server
 import xmlrpc.client, xmlrpc.server
+
+from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm
+from .models import Server, Hosttotal, Errata
+from autopatch.utils import ModMaint, TaskScripts
 
 def CreateCSV(request):
     s = []
@@ -62,7 +64,7 @@ def GetList(request):
         url_list = []
         paths = []
         mgmt = []
-        host_list = HostList()
+        #host_list = HostList()
         myurl = urllib.request.urlopen(manifests)
         html = myurl.read()
         soup = bs4.BeautifulSoup(html, "html.parser")
@@ -122,6 +124,46 @@ def create(request):
     args.update(csrf(request))
     args['form'] = form
     return render_to_response('autopatch/create_server.html', args)
+
+def UpdateErrata(request):
+    if request.POST:
+        #errata = Errata.objects.filter(pk=1)
+        form = ErrataForm(request.POST)
+        #form = ErrataForm(pk=1)
+        if form.is_valid():
+            errata = Errata.objects.first()
+            errata.RHEA = form.data['RHEA']
+            errata.RHSA = form.data['RHSA']
+            errata.RHBA = form.data['RHBA']
+            errata.save()
+            #errata = Errata.objects.filter(pk=1)
+            #server = Server.objects.get(pk=1).itemname
+            #server = Server.objects.all()[:1].get()
+            #errata = form.data['RHSA']
+            #errata = server.server
+            TaskScripts().parseForm(form)
+            #form.save()
+            return HttpResponseRedirect('/autopatch/errata/')
+    else:
+        form = ErrataForm()
+    args = {}
+    args.update(csrf(request))
+    if Errata.objects.exists():
+        errata = Errata.objects.first()
+        args['RHEA'] = errata.RHEA
+        args['RHSA'] = errata.RHSA
+        args['RHBA'] = errata.RHBA
+        #updates = {'RHEA': RHEA, 'RHSA': RHSA, 'RHBA': RHBA}
+    else:
+        #updates = {'RHEA': 0, 'RHSA': 0, 'RHBA': 0}
+        args['RHEA'] = 0
+        args['RHSA'] = 0
+        args['RHBA'] = 0
+    #args = {'form': form}
+    #args.append(updates)
+    args['form'] = form
+    #args['RHEA'] = errata.RHEA
+    return render_to_response('autopatch/update_errata.html', args)
 
 def DevSat(request):
     #URL = "https:///rpc/api"

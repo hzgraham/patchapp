@@ -1,6 +1,21 @@
 import urllib.request, urllib.error, git, shutil, os, glob
 from django.http import Http404
-from .models import Server,Hosttotal
+from .models import Server,Hosttotal,Errata
+from django.shortcuts import get_object_or_404
+
+class TaskScripts():
+    def parseForm(self, form):
+        RHEA = form.data['RHEA']
+        errata = Errata.objects.first()
+        errata = errata.RHBA
+        #errata = get_object_or_404(Errata, pk=1)
+        #errata = Errata.objects.all()
+        #server = Server.objects.filter(pk=1)
+        #print(server)
+        print(errata)
+        print(RHEA)
+        print("############################")
+        print("This is the form: ",form)
 
 class ModMaint():
     def parseGit(self, manifests):
