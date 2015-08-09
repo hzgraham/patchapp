@@ -42,6 +42,7 @@ def devTotal(request):
 
 def Git(request):
     context = {}
+    unlist = []
     if(request.GET.get('mybtn')):
         manifests = str(request.GET.get('gitpath'))
     else:
@@ -51,7 +52,12 @@ def Git(request):
         hosts = ModMaint().parseGit(manifests)
     else:
         pass
-    return render(request, 'autopatch/patching-tasks.html')
+    unassignlist = Server.objects.all().filter(env="unassigned").order_by('server')
+    for each in unassignlist:
+        unhost = each.server
+        unlist.append(unhost)
+    context = {'unlist': unlist}
+    return render(request, 'autopatch/patching-tasks.html', context)
 
 def GetList(request):
     if(request.GET.get('mybtn')):
@@ -126,6 +132,7 @@ def create(request):
     return render_to_response('autopatch/create_server.html', args)
 
 def UpdateErrata(request):
+    #This view used to update the top level errata
     if request.POST:
         #errata = Errata.objects.filter(pk=1)
         form = ErrataForm(request.POST)
@@ -164,25 +171,6 @@ def UpdateErrata(request):
     args['form'] = form
     #args['RHEA'] = errata.RHEA
     return render_to_response('autopatch/update_errata.html', args)
-
-def DevSat(request):
-    #URL = "https:///rpc/api"
-    context = {}
-    if request.POST:
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data['loginname']
-            pswd = form.cleaned_data['password']
-            URL = form.cleaned_data['satellite']
-            name = form.cleaned_data['hostname']
-            client = xmlrpc.client.Server(URL, verbose=0)
-            session = client.auth.login(user, pswd)
-            data = client.system.getId(session, name)
-            getid = data[0].get('id')
-            context = {'getid': getid}
-            client.auth.logout(session)
-    return render_to_response('autopatch/patching-tasks.html', context,
-                              context_instance=RequestContext(request))
 
 def Home(request):
     template = 'autopatch/base.html'
@@ -273,6 +261,77 @@ def DevView(request):
         devtotal = total.get("total")
     context = {'dev_list': dev_list, 'total': devtotal, 'env': env}
     return render(request, 'autopatch/dev-servers.html', context)
+
+def SatId(request):
+    #SatId will get the ID of each server in Satellite
+    #There are 4 buttons on the patching tasks page, one for each env
+    context = {}
+    if request.POST:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['loginname']
+            pswd = form.cleaned_data['password']
+            URL = form.cleaned_data['satellite']
+            name = form.cleaned_data['hostname']
+            client = xmlrpc.client.Server(URL, verbose=0)
+            session = client.auth.login(user, pswd)
+            if(request.GET.get('devbtn')):
+                dev_list = Server.objects.all().filter(env="dev").order_by('server')
+                for each in dev_list:
+                    devhost = each.server
+                    data = client.system.getId(session, name)
+                    getid = data[0].get('id')
+                    each.satid = getid
+                    each.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
+            if(request.GET.get('qabtn')):
+                qa_list = Server.objects.all().filter(env="qa").order_by('server')
+                for each in qa_list:
+                    data = client.system.getId(session, name)
+                    getid = data[0].get('id')
+                    each.satid = getid
+                    each.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
+            if(request.GET.get('stagebtn')):
+                stage_list = Server.objects.all().filter(env="stage").order_by('server')
+                for each in stage_list:
+                    data = client.system.getId(session, name)
+                    getid = data[0].get('id')
+                    each.satid = getid
+                    each.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
+            if(request.GET.get('prodbtn')):
+                prod_list = Server.objects.all().filter(env="prod").order_by('server')
+                for each in prod_list:
+                    data = client.system.getId(session, name)
+                    getid = data[0].get('id')
+                    each.satid = getid
+                    each.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
+    return render_to_response('autopatch/patching-tasks.html', context,
+                              context_instance=RequestContext(request))
+
+def QASat(request):
+    context = {}
+    if request.POST:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['loginname']
+            pswd = form.cleaned_data['password']
+            URL = form.cleaned_data['satellite']
+            name = form.cleaned_data['hostname']
+            client = xmlrpc.client.Server(URL, verbose=0)
+            session = client.auth.login(user, pswd)
+            data = client.system.getId(session, name)
+            getid = data[0].get('id')
+            context = {'getid': getid}
+            client.auth.logout(session)
+    return render_to_response('autopatch/patching-tasks.html', context,
+                              context_instance=RequestContext(request))
 
 # class DevView(generic.ListView):
 #     context = []

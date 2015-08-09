@@ -23,10 +23,6 @@ class HostList():
 #         SGMLParser.reset(self)
 #         self.urls = []
 
-#     def start_a(self, attrs):
-#         href = [v for k, v in attrs if k=='href']
-#         if href:
-#             self.urls.extend(href)
 class Hosttotal(models.Model):
     env = models.CharField(max_length=128)
     total = models.IntegerField(default=0)
@@ -46,12 +42,11 @@ class Server(models.Model):
     skip = models.CharField(max_length=25, null=True, blank=True)
     hostgroup = models.CharField(max_length=50, null=True, blank=True)
     comments = models.TextField(max_length=256, null=True, blank=True)
+    satid = models.IntegerField(default=0)
+    env = models.CharField(max_length=50, null=True, blank=True)
+    updates = models.TextField(max_length=256, null=True, blank=True)
     def __unicode__(self):
         return self.server
-
-    #active_status = models.BooleanField(default=0)
-    #def is_active(self):
-    #    return bool(active_status)
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)

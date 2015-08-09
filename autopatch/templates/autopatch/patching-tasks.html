@@ -10,14 +10,22 @@
       <div class="server_meta">
 	<li><a href="/autopatch/genlist/">Create an inventory</a></li>
 	<li><a href="/autopatch/errata/">Set the Errata Levels</a></li>
-
+	<p>
 	<form action="/autopatch/csv/" method="get"><input type="submit" class="btn" value="Create a .csv file" name="mybtn"></form>
+	<p>
 	<form action="/autopatch/git/" method="get">
 	  <input type="submit" class="btn" value="Enter a Git repo to clone" name="mybtn">
 	  <input type="text" name="gitpath" size="50"/>
 	</form>
-	<h4>Enter the following details to get the IDs of the specified hostname from Satellite:</h4>
-	<form action="/autopatch/devsat/" method="post">{% csrf_token %}
+	{% if unlist %}
+	<h4 style="text-decoration: underline;">These hosts are not in a list, please find out why.</h4>
+	{% for host in unlist %}
+	{{ host }}
+	{% endfor %}
+	{% endif %}
+	<p>
+	<h4 style="text-decoration: underline;">Enter the following details to get the IDs of the specified hostname from Satellite:</h4>
+	<form action="/autopatch/satid/" method="post">{% csrf_token %}
 	  <p><label for="id_satellite">Satellite FQDN:</label>
 	    <input id="id_satellite" type="text" name="satellite" maxlength="100" /></p>
 	  <p><label for="id_hostname">Servername in Satellite:</label>
@@ -29,7 +37,10 @@
 	  <!--<ul>
 	    {{ form.as_ul }}
 	  </ul>-->
-	  <input type="submit" name="submit" value="Dev Sat Info">
+	  <input type="submit" name="submit" value="Dev Sat Info" name="devbtn">
+	  <input type="submit" name="submit" value="QA Sat Info" name="qabtn">
+	  <input type="submit" name="submit" value="Stage Sat Info" name="stagebtn">
+	  <input type="submit" name="submit" value="Prod Sat Info" name="prodbtn">
 	</form>
 	{% if getid %}
 	<ul><p>This be the Server ID: {{ getid }}</p></ul>
@@ -37,11 +48,12 @@
 	<ul><p>Couldn't get the server ID</p></ul>
 	{% endif %}
       </div>
+      <!--
       <ul class="nav nav-pills nav-stacked">
-	<!--<li role="presentation"><a href="#">Update Satellite Info</a></li>-->
 	<li role="presentation"><a><form action="/autopatch/csv/" method="get"><input type="submit" class="btn" value="Create a .csv file" name="mybtn"></form></a></li>
 	<li role="presentation"><a href="#">Sort Git Data</a></li>
       </ul>
+      -->
     </article>
   </div>
 </div>

@@ -48,11 +48,11 @@ class ModMaint():
                         if 'syspatch_yum_excludes' == i.split(":")[0]:
                             exclude = i.split(":")[1].strip().split("\n")[0]
                         if 'syspatch_skip' == i.split(":")[0]:
-                            skip = i.split(":")[1].strip().split("\n")[0]
-                            # if i.split(":")[1].strip().split("\n")[0] is '1':
-                            #     skip = 'TRUE'
-                            # elif i.split(":")[1].strip().split("\n")[0] is '0':
-                            #     z = 'FALSE
+                            #skip = i.split(":")[1].strip().split("\n")[0]
+                            if i.split(":")[1].strip().split("\n")[0] is '1':
+                                skip = 'TRUE'
+                            elif i.split(":")[1].strip().split("\n")[0] is '0':
+                                skip = 'FALSE'
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
@@ -64,9 +64,41 @@ class ModMaint():
                     s.skip = skip
                     s.hostgroup = hostgroup
                     s.comments = comments
+                    s.env = ModMaint().setEnv(servername)
                     print("server: ",s.server)
                     s.save()
                 myfile.close()
+        # dev_list = Server.objects.all().filter(env="dev").order_by('server')
+        # for each in dev_list:
+        #     devhost = each.server
+        #     each.satid = 123
+        #     each.save()
+        #     print(devhost)
+        # dev_list = Server.objects.all().filter(env="dev").order_by('server')
+        # for each in dev_list:
+        #     devid = each.satid
+        #     print(devid)
+
+    def setEnv(self, server):
+        env = ""
+        if ".prod." in server or ".util" in server:
+            env = "prod"
+            print("1st check:", server, " in: ",env)
+        elif ".dev" not in server and  ".stage." not in server and ".qa." not in server:
+            env = "prod"
+            print("2nd check:", server, " in: ",env)
+        elif ".stage" in server:
+            env = "stage"
+            print("3rd check:", server, " in: ",env)
+        elif ".qa." in server:
+            env = "qa"
+            print("4rd check:", server, " in: ",env)
+        elif ".dev" in server:
+            env = "dev"
+            print("5rd check:", server, " in: ",env)
+        else:
+            env = "unassigned"
+        return env
 
     def getMaint(self, url):
         syspatch = {}
