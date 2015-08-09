@@ -29,7 +29,7 @@ class ModMaint():
             print("The path already exists",git_path)
         host_paths = []
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
-        print("Host Paths",host_paths)
+        #print("Host Paths",host_paths)
         for each in host_paths:
             mgmt = ''
             hostgroup = ''
@@ -56,7 +56,7 @@ class ModMaint():
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
-                    print("servername: ",servername)
+                    #print("servername: ",servername)
                     s = Server(server=servername)
                     s.server = each.split('/')[-1]
                     s.mgmt = mgmt
@@ -65,9 +65,12 @@ class ModMaint():
                     s.hostgroup = hostgroup
                     s.comments = comments
                     s.env = ModMaint().setEnv(servername)
-                    print("server: ",s.server)
+                    #print("server: ",s.server)
                     s.save()
                 myfile.close()
+        envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
+        for env,field in envs:
+            total = ModMaint().hostCount(env, field)
         # dev_list = Server.objects.all().filter(env="dev").order_by('server')
         # for each in dev_list:
         #     devhost = each.server
@@ -83,19 +86,19 @@ class ModMaint():
         env = ""
         if ".prod." in server or ".util" in server:
             env = "prod"
-            print("1st check:", server, " in: ",env)
+            #print("1st check:", server, " in: ",env)
         elif ".dev" not in server and  ".stage." not in server and ".qa." not in server:
             env = "prod"
-            print("2nd check:", server, " in: ",env)
+            #print("2nd check:", server, " in: ",env)
         elif ".stage" in server:
             env = "stage"
-            print("3rd check:", server, " in: ",env)
+            #print("3rd check:", server, " in: ",env)
         elif ".qa." in server:
             env = "qa"
-            print("4rd check:", server, " in: ",env)
+            #print("4rd check:", server, " in: ",env)
         elif ".dev" in server:
             env = "dev"
-            print("5rd check:", server, " in: ",env)
+            #print("5rd check:", server, " in: ",env)
         else:
             env = "unassigned"
         return env
@@ -145,7 +148,7 @@ class ModMaint():
         total = 0
         for each in Server.objects.all().order_by("server"):
             s = each.server
-            if env is "Prod":
+            if env == 'Prod':
                 if ".prod." in s or ".util" in s:
                     total += 1
                     #print("1st check servername: ",s)
