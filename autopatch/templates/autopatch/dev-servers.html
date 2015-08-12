@@ -24,10 +24,10 @@
       {% for host in dev_list %}
       {% if ".dev" in host.server %}
       <tr>
-	<td align="center" width="30%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
-	<td align="center" width="10%">{{ host.skip }}</td>
-	<td align="center" width="20%">{{ host.hostgroup }}</td>
-	<td align="center" width="50%">{{ host.exclude }}</td>
+	<td align="center" width="25%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
+	<td align="center" width="5%">{{ host.skip }}</td>
+	<td align="center" width="10%">{{ host.hostgroup }}</td>
+	<td align="center" width="60%">{{ host.exclude }}</td>
       </tr>
       {% endif %}
       {% endfor  %}

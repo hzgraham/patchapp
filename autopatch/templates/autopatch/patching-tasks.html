@@ -11,7 +11,12 @@
 	<li><a href="/autopatch/genlist/">Create an inventory</a></li>
 	<li><a href="/autopatch/errata/">Set the Errata Levels</a></li>
 	<p>
-	<form action="/autopatch/csv/" method="get"><input type="submit" class="btn" value="Create a .csv file" name="mybtn"></form>
+	  <form action="/autopatch/csv/" method="get">
+	    <input type="submit" class="btn" value="Create a .csv file for Prod" name="prodbtn">
+	    <input type="submit" class="btn" value="Create a .csv file for Stage" name="stagebtn">
+	    <input type="submit" class="btn" value="Create a .csv file for QA" name="qabtn">
+	    <input type="submit" class="btn" value="Create a .csv file for Dev" name="devbtn">
+	  </form>
 	<p>
 	<form action="/autopatch/git/" method="get">
 	  <input type="submit" class="btn" value="Enter a Git repo to clone" name="mybtn">

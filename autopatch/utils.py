@@ -31,6 +31,7 @@ class ModMaint():
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
         #print("Host Paths",host_paths)
         for each in host_paths:
+            print("This is the host path: ",each)
             mgmt = ''
             hostgroup = ''
             exclude = ''
@@ -56,7 +57,7 @@ class ModMaint():
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
-                    #print("servername: ",servername)
+                    print("servername: ",servername)
                     s = Server(server=servername)
                     s.server = each.split('/')[-1]
                     s.mgmt = mgmt
@@ -65,7 +66,7 @@ class ModMaint():
                     s.hostgroup = hostgroup
                     s.comments = comments
                     s.env = ModMaint().setEnv(servername)
-                    #print("server: ",s.server)
+                    print("server: ",s.server)
                     s.save()
                 myfile.close()
         envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
@@ -131,11 +132,15 @@ class ModMaint():
             #syspatch = {}
         return syspatch
 
-    def genCSV(self):
+    def genCSV(self, servers):
         s = []
         params = [['Hostname','Excluded packages','Skip','Hostgroup','Comments','Pastebin Link (If Errors Are Present)']]
-        for host in Server.objects.all():
+        #for host in Server.objects.all():
+        for each in servers:
+            host = Server.objects.all().get(server=each)
+            print("THIS IS THE HOST: ",host)
             hostname = host.server
+            print("THIS IS THE HOSTNAME: ",hostname)
             exclude = host.exclude
             skip = host.skip
             hostgroup = host.hostgroup

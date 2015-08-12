@@ -20,12 +20,27 @@ from autopatch.utils import ModMaint, TaskScripts
 def CreateCSV(request):
     s = []
     q = []
-    if(request.GET.get('mybtn')):
-        servers = Server.objects.all().order_by("server")
-        for host in Server.objects.all():
+    context = {}
+    #if request.GET:
+    if(request.GET.get('devbtn')):
+        dev_list = Server.objects.all().filter(env="dev").order_by('server')
+        for host in dev_list:
             s.append(host.server)
-        #for host in servers:
-    params = ModMaint().genCSV()
+    elif(request.GET.get('qabtn')):
+        qa_list = Server.objects.all().filter(env="qa").order_by('server')
+        for host in qa_list:
+            s.append(host.server)
+    elif(request.GET.get('stagebtn')):
+        stage_list = Server.objects.all().filter(env="stage").order_by('server')
+        for host in stage_list:
+            s.append(host.server)
+    elif(request.GET.get('prodbtn')):
+        prod_list = Server.objects.all().filter(env="prod").order_by('server')
+        for host in prod_list:
+            s.append(host.server)
+    else:
+        pass
+    params = ModMaint().genCSV(s)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="patching.csv"'
     writer = csv.writer(response)
