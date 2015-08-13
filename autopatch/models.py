@@ -15,7 +15,8 @@ class Errata(models.Model):
     RHSA = models.CharField(max_length=128, null=True, blank=True)
     RHBA = models.CharField(max_length=128, null=True, blank=True)
     def __unicode__(self):
-        return self.server
+        #return self.
+        return '%s %s %s' % (self.RHEA, self.RHSA, self.RHBA)
 
 class Server(models.Model):
     server = models.CharField(max_length=256, null=True, blank=True)

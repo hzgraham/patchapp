@@ -153,17 +153,24 @@ def UpdateErrata(request):
         form = ErrataForm(request.POST)
         #form = ErrataForm(pk=1)
         if form.is_valid():
+            #TaskScripts().parseForm(form)
+            #RHEA = form.data['RHEA']
+            RHSA = form.data['RHSA']
+            RHBA = form.data['RHBA']
             errata = Errata.objects.first()
-            errata.RHEA = form.data['RHEA']
-            errata.RHSA = form.data['RHSA']
-            errata.RHBA = form.data['RHBA']
+            if not errata:
+                errata = Errata(RHEA=form.data['RHEA'])
+            else:
+                pass
+            #errata.RHEA = RHEA
+            errata.RHSA = RHSA
+            errata.RHBA = RHBA
             errata.save()
             #errata = Errata.objects.filter(pk=1)
             #server = Server.objects.get(pk=1).itemname
             #server = Server.objects.all()[:1].get()
             #errata = form.data['RHSA']
             #errata = server.server
-            TaskScripts().parseForm(form)
             #form.save()
             return HttpResponseRedirect('/autopatch/errata/')
     else:

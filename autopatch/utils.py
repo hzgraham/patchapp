@@ -5,15 +5,16 @@ from django.shortcuts import get_object_or_404
 
 class TaskScripts():
     def parseForm(self, form):
+        print("This is the form:",form)
         RHEA = form.data['RHEA']
         errata = Errata.objects.first()
-        errata = errata.RHBA
+        #errata = errata.RHBA
         #errata = get_object_or_404(Errata, pk=1)
         #errata = Errata.objects.all()
         #server = Server.objects.filter(pk=1)
         #print(server)
-        print(errata)
-        print(RHEA)
+        print("This is the errata: ",errata)
+        print("This is RHEA",RHEA)
         print("############################")
         print("This is the form: ",form)
 
@@ -22,16 +23,16 @@ class ModMaint():
         git_path = 'autopatch/manifests'
         if not os.path.isdir(git_path):
             repo = git.Repo.clone_from(manifests,'autopatch/manifests')
-            print("this is the repo: ",repo)
+            #print("this is the repo: ",repo)
         else:
             shutil.rmtree(git_path)
             repo = git.Repo.clone_from(manifests,'autopatch/manifests')
-            print("The path already exists",git_path)
+            #print("The path already exists",git_path)
         host_paths = []
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
         #print("Host Paths",host_paths)
         for each in host_paths:
-            print("This is the host path: ",each)
+            #print("This is the host path: ",each)
             mgmt = ''
             hostgroup = ''
             exclude = ''
@@ -57,7 +58,7 @@ class ModMaint():
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
-                    print("servername: ",servername)
+                    #print("servername: ",servername)
                     s = Server(server=servername)
                     s.server = each.split('/')[-1]
                     s.mgmt = mgmt
@@ -66,7 +67,7 @@ class ModMaint():
                     s.hostgroup = hostgroup
                     s.comments = comments
                     s.env = ModMaint().setEnv(servername)
-                    print("server: ",s.server)
+                    #print("server: ",s.server)
                     s.save()
                 myfile.close()
         envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
