@@ -19,3 +19,9 @@ db.sqlite3
 \#*\#
 /venv
 *manifests*
+patchappenv
+static/css/*
+static/javascript/*
+static/*.js
+static/*.css
+static/*.map
