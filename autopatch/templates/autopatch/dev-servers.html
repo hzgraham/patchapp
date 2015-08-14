@@ -1,17 +1,8 @@
-
 {% extends "autopatch/index.html" %}
 {% block content %}
-<div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Dev Servers</div>
-  <div class="panel-body">
-    <p>Dev environment servers and Syspatch parameters</p>
-    <form action="/autopatch/dev/" method="get"><input type="submit" class="btn" value="Get Total Number of Dev Hosts" name="mybtn"></form>
-    <p> Environment: {{ env }}</p>
-    <p> Total Number of Hosts: {{ total }}</p>
-  </div>
-  <!-- Table -->
-  <table id="myTable" class="tablesorter" border="1">
+<div class="container">
+  <p>Viewing <b>{{ total }}</b> hosts in the <b>{{ env }}</b> environment.</p>
+  <table id="myTable" class="table table-striped tablesorter">
     <thead>
       <tr>
 	<th>Server Name</th>
@@ -30,25 +21,9 @@
 	<td align="center" width="60%">{{ host.exclude }}</td>
       </tr>
       {% endif %}
-      {% endfor  %}
+      {% endfor %}
     </tbody>
   </table>
 </div>
-<!--
-<ul class="list-group">
-{% for host in object_list %}
-{% if ".dev" in host.server %}
-<div class="MainContent">  
-  <li class="list-group-item">
-    <ul class="list-inline">
-      <a href="/autopatch/{{host.id}}">{{ host.server }}</a>
-      <li>syspatch_skip: {{ host.skip }}</li>
-      <li>hostgroup: {{ host.hostgroup }}</li>
-    </ul>
-  </li>
-</div>
-{% endif %}
-{% endfor  %}
-</ul>
--->
 {% endblock  %}
+<br />

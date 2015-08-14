@@ -1,65 +1,95 @@
 {% extends 'autopatch/index.html' %}
 
 {% block content %}
-<div class="MainContent">
-  <div class="content">
-    <article class="typicalArticle">
-      <header>
-	<h3>Some different patching related tasks</h3>
-      </header>
-      <div class="server_meta">
-	<li><a href="/autopatch/genlist/">Create an inventory</a></li>
-	<li><a href="/autopatch/errata/">Set the Errata Levels</a></li>
-	<p>
-	  <form action="/autopatch/csv/" method="get">
-	    <input type="submit" class="btn" value="Create a .csv file for Prod" name="prodbtn">
-	    <input type="submit" class="btn" value="Create a .csv file for Stage" name="stagebtn">
-	    <input type="submit" class="btn" value="Create a .csv file for QA" name="qabtn">
-	    <input type="submit" class="btn" value="Create a .csv file for Dev" name="devbtn">
-	  </form>
-	<p>
-	<form action="/autopatch/git/" method="get">
-	  <input type="submit" class="btn" value="Enter a Git repo to clone" name="mybtn">
-	  <input type="text" name="gitpath" size="50"/>
-	</form>
-	{% if unlist %}
-	<h4 style="text-decoration: underline;">These hosts are not in a list, please find out why.</h4>
-	{% for host in unlist %}
-	{{ host }}
-	{% endfor %}
-	{% endif %}
-	<p>
-	<h4 style="text-decoration: underline;">Enter the following details to get the IDs of the specified hostname from Satellite:</h4>
-	<form action="/autopatch/satid/" method="post">{% csrf_token %}
-	  <p><label for="id_satellite">Satellite FQDN:</label>
-	    <input id="id_satellite" type="text" name="satellite" maxlength="100" /></p>
-	  <p><label for="id_hostname">Servername in Satellite:</label>
-	    <input id="id_hostname" type="text" name="hostname" maxlength="100" /></p>
-	  <p><label for="id_loginname">Login:</label>
-	    <input id="id_loginname" type="text" name="loginname" maxlength="100" /></p>
-	  <p><label for="id_password">Password:</label>
-	    <input type="password" name="password" id="id_password" /></p>
-	  <!--<ul>
-	    {{ form.as_ul }}
-	  </ul>-->
-	  <input type="submit" name="submit" value="Dev Sat Info" name="devbtn">
-	  <input type="submit" name="submit" value="QA Sat Info" name="qabtn">
-	  <input type="submit" name="submit" value="Stage Sat Info" name="stagebtn">
-	  <input type="submit" name="submit" value="Prod Sat Info" name="prodbtn">
-	</form>
-	{% if getid %}
-	<ul><p>This be the Server ID: {{ getid }}</p></ul>
-	{% else %}
-	<ul><p>Couldn't get the server ID</p></ul>
-	{% endif %}
+<div class="container">
+  <h3>Patching Tasks</h3>
+  <hr />
+  <li><a href="/autopatch/genlist/">Create an inventory</a></li>
+  <li><a href="/autopatch/errata/">Set the Errata Levels</a></li>
+  <hr />
+  <form action="/autopatch/csv/" method="get">
+    <input type="submit" class="btn btn-info" value="Create a .csv file for Prod" name="prodbtn">
+    <input type="submit" class="btn btn-info" value="Create a .csv file for Stage" name="stagebtn">
+    <input type="submit" class="btn btn-info" value="Create a .csv file for QA" name="qabtn">
+    <input type="submit" class="btn btn-info" value="Create a .csv file for Dev" name="devbtn">
+  </form>
+  <hr />
+  <h4>Populate Hosts from Git</h4>
+  <form action="/autopatch/git/" method="get">
+    <div class="row">
+      <div class="col-xs-7">
+	<input type="text" name="gitpath" class="form-control" placeholder="https://somegithost.com/somerepo.git">
       </div>
-      <!--
+      <div class="col-xs-3">
+	<input type="submit" class="btn btn-info" value="Clone" name="mybtn">
+      </div>
+    </div>
+  </form>
+  {% if unlist %}
+  <h4 style="text-decoration: underline;">These hosts are not in a list, please find out why.</h4>
+  {% for host in unlist %}
+  {{ host }}
+  {% endfor %}
+  {% endif %}
+  <hr />
+  <h4>Query Satellite</h4>
+  <p>
+    Enter the following details to get the IDs of the specified hostname from Satellite:
+  </p>
+  <form action="/autopatch/satid/" method="post">{% csrf_token %}
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Satellite FQDN</p>
+      </div>
+      <div class="col-xs-6">
+	<input id="id_satellite" type="text" name="satellite" maxlength="100" class="form-control" placeholder="satellite.corp.example.com"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Servername</p>
+      </div>
+      <div class="col-xs-6">
+	<input id="id_hostname" type="text" name="hostname" maxlength="100" class="form-control" placeholder="myhost01.example.com"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Login</p>
+      </div>
+      <div class="col-xs-6">
+	<input id="id_loginname" type="text" name="loginname" maxlength="100" class="form-control" placeholder="username"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Password</p>
+      </div>
+      <div class="col-xs-6">
+	<input type="password" name="password" id="id_password" class="form-control" placeholder="" />
+      </div>
+    </div>
+    <br />
+    <input type="submit" name="submit" value="Dev Sat Info" name="devbtn" class="btn btn-info">
+    <input type="submit" name="submit" value="QA Sat Info" name="qabtn" class="btn btn-info">
+    <input type="submit" name="submit" value="Stage Sat Info" name="stagebtn" class="btn btn-info">
+    <input type="submit" name="submit" value="Prod Sat Info" name="prodbtn" class="btn btn-info">
+  </form>
+
+  <br />
+  {% if getid %}
+  <p>This be the Server ID: {{ getid }}</p>
+  {% else %}
+  <p>Couldn't get the server ID</p>
+  {% endif %}
+  <!--
       <ul class="nav nav-pills nav-stacked">
 	<li role="presentation"><a><form action="/autopatch/csv/" method="get"><input type="submit" class="btn" value="Create a .csv file" name="mybtn"></form></a></li>
 	<li role="presentation"><a href="#">Sort Git Data</a></li>
       </ul>
       -->
-    </article>
-  </div>
 </div>
 {% endblock  %}
+<br />
+<br />

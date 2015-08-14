@@ -3,112 +3,65 @@
 
   <head>
     <title>AutoPatch for Easy Patching</title>
+    <meta name="viewport content = "width-device-width, initial-scale=1.0 />
     <meta charset="utf-8" />
     {% load staticfiles %}
-    <link rel="stylesheet" href="{% static 'autopatch/css/styles.css' %}" type="text/css" />
-    <meta name="viewport content = "width-device-width, initial-scale=1.0 />
-  <!-- Bootstrap core CSS -->
-  <link href="{% static "autopatch/css/bootstrap-3.3.2.min.css" %}" rel="stylesheet">
-
-  <!-- Bootstrap theme -->
-      <link href="{% static "autopatch/css/bootstrap-theme-3.3.2.min.css" %}" rel="stylesh
-										  eet">
-
-      <!-- Bootstrap datetimepicker plugin -->
-      <link href="{% static "autopatch/css/bootstrap-datetimepicker-3.0.0.min.css" %}" rel
-	    ="stylesheet">
-
-      <!-- Custom CSS -->
-      <link href="{% static "autopatch/css/custom_base.css" %}" rel="stylesheet">
-
-      {% block extra-css %}
-      {% endblock %}
-       <script src="{% static "autopatch/javascript/jquery-latest.js" %}"></script>
-       <script src="{% static "autopatch/javascript/jquery.tablesorter.js" %}"></script>
-       <script>
-       $(document).ready(function()
-       {
-       $("#myTable").tablesorter( {sortList: [[0,0], [1,0]]} );
-       }
-       );
-       </script>
+    <link rel="stylesheet" href="{% static 'autopatch/css/bootstrap.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'autopatch/css/flat-ui.css' %}" type="text/css" />
+    {% load sass_tags %}
+    <link rel="stylesheet" href="{% sass_src 'autopatch/css/styles.scss' %}" type="text/css" />
   </head>
+
   <body class="body">
-    <header class="mainHead">
-      <!--
-      <img src="{% static 'autopatch/images/<image>.png' %}" windth="700" height="144"/>
-      -->
-      <h2 class='logoText'>Patching Headquarters</h2>
-
-    <div class="navbar navbar-inverse" role="navigation">
-      <div class="container-fluid">
-	<div class="navbar-header">
-	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	    <span class="sr-only">Toggle navigation</span>
-	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-	  </button>
-	  <a class="navbar-brand" href="/autopatch/">Platops Patching</a>
+    <header>
+      <nav class="navbar navbar-default navbar-static-top" role="navigation">
+	<div class="container">
+	  <div class="navbar-header">
+	    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	    </button>
+	    <a class="navbar-brand" href="/autopatch/">Platops Patching</a>
+	  </div>
+	  <div class="navbar-collapse collapse">
+	    <ul class="nav navbar-nav">
+	      <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/prod/">Prod</a></li>
+	      <li {% if request.path|slice:":16" == "/autopatch/stage" %}class="active"{% endif %}><a href="/autopatch/stage/">Stage</a></li>
+	      <li {% if request.path|slice:":16" == "/autopatch/qa/" %}class="active"{% endif %}><a href="/autopatch/qa/">QA</a></li>
+	      <li {% if request.path|slice:":16" == "/autopatch/dev/" %}class="active"{% endif %}><a href="/autopatch/dev/">Dev</a></li>
+	      <li {% if request.path|slice:":16" == "/autopatch/tasks/" %}class="active"{% endif %}><a href="/autopatch/tasks/">Patching Tasks</a></li>
+	    </ul>
+	  </div>
 	</div>
-	<div class="navbar-collapse collapse">
-	  <ul class="nav navbar-nav">
-	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/prod/">Prod</a></li>
-	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/stage/">Stage</a></li>
-	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/qa/">QA</a></li>
-	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/dev/">Dev</a></li>
-	    <li {% if request.path|slice:":16" == "/autopatch/prod/" %}class="active"{% endif %}><a href="/autopatch/tasks/">Patching Tasks</a></li>
-	  </ul>
-	</div>
-      </div>
-    </div>
-
+      </nav>
     </header>
-    
+
     {% block content %}
 
-    {% if latest_question_list %}
-
-    <div class="MainContent">
-      <div class="content">
-	<article class="typicalArticle">
-	    <h3>this is a server</h3>
-	    <content>
-	      <ul>
-		{% for question in latest_question_list %}
-		<li>
-		  <a href="{% url 'autopatch:post' post.id %}">{{ post.body }}</a>
-		</li>
-		{% endfor %}
-	      </ul>
-	      {% else %}
-	      <p>No polls are available.</p>
-	    </content>
-	</article>
-      </div>
-    </div>
-    {% endif %}
     {% endblock %}
     
     
-    <footer class="mainFooter">
-      <p> You are wonderful </p>
-    </footer>
-
-
-       <!-- Bootstrap core JavaScript
-	    ================================================== -->
-       <!-- Placed at the end of the document so the pages load faster -->
-       <script src="{% static "autopatch/javascript/jquery-1.11.2.min.js" %}"></script>
-       <script src="{% static "autopatch/javascript/jquery.cookie-1.4.1.js" %}"></script>
-       <script src="{% static "autopatch/javascript/ajax_config.js" %}"></script>
-       <script src="{% static "autopatch/javascript/moment-with-langs-2.7.0.min.js" %}"></script>
-       <script src="{% static "autopatch/javascript/bootstrap-3.3.2.min.js" %}"></script>
-       <script src="{% static "autopatch/javascript/bootstrap-datetimepicker-3.0.0.min.js" %}"></script>
-       <script src="{% static "autopatch/javascript/jquery-latest.js" %}"></script>
-       <script src="{% static "autopatch/javascript/jquery.tablesorter.js" %}"></script>
-       {% block extra-scripts %}
-       {% endblock %}
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+	<ul class="nav navbar-nav pull-left">
+	  <li>
+	    <p class="navbar-text">{{ encouragement }}</p>
+	  </li>
+	</ul>
+      </div>
+    </nav> 
   </body>
 
+  <script src="{% static 'autopatch/javascript/jquery-latest.js' %}"></script>
+  <script src="{% static 'autopatch/javascript/jquery.tablesorter.js' %}"></script>
+  <script src="{% static 'autopatch/javascript/flat-ui.min.js' %}"></script>
+  <script>
+    $(document).ready(function()
+    {
+    $("#myTable").tablesorter( {sortList: [[0,0], [1,0]]} );
+    }
+    );
+  </script>
 </html>

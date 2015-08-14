@@ -1,20 +1,13 @@
 {% extends "autopatch/index.html" %}
 
-{% block sidebar %}
-
-<ul>
-  <li><a href="/autopatch/">Cancel</a></li>
-</ul>
-{% endblock %}
-
 {% block content %}
 
-<form action="/autopatch/create/" method="post">{% csrf_token %}
-  <ul>
-    {{ form.as_ul }}
-  </ul>
-
-  <input type="submit" name="submit" value="Create Server">
-</form>
+<div class="container">
+  <form action="/autopatch/create/" method="post">{% csrf_token %}
+    {{ form }}
+    <br />
+    <input type="submit" name="submit" class="btn btn-info" value="Create Server">
+  </form>
+</div>
 
 {% endblock %}

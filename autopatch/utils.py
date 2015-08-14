@@ -1,4 +1,4 @@
-import urllib.request, urllib.error, git, shutil, os, glob
+import urllib.request, urllib.error, git, shutil, os, glob, random
 from django.http import Http404
 from .models import Server,Hosttotal,Errata
 from django.shortcuts import get_object_or_404
@@ -177,3 +177,12 @@ class ModMaint():
         total = {'env': t.env, 'total': t.total}
         t.save()
         return total
+
+def encouragement():
+    return random.choice(['You are wonderful.',
+                          'You have a phenomenal attitude.',
+                          'You are the wind beneath my wings.',
+                          'You are crazy, but in a good way.',
+                          'I wish I was more like you.',
+                          'I admire your strength and perseverance.',
+                          'You are an incredibly sensitive person who inspires joyous feelings in all those around you.'])

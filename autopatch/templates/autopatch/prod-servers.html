@@ -1,27 +1,8 @@
 {% extends "autopatch/index.html" %}
 {% block content %}
-<script type="text/javascript">
-  function goTo()
-  {
-  location.href = document.getElementById('link_id').value;
-  }
-</script>
-<!--
-    <h2> Search box </h2>
-    <input type='text' id='link_id'>
-    <input type='button' id='link' value='Search' onClick='javascript:goTo()'>
-    -->
-<div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Prod Servers</div>
-  <div class="panel-body">
-    <p>Prod environment servers and Syspatch parameters</p>
-    <form action="/autopatch/prod/" method="get"><input type="submit" class="btn" value="Get Total Number of Prod Hosts" name="mybtn"></form>
-    <p> Environment: {{ env }}</p>
-    <p> Total Number of Hosts: {{ total }}</p>
-  </div>
-  <!-- Table -->
-  <table id="myTable" class="tablesorter" border="1" align="center">
+<div class="container">
+  <p>Viewing <b>{{ total }}</b> hosts in the <b>{{ env }}</b> environment.</p>
+  <table id="myTable" class="table table-striped tablesorter">
     <thead>
       <tr>
 	<th>Server Name</th>
@@ -45,3 +26,4 @@
   </table>
 </div>
 {% endblock  %}
+<br />

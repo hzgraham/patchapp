@@ -1,0 +1,130 @@
+$background: #4d394b;
+$color: #ffffff;
+$highlight: #38978d;
+$link: #2a80b9;
+$linkhighlight: #5197c6;
+
+.navbar-default {
+    background-color: $background;
+}
+
+.navbar-default .navbar-brand {
+    color: $color;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: $highlight;
+}
+
+.navbar-default .navbar-brand:focus {
+    color: $highlight;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: $color;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: $highlight;
+}
+
+.navbar-default .navbar-nav>li>a:focus {
+    color: $highlight;
+}
+
+.navbar-default .navbar-nav>.dropdown>a .caret {
+    border-top-color: $color;
+    border-bottom-color: $color;
+}
+
+.navbar-default .navbar-nav>.dropdown>a:hover {
+    border-top-color: $highlight;
+    border-bottom-color: $highlight;
+}
+
+.navbar-default .navbar-nav>.dropdown>a:focus {
+    border-top-color: $highlight;
+    border-bottom-color: $highlight;
+}
+
+.navbar-default .navbar-nav>.dropdown>a:hover .caret {
+    border-top-color: $highlight;
+    border-bottom-color: $highlight;
+}
+
+.navbar-default .navbar-nav>.dropdown>a:focus .caret {
+    border-top-color: $highlight;
+    border-bottom-color: $highlight;
+}
+
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+											color: $highlight;
+											background-color: transparent;
+										    }
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus {
+										    color: $highlight;
+										    background-color: transparent;
+										}
+.navbar-default .navbar-text {
+    color: $color;
+}
+
+p.navbar-text>a {
+    color: $color;
+    text-decoration: none;
+    -webkit-transition: .25s;
+    transition: .25s;
+}
+
+p.navbar-text>a:hover {
+    color: $highlight;
+    text-decoration: none;
+    -webkit-transition: .25s;
+    transition: .25s;
+}
+
+p.navbar-text>a:focus {
+    color: $highlight;
+    text-decoration: none;
+    -webkit-transition: .25s;
+    transition: .25s;
+}
+
+.row .recently-added-col {
+  width: 800px;
+  margin-left: -5px;
+}
+
+.row [class*="col"] {
+    float: left;
+    min-height: 1px;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 100px;
+}
+
+.table>thead>tr>th {
+    text-align: center;
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+
+a {
+    color: $link;
+    text-decoration: none;
+    -webkit-transition: .25s;
+    transition: .25s;
+}
+
+a:hover {
+    color: $linkhighlight;
+}
+
+a:focus {
+    color: $linkhighlight;
+}
