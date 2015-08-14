@@ -1,136 +1,126 @@
-body {
-    color:#000305;
-    font-size: 80%;
-    font-family: 'Lucida Sans Unicode';
-    line-height: 1.5;
-    text-align: left;
-}
+/* line 7, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default {
+  background-color: #4d394b; }
 
+/* line 11, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-brand {
+  color: #ffffff; }
+
+/* line 15, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-brand:hover {
+  color: #38978d; }
+
+/* line 19, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-brand:focus {
+  color: #38978d; }
+
+/* line 23, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff; }
+
+/* line 27, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > li > a:hover {
+  color: #38978d; }
+
+/* line 31, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > li > a:focus {
+  color: #38978d; }
+
+/* line 35, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .dropdown > a .caret {
+  border-top-color: #ffffff;
+  border-bottom-color: #ffffff; }
+
+/* line 40, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .dropdown > a:hover {
+  border-top-color: #38978d;
+  border-bottom-color: #38978d; }
+
+/* line 45, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .dropdown > a:focus {
+  border-top-color: #38978d;
+  border-bottom-color: #38978d; }
+
+/* line 50, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .dropdown > a:hover .caret {
+  border-top-color: #38978d;
+  border-bottom-color: #38978d; }
+
+/* line 55, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+  border-top-color: #38978d;
+  border-bottom-color: #38978d; }
+
+/* line 61, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #38978d;
+  background-color: transparent; }
+
+/* line 66, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #38978d;
+  background-color: transparent; }
+
+/* line 70, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.navbar-default .navbar-text {
+  color: #ffffff; }
+
+/* line 74, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+p.navbar-text > a {
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: .25s;
+  transition: .25s; }
+
+/* line 81, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+p.navbar-text > a:hover {
+  color: #38978d;
+  text-decoration: none;
+  -webkit-transition: .25s;
+  transition: .25s; }
+
+/* line 88, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+p.navbar-text > a:focus {
+  color: #38978d;
+  text-decoration: none;
+  -webkit-transition: .25s;
+  transition: .25s; }
+
+/* line 95, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.row .recently-added-col {
+  width: 800px;
+  margin-left: -5px; }
+
+/* line 100, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.row [class*="col"] {
+  float: left;
+  min-height: 1px; }
+
+/* line 105, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 100px; }
+
+/* line 111, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+.table > thead > tr > th {
+  text-align: center;
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd; }
+
+/* line 117, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 a {
-    text-decoloration: none;
-}
+  color: #2a80b9;
+  text-decoration: none;
+  -webkit-transition: .25s;
+  transition: .25s; }
 
-a:link,
-a:visited {
-    color:#1A94D6;
-}
+/* line 124, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+a:hover {
+  color: #5197c6; }
 
-a:hover, a:active{
-    color: #797979;
-}
+/* line 128, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
+a:focus {
+  color: #5197c6; }
 
-.body{
-    margin:0 auto;
-    width:75%;
-    clear:both;
-}
-
-.mainHead nav{
-    background-color: #797979;
-    height: 40px;
-    border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-boarder-radius: 7px;
-}
-
-.mainHead nav ul {
-    list-style: none;
-    margin: 0 auto;
-}
-
-.mainHead nav ul li {
-    float: left;
-    display: inline;
-    
-}
-
-.mainHead nav a:link,
-.mainHead nav a:visited{
-    color: #FFF;
-    display: inline-block;
-    padding: 10px 25px;
-    height: 20px;
-				      
-}
-
-.mainHead nav .active a:link,
-.mainHead nav .active a:visited,
-.mainHead nav a:hover,
-.mainHead nav a:active {
-    background-color: #04BAE3;
-    text-shadow: none;
-}
-
-
-.mainContent {
-    line-height:20px;
-    border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-}
-
-.content{
-    width: 80%;
-    /*float: right;*/
-    margin-left: auto;
-    margin-right: auto;
-    /*text-align: center;*/
-    padding: 0% 2%;
-    background-color: #f8f8f8;
-    /*top right bottom left */
-    /*margin: 1% 0% 1% 1%;*/
-    border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-}
-
-.postInfo{
-    font-style: italic;
-    font-size: 85%;
-    color: #989898;
-}
-
-
-.sideInfo {
-    width: 25%;
-    float: left;
-    margin: 1% 0% 1% 0%;
-    border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-    background-color: #F8F8F8
-
-}
-
-.mainFooter {
-    width: 100%;
-    float: left;
-    margin-bottom: 2%;
-    border-radius: 7px;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-    background-color: #797979;
-}
-
-.mainFooter p {
-    width: 92%;
-    margin: 2% auto;
-    color: #fff;
-}
-/* Sortable tables */
-table.sortable thead {
-    background-color:#eee;
-    color:#666666;
-    font-weight: bold;
-    cursor: default;
-}
-th.header {
-    background-image: url(../img/small.gif);
-    cursor: pointer;
-    font-weight: bold;
-    background-repeat: no-repeat;
-    background-position: center left;
-    padding-left: 20px;
-    border-right: 1px solid #dad9c7;
-    margin-left: -1px;
-}
+/*# sourceMappingURL=../../../../../../../static/autopatch/css/styles.css.map */

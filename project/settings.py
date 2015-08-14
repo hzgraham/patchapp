@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'compressor',
+    'sass_processor',
     'autopatch',
 )
 
@@ -117,4 +119,10 @@ STATICFILES_DIRS =( os.path.join(STATIC_ROOT, 'css/'),
                     os.path.join(STATIC_ROOT, 'javascript/'),
                     os.path.join(STATIC_ROOT, 'images/'),
                     os.path.join(STATIC_ROOT, 'autopatch/')
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
 )

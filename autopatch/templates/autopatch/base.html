@@ -2,23 +2,22 @@
 
 {% block content %}
 
-<div class="MainContent">
+<div class="container">
   <div class="content">
     <article class="typicalArticle">
       <header>
-	<h3>Welcome to the main page of the Patching App</h3>
+	<h3>Welcome to the Patching App</h3>
       </header>
-      <h4>Comments:</h4>
-      <ul> Please select from one of the options in the menu bar located above.
-        <p>
-	  <li>The "Prod/Stage/QA/Dev" tabs will take you to a list of hosts for that environment</li>
-	  <li>The "Tasks" tab will take you to a page containing patching related operations you can do.</li>
-	</p>
+      <p>
+	Select from environments or tasks in the top navigation.
+      </p>
+      <ul>
+	<li>The "Prod/Stage/QA/Dev" tabs will take you to a list of hosts for that environment</li>
+	<li>The "Patching Tasks" tab will take you to a page containing patching related operations.</li>
 	<li>You can manually add a server here! - <a href="/autopatch/create/">Create Server</a></li>
       </ul>
     </article>
   </div>
 </div>
-
 
 {% endblock %}
