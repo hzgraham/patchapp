@@ -30,7 +30,7 @@
 	      <li {% if request.path|slice:":16" == "/autopatch/stage" %}class="active"{% endif %}><a href="/autopatch/stage/">Stage</a></li>
 	      <li {% if request.path|slice:":16" == "/autopatch/qa/" %}class="active"{% endif %}><a href="/autopatch/qa/">QA</a></li>
 	      <li {% if request.path|slice:":16" == "/autopatch/dev/" %}class="active"{% endif %}><a href="/autopatch/dev/">Dev</a></li>
-	      <li {% if request.path|slice:":16" == "/autopatch/tasks/" %}class="active"{% endif %}><a href="/autopatch/tasks/">Patching Tasks</a></li>
+	      <li {% if request.path|slice:":16" == "/autopatch/tasks" %}class="active"{% endif %}><a href="/autopatch/tasks/">Patching Tasks</a></li>
 	    </ul>
 	  </div>
 	</div>
