@@ -1,126 +1,99 @@
-/* line 7, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default {
   background-color: #4d394b; }
 
-/* line 11, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-brand {
   color: #ffffff; }
 
-/* line 15, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-brand:hover {
   color: #38978d; }
 
-/* line 19, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-brand:focus {
   color: #38978d; }
 
-/* line 23, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > li > a {
   color: #ffffff; }
 
-/* line 27, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > li > a:hover {
   color: #38978d; }
 
-/* line 31, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > li > a:focus {
   color: #38978d; }
 
-/* line 35, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .dropdown > a .caret {
   border-top-color: #ffffff;
   border-bottom-color: #ffffff; }
 
-/* line 40, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .dropdown > a:hover {
   border-top-color: #38978d;
   border-bottom-color: #38978d; }
 
-/* line 45, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .dropdown > a:focus {
   border-top-color: #38978d;
   border-bottom-color: #38978d; }
 
-/* line 50, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .dropdown > a:hover .caret {
   border-top-color: #38978d;
   border-bottom-color: #38978d; }
 
-/* line 55, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .dropdown > a:focus .caret {
   border-top-color: #38978d;
   border-bottom-color: #38978d; }
 
-/* line 61, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
   color: #38978d;
   background-color: transparent; }
 
-/* line 66, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
   color: #38978d;
   background-color: transparent; }
 
-/* line 70, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .navbar-default .navbar-text {
   color: #ffffff; }
 
-/* line 74, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 p.navbar-text > a {
   color: #ffffff;
   text-decoration: none;
   -webkit-transition: .25s;
   transition: .25s; }
 
-/* line 81, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 p.navbar-text > a:hover {
   color: #38978d;
   text-decoration: none;
   -webkit-transition: .25s;
   transition: .25s; }
 
-/* line 88, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 p.navbar-text > a:focus {
   color: #38978d;
   text-decoration: none;
   -webkit-transition: .25s;
   transition: .25s; }
 
-/* line 95, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .row .recently-added-col {
   width: 800px;
   margin-left: -5px; }
 
-/* line 100, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .row [class*="col"] {
   float: left;
   min-height: 1px; }
 
-/* line 105, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .table {
   width: 100%;
   max-width: 100%;
   margin-bottom: 100px; }
 
-/* line 111, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 .table > thead > tr > th {
   text-align: center;
   vertical-align: bottom;
   border-bottom: 2px solid #ddd; }
 
-/* line 117, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 a {
   color: #2a80b9;
   text-decoration: none;
   -webkit-transition: .25s;
   transition: .25s; }
 
-/* line 124, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 a:hover {
   color: #5197c6; }
 
-/* line 128, /home/abutcher/patchapp/autopatch/static/autopatch/css/styles.scss */
 a:focus {
   color: #5197c6; }
-
-/*# sourceMappingURL=../../../../../../../static/autopatch/css/styles.css.map */
