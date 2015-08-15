@@ -19,7 +19,7 @@ class LoginForm(forms.Form):
     ENV = [
         ('dev'), ('qa'), ('stage'), ('prod'),
     ]
-    environment = forms.ChoiceField(choices=ENV, required=True, label='Environment')
+    environment = forms.ChoiceField(choices=[(1, 'dev'),(2, 'qa'),(3, 'stage'), (4, 'prod')], required=True, label='Environment')
 
 class ErrataForm(forms.ModelForm):
 
