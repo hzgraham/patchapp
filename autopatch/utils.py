@@ -2,6 +2,9 @@ import urllib.request, urllib.error, git, shutil, os, glob, random
 from django.http import Http404
 from .models import Server,Hosttotal,Errata
 from django.shortcuts import get_object_or_404
+#for satellite
+import xmlrpc.client, xmlrpc.server
+from .forms import LoginForm
 
 class TaskScripts():
     def parseForm(self, form):
@@ -17,6 +20,61 @@ class TaskScripts():
         print("This is RHEA",RHEA)
         print("############################")
         print("This is the form: ",form)
+
+    def parseSatForm(self, request, form):
+        #env = form.data['environment']
+        submit = form.data['submit']
+        #print("Form data: ", env, submit)
+        print("This is the request: ", request)
+        #print("This is the form : ", form)
+        #print("This is the button: ", btn)
+
+class Satellite():
+    def getIds(self, request, session):
+        form = LoginForm(request.POST)
+        #env = form.data['environment']
+        submit = form.data['submit']
+        context = {'encouragement': encouragement()}
+        print("Made it to utils: ",request)
+        if(environment=="dev"):
+            dev_list = Server.objects.all().filter(env="dev").order_by('server')
+            print(dev_list)
+            # for each in dev_list:
+        #         devhost = each.server
+        #         data = client.system.getId(session, name)
+        #         getid = data[0].get('id')
+        #         each.satid = getid
+        #         each.save()
+        #         #context = {'getid': getid}
+        #     client.auth.logout(session)
+        # if(request.GET.get('qabtn')):
+        #     qa_list = Server.objects.all().filter(env="qa").order_by('server')
+        #     for each in qa_list:
+        #         data = client.system.getId(session, name)
+        #         getid = data[0].get('id')
+        #         each.satid = getid
+        #         each.save()
+        #         #context = {'getid': getid}
+        #     client.auth.logout(session)
+        # if(request.GET.get('stagebtn')):
+        #     stage_list = Server.objects.all().filter(env="stage").order_by('server')
+        #     for each in stage_list:
+        #         data = client.system.getId(session, name)
+        #         getid = data[0].get('id')
+        #         each.satid = getid
+        #         each.save()
+        #         #context = {'getid': getid}
+        #     client.auth.logout(session)
+        # if(request.GET.get('prodbtn')):
+        #     prod_list = Server.objects.all().filter(env="prod").order_by('server')
+        #     for each in prod_list:
+        #         data = client.system.getId(session, name)
+        #         getid = data[0].get('id')
+        #         each.satid = getid
+        #         each.save()
+        #         #context = {'getid': getid}
+        #     client.auth.logout(session)
+        return context
 
 class ModMaint():
     def parseGit(self, manifests):

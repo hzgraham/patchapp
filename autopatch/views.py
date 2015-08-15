@@ -1,7 +1,11 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+#Class Views
 from django.views import generic
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
+
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.utils import timezone
@@ -15,7 +19,7 @@ import xmlrpc.client, xmlrpc.server
 
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm
 from .models import Server, Hosttotal, Errata
-from autopatch.utils import ModMaint, TaskScripts, encouragement
+from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 
 def CreateCSV(request):
     s = []
@@ -283,55 +287,63 @@ def DevView(request):
     return render(request, 'autopatch/dev-servers.html', context)
 
 def SatId(request):
+    context = {'encouragement': encouragement()}
     #SatId will get the ID of each server in Satellite
     #There are 4 buttons on the patching tasks page, one for each env
-    context = {'encouragement': encouragement()}
+    #context = {'encouragement': encouragement()}
     if request.POST:
-        form = LoginForm(request.POST)
+        form = LoginForm(data=request.POST)
+        if(request.POST.get('devbtn')):
+            btn = 'dev button!!'
+        else:
+            btn = 'no btn :('
+        TaskScripts().parseSatForm(request, form)
         if form.is_valid():
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
             URL = form.cleaned_data['satellite']
-            name = form.cleaned_data['hostname']
-            client = xmlrpc.client.Server(URL, verbose=0)
-            session = client.auth.login(user, pswd)
-            if(request.GET.get('devbtn')):
-                dev_list = Server.objects.all().filter(env="dev").order_by('server')
-                for each in dev_list:
-                    devhost = each.server
-                    data = client.system.getId(session, name)
-                    getid = data[0].get('id')
-                    each.satid = getid
-                    each.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
-            if(request.GET.get('qabtn')):
-                qa_list = Server.objects.all().filter(env="qa").order_by('server')
-                for each in qa_list:
-                    data = client.system.getId(session, name)
-                    getid = data[0].get('id')
-                    each.satid = getid
-                    each.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
-            if(request.GET.get('stagebtn')):
-                stage_list = Server.objects.all().filter(env="stage").order_by('server')
-                for each in stage_list:
-                    data = client.system.getId(session, name)
-                    getid = data[0].get('id')
-                    each.satid = getid
-                    each.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
-            if(request.GET.get('prodbtn')):
-                prod_list = Server.objects.all().filter(env="prod").order_by('server')
-                for each in prod_list:
-                    data = client.system.getId(session, name)
-                    getid = data[0].get('id')
-                    each.satid = getid
-                    each.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
+            #name = form.cleaned_data['hostname']
+            #client = xmlrpc.client.Server(URL, verbose=0)
+            #session = client.auth.login(user, pswd)
+            session = 'temp'
+            context = Satellite().getIds(request, session)
+            # if(request.GET.get('devbtn')):
+            #     dev_list = Server.objects.all().filter(env="dev").order_by('server')
+            #     for each in dev_list:
+            #         devhost = each.server
+            #         data = client.system.getId(session, name)
+            #         getid = data[0].get('id')
+            #         each.satid = getid
+            #         each.save()
+            #         #context = {'getid': getid}
+            #     client.auth.logout(session)
+            # if(request.GET.get('qabtn')):
+            #     qa_list = Server.objects.all().filter(env="qa").order_by('server')
+            #     for each in qa_list:
+            #         data = client.system.getId(session, name)
+            #         getid = data[0].get('id')
+            #         each.satid = getid
+            #         each.save()
+            #         #context = {'getid': getid}
+            #     client.auth.logout(session)
+            # if(request.GET.get('stagebtn')):
+            #     stage_list = Server.objects.all().filter(env="stage").order_by('server')
+            #     for each in stage_list:
+            #         data = client.system.getId(session, name)
+            #         getid = data[0].get('id')
+            #         each.satid = getid
+            #         each.save()
+            #         #context = {'getid': getid}
+            #     client.auth.logout(session)
+            # if(request.GET.get('prodbtn')):
+            #     prod_list = Server.objects.all().filter(env="prod").order_by('server')
+            #     for each in prod_list:
+            #         data = client.system.getId(session, name)
+            #         getid = data[0].get('id')
+            #         each.satid = getid
+            #         each.save()
+            #         #context = {'getid': getid}
+            #     client.auth.logout(session)
     return render_to_response('autopatch/patching-tasks.html', context,
                               context_instance=RequestContext(request))
 

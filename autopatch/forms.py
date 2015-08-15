@@ -15,7 +15,11 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput())
     loginname = forms.CharField(max_length=256)
     satellite = forms.CharField(max_length=256)
-    hostname = forms.CharField(max_length=256)
+    #hostname = forms.CharField(max_length=256)
+    ENV = [
+        ('dev'), ('qa'), ('stage'), ('prod'),
+    ]
+    environment = forms.ChoiceField(choices=ENV, required=True, label='Environment')
 
 class ErrataForm(forms.ModelForm):
 
