@@ -21,6 +21,9 @@ from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, Err
 from .models import Server, Hosttotal, Errata
 from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 
+from django.views.decorators.debug import sensitive_variables
+from django.views.decorators.debug import sensitive_post_parameters
+
 def CreateCSV(request):
     s = []
     q = []
@@ -286,6 +289,8 @@ def DevView(request):
     context = {'dev_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
     return render(request, 'autopatch/dev-servers.html', context)
 
+@sensitive_variables('pswd', 'password', 'form')
+@sensitive_post_parameters('password')
 def SatId(request):
     #SatId will get the ID of each server in Satellite
     #There are 4 buttons on the patching tasks page, one for each env

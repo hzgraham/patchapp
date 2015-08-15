@@ -28,7 +28,7 @@ class TaskScripts():
         # #env = form.data['environment']
         # submit = form.data['submit']
         #print("Form data: ", env, submit)
-        #print("This is the request: ", request)
+        print("This is the request: ", request)
         #print("This is the form : ", form)
         #print("This is the button: ", btn)
 
@@ -249,4 +249,5 @@ def encouragement():
                           'You are crazy, but in a good way.',
                           'I wish I was more like you.',
                           'I admire your strength and perseverance.',
-                          'You are an incredibly sensitive person who inspires joyous feelings in all those around you.'])
+                          'You are an incredibly sensitive person who inspires joyous feelings in all those around you.',
+                          'Stay Classy'])
