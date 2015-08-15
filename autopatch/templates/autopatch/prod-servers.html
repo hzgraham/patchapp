@@ -2,6 +2,11 @@
 {% block content %}
 <div class="container">
   <p>Viewing <b>{{ total }}</b> hosts in the <b>{{ env }}</b> environment.</p>
+  <div class="row">
+    <div class="col-xs-4">
+      <input class="form-control" type="text" id="input-server-list" placeholder="Filter" />
+    </div>
+  </div>
   <table id="myTable" class="table table-striped tablesorter">
     <thead>
       <tr>
@@ -11,10 +16,10 @@
 	<th>Exclude Packages</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="list-servers">
       {% for host in prod_list %}
       {% if ".prod." in host.server or ".util." in host.server or ".dev" not in host.server and ".qa." not in host.server and ".stage." not in host.server %}
-      <tr>
+      <tr id="list-servers">
 	<td align="center" width="25%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
 	<td align="center" width="5%">{{ host.skip }}</td>
 	<td align="center" width="10%">{{ host.hostgroup }}</td>
