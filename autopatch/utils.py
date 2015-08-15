@@ -34,6 +34,7 @@ class TaskScripts():
 
 class Satellite():
     def getIds(self, client, request, session, env):
+        #This function currently isn't used
         form = LoginForm(request.POST)
         #env = form.data['environment']
         context = {'encouragement': encouragement()}
@@ -45,41 +46,6 @@ class Satellite():
                 servername = host.server
                 URL = "https://satellite.corp.redhat.com/rpc/api"
                 print("Servername: ",servername)
-            #     client = xmlrpc.client.Server(URL, verbose=0)
-            #     data = client.system.getId(session, servername)
-            #     getid = data[0].get('id')
-            #     host.satid = getid
-            #     print("Server: ",servername,"Sat ID:",getid)
-            #     host.save()
-            #     #context = {'getid': getid}
-            # client.auth.logout(session)
-        # if(request.GET.get('qabtn')):
-        #     qa_list = Server.objects.all().filter(env="qa").order_by('server')
-        #     for each in qa_list:
-        #         data = client.system.getId(session, name)
-        #         getid = data[0].get('id')
-        #         each.satid = getid
-        #         each.save()
-        #         #context = {'getid': getid}
-        #     client.auth.logout(session)
-        # if(request.GET.get('stagebtn')):
-        #     stage_list = Server.objects.all().filter(env="stage").order_by('server')
-        #     for each in stage_list:
-        #         data = client.system.getId(session, name)
-        #         getid = data[0].get('id')
-        #         each.satid = getid
-        #         each.save()
-        #         #context = {'getid': getid}
-        #     client.auth.logout(session)
-        # if(request.GET.get('prodbtn')):
-        #     prod_list = Server.objects.all().filter(env="prod").order_by('server')
-        #     for each in prod_list:
-        #         data = client.system.getId(session, name)
-        #         getid = data[0].get('id')
-        #         each.satid = getid
-        #         each.save()
-        #         #context = {'getid': getid}
-        #     client.auth.logout(session)
         return context
 
 class ModMaint():

@@ -325,43 +325,54 @@ def SatId(request):
                     host.save()
                     #context = {'getid': getid}
                 client.auth.logout(session)
-            # if(request.GET.get('devbtn')):
-            #     dev_list = Server.objects.all().filter(env="dev").order_by('server')
-            #     for each in dev_list:
-            #         devhost = each.server
-            #         data = client.system.getId(session, name)
-            #         getid = data[0].get('id')
-            #         each.satid = getid
-            #         each.save()
-            #         #context = {'getid': getid}
-            #     client.auth.logout(session)
-            # if(request.GET.get('qabtn')):
-            #     qa_list = Server.objects.all().filter(env="qa").order_by('server')
-            #     for each in qa_list:
-            #         data = client.system.getId(session, name)
-            #         getid = data[0].get('id')
-            #         each.satid = getid
-            #         each.save()
-            #         #context = {'getid': getid}
-            #     client.auth.logout(session)
-            # if(request.GET.get('stagebtn')):
-            #     stage_list = Server.objects.all().filter(env="stage").order_by('server')
-            #     for each in stage_list:
-            #         data = client.system.getId(session, name)
-            #         getid = data[0].get('id')
-            #         each.satid = getid
-            #         each.save()
-            #         #context = {'getid': getid}
-            #     client.auth.logout(session)
-            # if(request.GET.get('prodbtn')):
-            #     prod_list = Server.objects.all().filter(env="prod").order_by('server')
-            #     for each in prod_list:
-            #         data = client.system.getId(session, name)
-            #         getid = data[0].get('id')
-            #         each.satid = getid
-            #         each.save()
-            #         #context = {'getid': getid}
-            #     client.auth.logout(session)
+            if(env=="qa"):
+                qa_list = Server.objects.all().filter(env="qa").order_by('server')[:15]
+                for host in qa_list:
+                    servername = host.server
+                    #print("Servername: ",servername)
+                    client = xmlrpc.client.Server(URL, verbose=0)
+                    data = client.system.getId(session, servername)
+                    #TaskScripts().parseSatForm(servername, data)
+                    if data:
+                        getid = data[0].get('id')
+                        host.satid = getid
+                    else:
+                        pass
+                    host.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
+            if(env=="stage"):
+                stage_list = Server.objects.all().filter(env="stage").order_by('server')[:15]
+                for host in stage_list:
+                    servername = host.server
+                    #print("Servername: ",servername)
+                    client = xmlrpc.client.Server(URL, verbose=0)
+                    data = client.system.getId(session, servername)
+                    #TaskScripts().parseSatForm(servername, data)
+                    if data:
+                        getid = data[0].get('id')
+                        host.satid = getid
+                    else:
+                        pass
+                    host.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
+            if(env=="prod"):
+                prod_list = Server.objects.all().filter(env="prod").order_by('server')[:15]
+                for host in prod_list:
+                    servername = host.server
+                    #print("Servername: ",servername)
+                    client = xmlrpc.client.Server(URL, verbose=0)
+                    data = client.system.getId(session, servername)
+                    #TaskScripts().parseSatForm(servername, data)
+                    if data:
+                        getid = data[0].get('id')
+                        host.satid = getid
+                    else:
+                        pass
+                    host.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
     else:
         pass
     return render_to_response('autopatch/patching-tasks.html', context,
