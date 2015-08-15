@@ -45,6 +45,7 @@
 	<input id="id_satellite" type="text" name="satellite" maxlength="100" class="form-control" placeholder="satellite.corp.example.com"/>
       </div>
     </div>
+    <!--
     <div class="row">
       <div class="col-xs-2">
 	<p>Servername</p>
@@ -53,6 +54,7 @@
 	<input id="id_hostname" type="text" name="hostname" maxlength="100" class="form-control" placeholder="myhost01.example.com"/>
       </div>
     </div>
+    -->
     <div class="row">
       <div class="col-xs-2">
 	<p>Login</p>
@@ -70,9 +72,22 @@
 	<input type="password" name="password" id="id_password" class="form-control" placeholder="" />
       </div>
     </div>
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Environment</p>
+      </div>
+      <div class="col-xs-6">
+	<select name="environment">
+	  <option value="prod" selected="selected">Prod Env</option>
+	  <option value="stage" selected="selected">Stage Env</option>
+	  <option value="qa" selected="selected">QA Env</option>
+	  <option value="dev" selected="selected">Dev Env</option>
+	</select>
+      </div>
+    </div>
     <br />
-    <input type="submit" name="submit" value="Dev Sat Info" name="devbtn" class="btn btn-info">
-    <input type="submit" name="submit" value="QA Sat Info" name="qabtn" class="btn btn-info">
+    <input type="submit" name="submit" value="Dev Sat Info" name="field" class="btn btn-info">
+    <input type="submit" name="qabtn" value="QA Sat Info" name="qabtn" class="btn btn-info">
     <input type="submit" name="submit" value="Stage Sat Info" name="stagebtn" class="btn btn-info">
     <input type="submit" name="submit" value="Prod Sat Info" name="prodbtn" class="btn btn-info">
   </form>
