@@ -287,26 +287,39 @@ def DevView(request):
     return render(request, 'autopatch/dev-servers.html', context)
 
 def SatId(request):
-    context = {'encouragement': encouragement()}
     #SatId will get the ID of each server in Satellite
     #There are 4 buttons on the patching tasks page, one for each env
-    #context = {'encouragement': encouragement()}
+    context = {'encouragement': encouragement()}
     if request.POST:
-        form = LoginForm(data=request.POST)
-        if(request.POST.get('devbtn')):
-            btn = 'dev button!!'
-        else:
-            btn = 'no btn :('
+        form = LoginForm(request.POST)
         TaskScripts().parseSatForm(request, form)
         if form.is_valid():
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
-            URL = form.cleaned_data['satellite']
+            url = form.cleaned_data['satellite']
+            URL = "https://"+url+"/rpc/api"
+            env = form.cleaned_data['environment']
             #name = form.cleaned_data['hostname']
-            #client = xmlrpc.client.Server(URL, verbose=0)
-            #session = client.auth.login(user, pswd)
-            session = 'temp'
-            context = Satellite().getIds(request, session)
+            client = xmlrpc.client.Server(URL, verbose=0)
+            session = client.auth.login(user, pswd)
+            #session = 'temp'
+            #context = Satellite().getIds(request, client, session, env)
+            if(env=="dev"):
+                dev_list = Server.objects.all().filter(env="dev").order_by('server')[:15]
+                for host in dev_list:
+                    servername = host.server
+                    #print("Servername: ",servername)
+                    client = xmlrpc.client.Server(URL, verbose=0)
+                    data = client.system.getId(session, servername)
+                    #TaskScripts().parseSatForm(servername, data)
+                    if data:
+                        getid = data[0].get('id')
+                        host.satid = getid
+                    else:
+                        pass
+                    host.save()
+                    #context = {'getid': getid}
+                client.auth.logout(session)
             # if(request.GET.get('devbtn')):
             #     dev_list = Server.objects.all().filter(env="dev").order_by('server')
             #     for each in dev_list:
@@ -344,6 +357,8 @@ def SatId(request):
             #         each.save()
             #         #context = {'getid': getid}
             #     client.auth.logout(session)
+    else:
+        pass
     return render_to_response('autopatch/patching-tasks.html', context,
                               context_instance=RequestContext(request))
 

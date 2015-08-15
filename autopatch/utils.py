@@ -22,31 +22,37 @@ class TaskScripts():
         print("This is the form: ",form)
 
     def parseSatForm(self, request, form):
-        #env = form.data['environment']
-        submit = form.data['submit']
+        # if form.is_valid():
+        #     URL = form.cleaned_data['satellite']
+        #     print("This is the Satellite URL",URL)
+        # #env = form.data['environment']
+        # submit = form.data['submit']
         #print("Form data: ", env, submit)
-        print("This is the request: ", request)
+        #print("This is the request: ", request)
         #print("This is the form : ", form)
         #print("This is the button: ", btn)
 
 class Satellite():
-    def getIds(self, request, session):
+    def getIds(self, client, request, session, env):
         form = LoginForm(request.POST)
         #env = form.data['environment']
-        submit = form.data['submit']
         context = {'encouragement': encouragement()}
         print("Made it to utils: ",request)
-        if(environment=="dev"):
-            dev_list = Server.objects.all().filter(env="dev").order_by('server')
-            print(dev_list)
-            # for each in dev_list:
-        #         devhost = each.server
-        #         data = client.system.getId(session, name)
-        #         getid = data[0].get('id')
-        #         each.satid = getid
-        #         each.save()
-        #         #context = {'getid': getid}
-        #     client.auth.logout(session)
+        print("This is the environment: ",env)
+        if(env=="dev"):
+            dev_list = Server.objects.all().filter(env="dev").order_by('server')[:5]
+            for host in dev_list:
+                servername = host.server
+                URL = "https://satellite.corp.redhat.com/rpc/api"
+                print("Servername: ",servername)
+            #     client = xmlrpc.client.Server(URL, verbose=0)
+            #     data = client.system.getId(session, servername)
+            #     getid = data[0].get('id')
+            #     host.satid = getid
+            #     print("Server: ",servername,"Sat ID:",getid)
+            #     host.save()
+            #     #context = {'getid': getid}
+            # client.auth.logout(session)
         # if(request.GET.get('qabtn')):
         #     qa_list = Server.objects.all().filter(env="qa").order_by('server')
         #     for each in qa_list:
