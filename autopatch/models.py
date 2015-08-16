@@ -26,6 +26,8 @@ class Server(models.Model):
     comments = models.TextField(max_length=256, null=True, blank=True)
     satid = models.IntegerField(default=0)
     env = models.CharField(max_length=50, null=True, blank=True)
-    updates = models.TextField(max_length=1000, null=True, blank=True)
+    updates = models.TextField(max_length=2000, null=True, blank=True)
+    plerrata = models.TextField(max_length=2000, null=True, blank=True)
+    uptodate = models.BooleanField(default=0)
     def __unicode__(self):
         return self.server

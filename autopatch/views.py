@@ -161,6 +161,7 @@ def UpdateErrata(request):
         if form.is_valid():
             #TaskScripts().parseForm(form)
             #saving the errata levels entered in the form
+            RHEA = form.data['RHEA']
             RHSA = form.data['RHSA']
             RHBA = form.data['RHBA']
             errata = Errata.objects.first()
@@ -171,6 +172,11 @@ def UpdateErrata(request):
                 oldrhea = errata.RHEA
                 oldrhsa = errata.RHSA
                 oldrhba = errata.RHBA
+            if RHEA:
+                errata.RHEA = RHEA
+            elif oldrhea:
+                errata.RHEA = oldrhea
+            else:
                 pass
             if RHSA:
                 errata.RHSA = RHSA
@@ -293,7 +299,7 @@ def SatId(request):
     context = {'encouragement': encouragement()}
     if request.POST:
         form = LoginForm(request.POST)
-        TaskScripts().parseSatForm(request, form)
+        #TaskScripts().parseSatForm(request, form)
         if form.is_valid():
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
@@ -306,7 +312,7 @@ def SatId(request):
             #session = 'temp'
             #context = Satellite().getIds(request, client, session, env)
             if(env=="dev"):
-                dev_list = Server.objects.all().filter(env="dev").order_by('server')[:15]
+                dev_list = Server.objects.all().filter(env="dev").order_by('server')[:25]
                 for host in dev_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -322,7 +328,7 @@ def SatId(request):
                     #context = {'getid': getid}
                 client.auth.logout(session)
             if(env=="qa"):
-                qa_list = Server.objects.all().filter(env="qa").order_by('server')[:15]
+                qa_list = Server.objects.all().filter(env="qa").order_by('server')[:25]
                 for host in qa_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -338,7 +344,7 @@ def SatId(request):
                     #context = {'getid': getid}
                 client.auth.logout(session)
             if(env=="stage"):
-                stage_list = Server.objects.all().filter(env="stage").order_by('server')[:15]
+                stage_list = Server.objects.all().filter(env="stage").order_by('server')[:25]
                 for host in stage_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -354,7 +360,7 @@ def SatId(request):
                     #context = {'getid': getid}
                 client.auth.logout(session)
             if(env=="prod"):
-                prod_list = Server.objects.all().filter(env="prod").order_by('server')[:15]
+                prod_list = Server.objects.all().filter(env="prod").order_by('server')[:25]
                 for host in prod_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -380,6 +386,14 @@ def SatUpdates(request):
     #SatId will get the ID of each server in Satellite
     #There are 4 buttons on the patching tasks page, one for each env
     context = {'encouragement': encouragement()}
+    errata_levels = {}
+    errata = Errata.objects.first()
+    if errata:
+        errata_levels['rhea'] = errata.RHEA
+        errata_levels['rhsa'] = errata.RHSA
+        errata_levels['rhba'] = errata.RHBA
+    else:
+        pass
     if request.POST:
         form = LoginForm(request.POST)
         #TaskScripts().parseSatForm(request, form)
@@ -394,12 +408,13 @@ def SatUpdates(request):
             session = client.auth.login(user, pswd)
             #session = 'temp'
             #context = Satellite().getIds(request, client, session, env)
-            host_list = Server.objects.all().filter(env=env).order_by('server')[:15]
+            host_list = Server.objects.all().filter(env=env).order_by('server')[:25]
             for host in host_list:
                 servername = host.server
                 if host.satid:
                     updates = []
                     satid = host.satid
+                    #TaskScripts().parseSatForm(servername, env)
                     client = xmlrpc.client.Server(URL, verbose=0)
                     erratas = client.system.getRelevantErrata(session,satid)
                     if erratas:
@@ -407,7 +422,13 @@ def SatUpdates(request):
                         for errata in erratas:
                             updates.append(errata['advisory_name']+' ')
                             Updates = ''.join(updates).strip()
+                        needed_updates = Satellite().desiredErrata(updates)
                         #TaskScripts().parseSatForm(servername, Updates)
+                        if needed_updates:
+                            host.plerrata = needed_updates
+                            host.uptodate = 0
+                        else:
+                            host.uptodate = 1
                         host.updates = Updates
                     else:
                         pass
@@ -418,24 +439,6 @@ def SatUpdates(request):
             client.auth.logout(session)
     else:
         pass
-    return render_to_response('autopatch/patching-tasks.html', context,
-                              context_instance=RequestContext(request))
-
-def QASat(request):
-    context = {'encouragement': encouragement()}
-    if request.POST:
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data['loginname']
-            pswd = form.cleaned_data['password']
-            URL = form.cleaned_data['satellite']
-            name = form.cleaned_data['hostname']
-            client = xmlrpc.client.Server(URL, verbose=0)
-            session = client.auth.login(user, pswd)
-            data = client.system.getId(session, name)
-            getid = data[0].get('id')
-            context = {'getid': getid}
-            client.auth.logout(session)
     return render_to_response('autopatch/patching-tasks.html', context,
                               context_instance=RequestContext(request))
 

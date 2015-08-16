@@ -48,6 +48,69 @@ class Satellite():
                 print("Servername: ",servername)
         return context
 
+    def desiredErrata(self, updates):
+        needed_updates = []
+        errata = Errata.objects.first()
+        errata_levels = {}
+        if errata:
+            errata_levels['rhea'] = errata.RHEA
+            errata_levels['rhsa'] = errata.RHSA
+            errata_levels['rhba'] = errata.RHBA
+        print("The errata levels", errata_levels)
+        if errata_levels:
+            if errata_levels['rhea']:
+                rhea_date = errata_levels['rhea'].split('-')[1].split(':')[0]
+                rhea_id = errata_levels['rhea'].split('-')[1].split(':')[1]
+                #print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
+            else:
+                rhea_date = 0
+                rhea_id = 0
+                #print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
+            if errata_levels['rhsa']:
+                rhsa_date = errata_levels['rhsa'].split('-')[1].split(':')[0]
+                rhsa_id = errata_levels['rhsa'].split('-')[1].split(':')[1]
+                #print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
+            else:
+                rhsa_date = 0
+                rhsa_id = 0
+                #print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
+            if errata_levels['rhba']:
+                rhba_date = errata_levels['rhba'].split('-')[1].split(':')[0]
+                rhba_id = errata_levels['rhba'].split('-')[1].split(':')[1]
+                #print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
+            else:
+                rhba_date = 0
+                rhba_id = 0
+                #print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
+            for each in updates:
+                adv_type = each.split('-')[0]
+                date = each.split('-')[1].split(':')[0]
+                errata_id = each.split('-')[1].split(':')[1]
+                #print("The data and id of the advisory are: ", date, errata_id)
+                if adv_type == 'RHEA':
+                    if date < rhea_date:
+                        needed_updates.append(each)
+                    elif date <= rhea_date and errata_id <= rhea_id:
+                        needed_updates.append(each)
+                    else:
+                        pass
+                if adv_type == 'RHSA':
+                    if date < rhsa_date:
+                        needed_updates.append(each)
+                    elif date <= rhsa_date and errata_id <= rhsa_id:
+                        needed_updates.append(each)
+                    else:
+                        pass
+                if adv_type == 'RHBA':
+                    if date < rhba_date:
+                        needed_updates.append(each)
+                    elif date <= rhba_date and errata_id <= rhba_id:
+                        needed_updates.append(each)
+                    else:
+                        pass
+            print("These are the needed updates!:",needed_updates)
+            return needed_updates
+
 class ModMaint():
     def parseGit(self, manifests):
         git_path = 'autopatch/manifests'
@@ -169,9 +232,9 @@ class ModMaint():
         #for host in Server.objects.all():
         for each in servers:
             host = Server.objects.all().get(server=each)
-            print("THIS IS THE HOST: ",host)
+            #print("THIS IS THE HOST: ",host)
             hostname = host.server
-            print("THIS IS THE HOSTNAME: ",hostname)
+            #print("THIS IS THE HOSTNAME: ",hostname)
             exclude = host.exclude
             skip = host.skip
             hostgroup = host.hostgroup

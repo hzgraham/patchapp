@@ -11,6 +11,7 @@
     <thead>
       <tr>
 	<th>Server Name</th>
+	<th>Updated</th>
 	<th>Skip Patching</th>
 	<th>Group Owner</th>
 	<th>Exclude Packages</th>
@@ -21,6 +22,7 @@
       {% if ".qa." in host.server %}
       <tr id="list-servers">
 	<td align="center" width="25%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
+	<td align="center" width="5%">{{ host.uptodate }}</td>
 	<td align="center" width="5%">
 	  <label class="checkbox">
 	    {% if host.skip %}
