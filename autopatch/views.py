@@ -164,13 +164,13 @@ def UpdateErrata(request):
             RHSA = form.data['RHSA']
             RHBA = form.data['RHBA']
             errata = Errata.objects.first()
-            oldrhea = errata.RHEA
-            oldrhsa = errata.RHSA
-            oldrhba = errata.RHBA
             #This keeps the exists errata levels set if none are entered in the form
             if not errata:
                 errata = Errata(RHEA=form.data['RHEA'])
             else:
+                oldrhea = errata.RHEA
+                oldrhsa = errata.RHSA
+                oldrhba = errata.RHBA
                 pass
             if RHSA:
                 errata.RHSA = RHSA
