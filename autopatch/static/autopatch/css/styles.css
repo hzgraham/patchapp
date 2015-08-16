@@ -120,3 +120,27 @@ a:focus {
     opacity: 1;
     -webkit-filter: none;
 }
+
+[class^=fui-cross], [class*=fui-cross] {
+    font-family: Flat-UI-Pro-Icons;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #E74C3C;
+}
+
+[class^=fui-check], [class*=fui-check] {
+    font-family: Flat-UI-Pro-Icons;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #27AE60;
+}

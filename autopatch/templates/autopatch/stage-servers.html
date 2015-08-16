@@ -22,7 +22,13 @@
       {% if ".stage." in host.server %}
       <tr id="list-server">
 	<td align="center" width="25%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
-	<td align="center" width="5%">{{ host.uptodate }}</td>
+	<td align="center" width="5%">
+	  {% if host.uptodate %}
+	  <span class="fui-check"></span>
+	  {% else %}
+	  <span class="fui-cross"></span>
+	  {% endif %}
+	</td>
 	<td align="center" width="5%">
 	  <label class="checkbox">
 	    {% if host.skip %}
