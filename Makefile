@@ -15,6 +15,7 @@ clean:
 
 run: clean virtualenv
 	. $(NAME)env/bin/activate && python3 manage.py collectstatic --noinput
+	. $(NAME)env/bin/activate && python3 manage.py makemigrations
 	. $(NAME)env/bin/activate && python3 manage.py migrate --noinput
 	. $(NAME)env/bin/activate && python3 manage.py runserver 0.0.0.0:8080
 
