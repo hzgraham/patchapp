@@ -21,7 +21,19 @@
       {% if ".qa." in host.server %}
       <tr id="list-servers">
 	<td align="center" width="25%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
-	<td align="center" width="5%">{{ host.skip }}</td>
+	<td align="center" width="5%">
+	  <label class="checkbox">
+	    {% if host.skip %}
+	    <input type="checkbox" value="" id="checkbox4" checked="checked" data-toggle="checkbox" disabled="" class="custom-checkbox">
+	    {% else %}
+	    <input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" disabled="" class="custom-checkbox">
+	    {% endif %}	    
+	    <span class="icons">
+	      <span class="icon-unchecked"></span>
+	      <span class="icon-checked"></span>
+	    </span>
+	  </label>
+	</td>
 	<td align="center" width="10%">{{ host.hostgroup }}</td>
 	<td align="center" width="60%">{{ host.exclude }}</td>
       </tr>

@@ -82,9 +82,9 @@ class ModMaint():
                         if 'syspatch_skip' == i.split(":")[0]:
                             #skip = i.split(":")[1].strip().split("\n")[0]
                             if i.split(":")[1].strip().split("\n")[0] is '1':
-                                skip = 'TRUE'
+                                skip = True
                             elif i.split(":")[1].strip().split("\n")[0] is '0':
-                                skip = 'FALSE'
+                                skip = False
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]

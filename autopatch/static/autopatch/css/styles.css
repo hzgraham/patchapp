@@ -97,3 +97,26 @@ a:hover {
 
 a:focus {
   color: #5197c6; }
+
+.checkbox, .radio {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-transition: color .25s linear;
+    transition: color .25s linear;
+    display: inherit;
+}
+
+.checkbox input[type=checkbox].custom-checkbox:disabled+.icons, .radio input[type=checkbox].custom-checkbox:disabled+.icons, .checkbox input[type=radio].custom-radio:disabled+.icons, .radio input[type=radio].custom-radio:disabled+.icons {
+    color: #BDC3C7;
+    cursor: default;
+}
+
+.checkbox input[type=checkbox].custom-checkbox:disabled:checked+.icons .icon-checked, .radio input[type=checkbox].custom-checkbox:disabled:checked+.icons .icon-checked, .checkbox input[type=radio].custom-radio:disabled:checked+.icons .icon-checked, .radio input[type=radio].custom-radio:disabled:checked+.icons .icon-checked {
+    color: #BDC3C7;
+    filter: none;
+    opacity: 1;
+    -webkit-filter: none;
+}

@@ -27,6 +27,7 @@ class ServerForm(forms.Form):
     server = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'server01.example.com'}))
     exclude = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'jbossas*, openjdk*'}))
     skip = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'False'}))
+    skip = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'custom-checkbox'}), initial=True, required=False)
     hostgroup = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'JBoss Servers'}))
     comments = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'Jmainguy provisioned this server'}))
     satid = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': '0123456'}))

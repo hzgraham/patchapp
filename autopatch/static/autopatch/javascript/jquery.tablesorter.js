@@ -375,7 +375,6 @@
 	    };
 
 	    function buildHeaders(table) {
-
 		if (table.config.debug) {
 		    var time = new Date();
 		}
@@ -1037,3 +1036,4 @@
 	}
     });
 })(jQuery);
+$(":checkbox").radiocheck();

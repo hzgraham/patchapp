@@ -21,7 +21,7 @@ class Errata(models.Model):
 class Server(models.Model):
     server = models.CharField(max_length=256, null=True, blank=True)
     exclude = models.TextField(max_length=256, null=True, blank=True)
-    skip = models.CharField(max_length=25, null=True, blank=True)
+    skip = models.BooleanField(default=True)
     hostgroup = models.CharField(max_length=50, null=True, blank=True)
     comments = models.TextField(max_length=256, null=True, blank=True)
     satid = models.IntegerField(default=0)
