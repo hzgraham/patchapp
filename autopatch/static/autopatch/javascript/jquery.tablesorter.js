@@ -549,9 +549,9 @@
 		var l = list.length;
 		for (var i = 0; i < l; i++) {
 		    h[list[i][0]].addClass(css[list[i][1]]);
-		    if (h[list[i][0]].attr("class").includes('headerSortDown')){
+		    if (h[list[i][0]].hasClass('headerSortDown')){
 			h[list[i][0]].html(h[list[i][0]].text() + ' <span id="arrow" class="fui-triangle-down"></span>');
-		    } else if (h[list[i][0]].attr("class").includes('headerSortUp')) {
+		    } else if ( h[list[i][0]].hasClass('headerSortUp') ) {
 			h[list[i][0]].html(h[list[i][0]].text() + ' <span id="arrow" class="fui-triangle-up"></span>');
 		    }
 		}
@@ -1035,5 +1035,5 @@
 	    }
 	}
     });
+    $(":checkbox").radiocheck();
 })(jQuery);
-$(":checkbox").radiocheck();
