@@ -24,6 +24,7 @@ urlpatterns = [
 
     #Satellite links
     url(r'^satid/', views.SatId),
+    url(r'^satupdates/', views.SatUpdates),
 
     #List views of hosts for the different environments
     url(r'^prod/$', views.ProdView),

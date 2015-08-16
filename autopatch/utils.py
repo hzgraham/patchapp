@@ -21,14 +21,14 @@ class TaskScripts():
         print("############################")
         print("This is the form: ",form)
 
-    def parseSatForm(self, request, form):
+    def parseSatForm(self, servername, erratas):
         # if form.is_valid():
         #     URL = form.cleaned_data['satellite']
         #     print("This is the Satellite URL",URL)
         # #env = form.data['environment']
         # submit = form.data['submit']
         #print("Form data: ", env, submit)
-        print("This is the request: ", request)
+        print("This is the request: ", servername, erratas)
         #print("This is the form : ", form)
         #print("This is the button: ", btn)
 

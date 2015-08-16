@@ -255,10 +255,6 @@ def StageView(request):
     context = {'stage_list': stage_list, 'total': stagetotal, 'env': env, 'encouragement': encouragement()}
     return render(request, 'autopatch/stage-servers.html', context)
 
-# class QAView(generic.ListView):
-#     template_name = 'autopatch/qa-servers.html'
-#     def get_queryset(self):
-#         return Server.objects.all().order_by("server")
 def QAView(request):
     qa_list = Server.objects.all().order_by('server')
     env = "QA"
@@ -373,6 +369,53 @@ def SatId(request):
                     host.save()
                     #context = {'getid': getid}
                 client.auth.logout(session)
+    else:
+        pass
+    return render_to_response('autopatch/patching-tasks.html', context,
+                              context_instance=RequestContext(request))
+
+@sensitive_variables('pswd', 'password', 'form')
+@sensitive_post_parameters('password')
+def SatUpdates(request):
+    #SatId will get the ID of each server in Satellite
+    #There are 4 buttons on the patching tasks page, one for each env
+    context = {'encouragement': encouragement()}
+    if request.POST:
+        form = LoginForm(request.POST)
+        #TaskScripts().parseSatForm(request, form)
+        if form.is_valid():
+            user = form.cleaned_data['loginname']
+            pswd = form.cleaned_data['password']
+            url = form.cleaned_data['satellite']
+            URL = "https://"+url+"/rpc/api"
+            env = form.cleaned_data['environment']
+            #name = form.cleaned_data['hostname']
+            client = xmlrpc.client.Server(URL, verbose=0)
+            session = client.auth.login(user, pswd)
+            #session = 'temp'
+            #context = Satellite().getIds(request, client, session, env)
+            host_list = Server.objects.all().filter(env=env).order_by('server')[:15]
+            for host in host_list:
+                servername = host.server
+                if host.satid:
+                    updates = []
+                    satid = host.satid
+                    client = xmlrpc.client.Server(URL, verbose=0)
+                    erratas = client.system.getRelevantErrata(session,satid)
+                    if erratas:
+                        #TaskScripts().parseSatForm(servername, erratas)
+                        for errata in erratas:
+                            updates.append(errata['advisory_name']+' ')
+                            Updates = ''.join(updates).strip()
+                        #TaskScripts().parseSatForm(servername, Updates)
+                        host.updates = Updates
+                    else:
+                        pass
+                    host.save()
+                else:
+                    pass
+                #context = {'getid': getid}
+            client.auth.logout(session)
     else:
         pass
     return render_to_response('autopatch/patching-tasks.html', context,
