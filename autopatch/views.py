@@ -291,8 +291,8 @@ def DevView(request):
     context = {'dev_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
     return render(request, 'autopatch/dev-servers.html', context)
 
-@sensitive_variables('pswd', 'password', 'form')
-@sensitive_post_parameters('password')
+@sensitive_post_parameters()
+@sensitive_variables()
 def SatId(request):
     #SatId will get the ID of each server in Satellite
     #There are 4 buttons on the patching tasks page, one for each env
@@ -306,7 +306,6 @@ def SatId(request):
             url = form.cleaned_data['satellite']
             URL = "https://"+url+"/rpc/api"
             env = form.cleaned_data['environment']
-            #name = form.cleaned_data['hostname']
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
             #session = 'temp'

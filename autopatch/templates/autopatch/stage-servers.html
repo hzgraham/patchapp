@@ -23,7 +23,9 @@
       <tr id="list-server">
 	<td align="center" width="25%"><a href="/autopatch/{{host.id}}">{{ host.server }}</a></td>
 	<td align="center" width="5%">
-	  {% if host.uptodate %}
+	  {% if not host.satid %}
+	  <p>N/A</p>
+	  {% elif host.uptodate %}
 	  <span class="fui-check"></span>
 	  {% else %}
 	  <span class="fui-cross"></span>
