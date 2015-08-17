@@ -312,7 +312,7 @@ def SatId(request):
             #session = 'temp'
             #context = Satellite().getIds(request, client, session, env)
             if(env=="dev"):
-                dev_list = Server.objects.all().filter(env="dev").order_by('server')[:25]
+                dev_list = Server.objects.all().filter(env="dev").order_by('server')
                 for host in dev_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -328,7 +328,7 @@ def SatId(request):
                     #context = {'getid': getid}
                 client.auth.logout(session)
             if(env=="qa"):
-                qa_list = Server.objects.all().filter(env="qa").order_by('server')[:25]
+                qa_list = Server.objects.all().filter(env="qa").order_by('server')
                 for host in qa_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -344,7 +344,7 @@ def SatId(request):
                     #context = {'getid': getid}
                 client.auth.logout(session)
             if(env=="stage"):
-                stage_list = Server.objects.all().filter(env="stage").order_by('server')[:25]
+                stage_list = Server.objects.all().filter(env="stage").order_by('server')
                 for host in stage_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -360,7 +360,7 @@ def SatId(request):
                     #context = {'getid': getid}
                 client.auth.logout(session)
             if(env=="prod"):
-                prod_list = Server.objects.all().filter(env="prod").order_by('server')[:25]
+                prod_list = Server.objects.all().filter(env="prod").order_by('server')
                 for host in prod_list:
                     servername = host.server
                     #print("Servername: ",servername)
@@ -408,7 +408,7 @@ def SatUpdates(request):
             session = client.auth.login(user, pswd)
             #session = 'temp'
             #context = Satellite().getIds(request, client, session, env)
-            host_list = Server.objects.all().filter(env=env).order_by('server')[:25]
+            host_list = Server.objects.all().filter(env=env).order_by('server')
             for host in host_list:
                 servername = host.server
                 if host.satid:
