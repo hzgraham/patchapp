@@ -49,6 +49,7 @@ class Satellite():
         return context
 
     def desiredErrata(self, updates):
+        advisories = ['RHEA','RHSA','RHBA']
         needed_updates = []
         errata = Errata.objects.first()
         errata_levels = {}
@@ -83,31 +84,34 @@ class Satellite():
                 rhba_id = 0
                 #print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
             for each in updates:
-                adv_type = each.split('-')[0]
-                date = each.split('-')[1].split(':')[0]
-                errata_id = each.split('-')[1].split(':')[1]
-                #print("The data and id of the advisory are: ", date, errata_id)
-                if adv_type == 'RHEA':
-                    if date < rhea_date:
-                        needed_updates.append(each)
-                    elif date <= rhea_date and errata_id <= rhea_id:
-                        needed_updates.append(each)
-                    else:
-                        pass
-                if adv_type == 'RHSA':
-                    if date < rhsa_date:
-                        needed_updates.append(each)
-                    elif date <= rhsa_date and errata_id <= rhsa_id:
-                        needed_updates.append(each)
-                    else:
-                        pass
-                if adv_type == 'RHBA':
-                    if date < rhba_date:
-                        needed_updates.append(each)
-                    elif date <= rhba_date and errata_id <= rhba_id:
-                        needed_updates.append(each)
-                    else:
-                        pass
+                if any(x in each for x in advisories):
+                    adv_type = each.split('-')[0]
+                    date = each.split('-')[1].split(':')[0]
+                    errata_id = each.split('-')[1].split(':')[1]
+                    #print("The data and id of the advisory are: ", date, errata_id)
+                    if adv_type == 'RHEA':
+                        if date < rhea_date:
+                            needed_updates.append(each)
+                        elif date <= rhea_date and errata_id <= rhea_id:
+                            needed_updates.append(each)
+                        else:
+                            pass
+                    if adv_type == 'RHSA':
+                        if date < rhsa_date:
+                            needed_updates.append(each)
+                        elif date <= rhsa_date and errata_id <= rhsa_id:
+                            needed_updates.append(each)
+                        else:
+                            pass
+                    if adv_type == 'RHBA':
+                        if date < rhba_date:
+                            needed_updates.append(each)
+                        elif date <= rhba_date and errata_id <= rhba_id:
+                            needed_updates.append(each)
+                        else:
+                            pass
+                else:
+                    pass
             print("These are the needed updates!:",needed_updates)
             return needed_updates
 
