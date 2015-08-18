@@ -57,7 +57,7 @@ class Satellite():
             errata_levels['rhea'] = errata.RHEA
             errata_levels['rhsa'] = errata.RHSA
             errata_levels['rhba'] = errata.RHBA
-        print("The errata levels", errata_levels)
+        #print("The errata levels", errata_levels)
         if errata_levels:
             if errata_levels['rhea']:
                 rhea_date = errata_levels['rhea'].split('-')[1].split(':')[0]
@@ -112,7 +112,7 @@ class Satellite():
                             pass
                 else:
                     pass
-            print("These are the needed updates!:",needed_updates)
+            #print("These are the needed updates!:",needed_updates)
             return needed_updates
 
 class ModMaint():
