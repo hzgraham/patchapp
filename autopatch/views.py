@@ -301,79 +301,31 @@ def SatId(request):
         form = LoginForm(request.POST)
         #TaskScripts().parseSatForm(request, form)
         if form.is_valid():
+            #Get variables from the form
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
             url = form.cleaned_data['satellite']
             URL = "https://"+url+"/rpc/api"
             env = form.cleaned_data['environment']
+            #using xmlrpc to get a session key from the satellite server
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
-            #session = 'temp'
-            #context = Satellite().getIds(request, client, session, env)
-            if(env=="dev"):
-                dev_list = Server.objects.all().filter(env="dev").order_by('server')
-                for host in dev_list:
-                    servername = host.server
-                    #print("Servername: ",servername)
-                    client = xmlrpc.client.Server(URL, verbose=0)
-                    data = client.system.getId(session, servername)
-                    #TaskScripts().parseSatForm(servername, data)
-                    if data:
-                        getid = data[0].get('id')
-                        host.satid = getid
-                    else:
-                        pass
-                    host.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
-            if(env=="qa"):
-                qa_list = Server.objects.all().filter(env="qa").order_by('server')
-                for host in qa_list:
-                    servername = host.server
-                    #print("Servername: ",servername)
-                    client = xmlrpc.client.Server(URL, verbose=0)
-                    data = client.system.getId(session, servername)
-                    #TaskScripts().parseSatForm(servername, data)
-                    if data:
-                        getid = data[0].get('id')
-                        host.satid = getid
-                    else:
-                        pass
-                    host.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
-            if(env=="stage"):
-                stage_list = Server.objects.all().filter(env="stage").order_by('server')
-                for host in stage_list:
-                    servername = host.server
-                    #print("Servername: ",servername)
-                    client = xmlrpc.client.Server(URL, verbose=0)
-                    data = client.system.getId(session, servername)
-                    #TaskScripts().parseSatForm(servername, data)
-                    if data:
-                        getid = data[0].get('id')
-                        host.satid = getid
-                    else:
-                        pass
-                    host.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
-            if(env=="prod"):
-                prod_list = Server.objects.all().filter(env="prod").order_by('server')
-                for host in prod_list:
-                    servername = host.server
-                    #print("Servername: ",servername)
-                    client = xmlrpc.client.Server(URL, verbose=0)
-                    data = client.system.getId(session, servername)
-                    #TaskScripts().parseSatForm(servername, data)
-                    if data:
-                        getid = data[0].get('id')
-                        host.satid = getid
-                    else:
-                        pass
-                    host.save()
-                    #context = {'getid': getid}
-                client.auth.logout(session)
+            #Get list of hosts in an env
+            host_list = Server.objects.all().filter(env=env).order_by('server')
+            #Loop through each host and get satellite ID
+            for host in host_list:
+                servername = host.server
+                client = xmlrpc.client.Server(URL, verbose=0)
+                data = client.system.getId(session, servername)
+                #TaskScripts().parseSatForm(servername, data)
+                if data:
+                    getid = data[0].get('id')
+                    host.satid = getid
+                else:
+                    pass
+                host.save()
+                #context = {'getid': getid}
+            client.auth.logout(session)
     else:
         pass
     return render_to_response('autopatch/patching-tasks.html', context,
@@ -443,37 +395,3 @@ def SatUpdates(request):
 
 def index(request):
     return render(request, 'autopatch/index.html')
-
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    # response = "You're looking at the results of question %s."
-    # return HttpResponse(response % question_id)
-    return render(request, 'autopatch/results.html', {'question': question})
-
-def vote(request, question_id):
-    #return HttpResponse("You're voting on question %s." % question_id)
-    p = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = p.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'autopatch/detail.html', {
-	    'question': p,
-	    'error_message': "You didn't select a choice.",
-	})
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-	# Always return an HttpResponseRedirect after successfully dealing
-	# with POST data. This prevents data from being posted twice if a
-	# user hits the Back button.
-        return HttpResponseRedirect(reverse('autopatch:results', args=(p.id,)))
-    
-def detail(request, question_id):
-    # return HttpResponse("You're looking at question %s." % question_id)
-    # try:
-    #     question = Question.objects.get(pk=question_id)
-    # except Question.DoesNotExist:
-    #     raise Http404("Question does not exist")
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'autopatch/detail.html', {'question': question})
