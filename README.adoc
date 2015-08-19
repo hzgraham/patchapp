@@ -7,17 +7,8 @@ toc::[]
 
 = Basic Setup
 
-To use a VM, follow the setup instructions from link:http://bit.ly/v3devs[this workshop]
-
-== Authentication
-[source, bash]
-----
-oc login <openshift-cluster-ip>
-oc config view
-----
-
 == Create a project
-Create a project to house this application:
+Create a project to house the app:
 
 [source, bash]
 ----
@@ -99,14 +90,3 @@ The 'run' Makefile target will install application dependencies within a python 
 ----
 make run
 ----
-
-= Cleanup
-
-You can clear out everything in your existing project by running the following:
-
-[source, bash]
-----
-oc delete all --all
-----
-
-TIP: Be careful to verify that you're logged into the correct server and project before running this command!
