@@ -11,7 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name='server',
+            name='skip'
+        ),
+        migrations.AddField(
             model_name='server',
             name='skip',
             field=models.BooleanField(default=True),
