@@ -24,11 +24,12 @@ Create a project to house this application:
 oc new-project <project-name>
 ----
 
-Create an application using this repository.
+Install and launch the app from a template:
 
 [source, bash]
 ----
-oc new-app openshift/python-33-centos7:latest~https://github.com/hzgraham/patchapp.git
+oc create -f https://raw.githubusercontent.com/hzgraham/patchapp/master/app_template.json
+oc process patchapp | oc create -f -
 ----
 
 Then, check the results:

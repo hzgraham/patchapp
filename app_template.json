@@ -1,0 +1,327 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+	"name": "patchapp",
+	"annotations": {
+	    "description": "Patching tool to assist with exclude maintenance.",
+	    "tags": "instant-app,python,django,postgresql",
+	    "iconClass": "icon-python"
+	}
+    },
+    "labels": {
+	"template": "patchapp"
+    },
+    "objects": [
+	{
+	    "kind": "Service",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchapp-frontend",
+		"annotations": {
+		    "description": "Exposes and load balances the application pods"
+		}
+	    },
+	    "spec": {
+		"ports": [
+		    {
+			"name": "web",
+			"port": 8080,
+			"targetPort": 8080
+		    }
+		],
+		"selector": {
+		    "name": "patchapp-frontend"
+		}
+	    }
+	},
+	{
+	    "kind": "Route",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchapp"
+	    },
+	    "spec": {
+		"host": "",
+		"to": {
+		    "kind": "Service",
+		    "name": "patchapp-frontend"
+		}
+	    }
+	},
+	{
+	    "kind": "ImageStream",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchapp",
+		"annotations": {
+		    "description": "Keeps track of changes in the application image"
+		}
+	    }
+	},
+	{
+	    "kind": "BuildConfig",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchapp",
+		"annotations": {
+		    "description": "Defines how to build the application"
+		}
+	    },
+	    "spec": {
+		"source": {
+		    "type": "Git",
+		    "git": {
+			"uri": "https://github.com/hzgraham/patchapp.git"
+		    },
+		    "contextDir": "${CONTEXT_DIR}"
+		},
+		"strategy": {
+		    "type": "Source",
+		    "sourceStrategy": {
+			"from": {
+			    "kind": "ImageStreamTag",
+			    "namespace": "openshift",
+			    "name": "python:3.3"
+			}
+		    }
+		},
+		"output": {
+		    "to": {
+			"kind": "ImageStreamTag",
+			"name": "patchapp:latest"
+		    }
+		},
+		"triggers": [
+		    {
+			"type": "ImageChange"
+		    },
+		    {
+			"type": "GitHub",
+			"github": {
+			    "secret": "${GITHUB_WEBHOOK_SECRET}"
+			}
+		    }
+		]
+	    }
+	},
+	{
+	    "kind": "DeploymentConfig",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchapp-frontend",
+		"annotations": {
+		    "description": "Defines how to deploy the application server"
+		}
+	    },
+	    "spec": {
+		"strategy": {
+		    "type": "Rolling"
+		},
+		"triggers": [
+		    {
+			"type": "ImageChange",
+			"imageChangeParams": {
+			    "automatic": true,
+			    "containerNames": [
+				"patchapp"
+			    ],
+			    "from": {
+				"kind": "ImageStreamTag",
+				"name": "patchapp:latest"
+			    }
+			}
+		    },
+		    {
+			"type": "ConfigChange"
+		    }
+		],
+		"replicas": 1,
+		"selector": {
+		    "name": "patchapp-frontend"
+		},
+		"template": {
+		    "metadata": {
+			"name": "patchapp-frontend",
+			"labels": {
+			    "name": "patchapp-frontend"
+			}
+		    },
+		    "spec": {
+			"containers": [
+			    {
+				"name": "patchapp",
+				"image": "patchapp",
+				"ports": [
+				    {
+					"containerPort": 8080
+				    }
+				],
+				"env": [
+				    {
+					"name": "DATABASE_SERVICE_NAME",
+					"value": "${DATABASE_SERVICE_NAME}"
+				    },
+				    {
+					"name": "DATABASE_ENGINE",
+					"value": "${DATABASE_ENGINE}"
+				    },
+				    {
+					"name": "DATABASE_NAME",
+					"value": "${DATABASE_NAME}"
+				    },
+				    {
+					"name": "DATABASE_USER",
+					"value": "${DATABASE_USER}"
+				    },
+				    {
+					"name": "DATABASE_PASSWORD",
+					"value": "${DATABASE_PASSWORD}"
+				    },
+				    {
+					"name": "APP_CONFIG",
+					"value": "autopatch/config.py"
+				    },
+				    {
+					"name": "DJANGO_SECRET_KEY",
+					"value": "${DJANGO_SECRET_KEY}"
+				    }
+				]
+			    }
+			]
+		    }
+		}
+	    }
+	},
+	{
+	    "kind": "Service",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "${DATABASE_SERVICE_NAME}",
+		"annotations": {
+		    "description": "Exposes the database server"
+		}
+	    },
+	    "spec": {
+		"ports": [
+		    {
+			"name": "postgresql",
+			"port": 5432,
+			"targetPort": 5432
+		    }
+		],
+		"selector": {
+		    "name": "${DATABASE_SERVICE_NAME}"
+		}
+	    }
+	},
+	{
+	    "kind": "DeploymentConfig",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "${DATABASE_SERVICE_NAME}",
+		"annotations": {
+		    "description": "Defines how to deploy the database"
+		}
+	    },
+	    "spec": {
+		"strategy": {
+		    "type": "Recreate"
+		},
+		"triggers": [
+		    {
+			"type": "ConfigChange"
+		    }
+		],
+		"replicas": 1,
+		"selector": {
+		    "name": "${DATABASE_SERVICE_NAME}"
+		},
+		"template": {
+		    "metadata": {
+			"name": "${DATABASE_SERVICE_NAME}",
+			"labels": {
+			    "name": "${DATABASE_SERVICE_NAME}"
+			}
+		    },
+		    "spec": {
+			"containers": [
+			    {
+				"name": "postgresql",
+				"image": "openshift/postgresql-92-centos7",
+				"ports": [
+				    {
+					"containerPort": 5432
+				    }
+				],
+				"env": [
+				    {
+					"name": "POSTGRESQL_USER",
+					"value": "${DATABASE_USER}"
+				    },
+				    {
+					"name": "POSTGRESQL_PASSWORD",
+					"value": "${DATABASE_PASSWORD}"
+				    },
+				    {
+					"name": "POSTGRESQL_DATABASE",
+					"value": "${DATABASE_NAME}"
+				    }
+				]
+			    }
+			]
+		    }
+		}
+	    }
+	}
+    ],
+    "parameters": [
+	{
+	    "name": "CONTEXT_DIR",
+	    "description": "Set this to the relative path to your project if it is not in the root of your repository"
+	},
+	{
+	    "name": "APPLICATION_DOMAIN",
+	    "description": "The exposed hostname that will route to the Django service",
+	    "value": "patchapp.openshiftapps.com"
+	},
+	{
+	    "name": "GITHUB_WEBHOOK_SECRET",
+	    "description": "A secret string used to configure the GitHub webhook",
+	    "generate": "expression",
+	    "from": "[a-zA-Z0-9]{40}"
+	},
+	{
+	    "name": "DATABASE_SERVICE_NAME",
+	    "description": "Database service name",
+	    "value": "postgresql"
+	},
+	{
+	    "name": "DATABASE_ENGINE",
+	    "description": "Database engine: postgresql, mysql or sqlite (default)",
+	    "value": "postgresql"
+	},
+	{
+	    "name": "DATABASE_NAME",
+	    "description": "Database name",
+	    "value": "default"
+	},
+	{
+	    "name": "DATABASE_USER",
+	    "description": "Database user name",
+	    "value": "django"
+	},
+	{
+	    "name": "DATABASE_PASSWORD",
+	    "description": "Database user password",
+	    "generate": "expression",
+	    "from": "[a-zA-Z0-9]{16}"
+	},
+	{
+	    "name": "DJANGO_SECRET_KEY",
+	    "description": "Set this to a long random string",
+	    "generate": "expression",
+	    "from": "[\\w]{50}"
+	}
+    ]
+}
