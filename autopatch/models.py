@@ -31,3 +31,8 @@ class Server(models.Model):
     uptodate = models.BooleanField(default=0)
     def __unicode__(self):
         return self.server
+
+#Model containing syspatch_owner entries
+#that will be ignored by views and templates
+class Owner(models.Model):
+    owner = models.CharField(max_length=128)
