@@ -116,6 +116,7 @@ class Satellite():
             return needed_updates
 
 class ModMaint():
+    #Function called by Git view that imports host data from a git repo by cloning
     def parseGit(self, manifests):
         git_path = 'autopatch/manifests'
         if not os.path.isdir(git_path):
@@ -155,7 +156,7 @@ class ModMaint():
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
-                    #print("servername: ",servername)
+                    print("servername: ",servername)
                     s = Server(server=servername)
                     s.server = each.split('/')[-1]
                     s.mgmt = mgmt
@@ -164,22 +165,12 @@ class ModMaint():
                     s.hostgroup = hostgroup
                     s.comments = comments
                     s.env = ModMaint().setEnv(servername)
-                    #print("server: ",s.server)
+                    print("server: ",s.server)
                     s.save()
                 myfile.close()
         envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
         for env,field in envs:
             total = ModMaint().hostCount(env, field)
-        # dev_list = Server.objects.all().filter(env="dev").order_by('server')
-        # for each in dev_list:
-        #     devhost = each.server
-        #     each.satid = 123
-        #     each.save()
-        #     print(devhost)
-        # dev_list = Server.objects.all().filter(env="dev").order_by('server')
-        # for each in dev_list:
-        #     devid = each.satid
-        #     print(devid)
 
     def setEnv(self, server):
         env = ""
@@ -283,4 +274,5 @@ def encouragement():
                           'I wish I was more like you.',
                           'I admire your strength and perseverance.',
                           'You are an incredibly sensitive person who inspires joyous feelings in all those around you.',
-                          'Stay Classy'])
+                          'Stay Classy',
+                          'Be excellent to each other.'])

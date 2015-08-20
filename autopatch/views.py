@@ -62,17 +62,22 @@ def devTotal(request):
         ModMaint().hostCount("Dev")
     template_name = 'autopatch/dev-servers.html'
 
+#Funtion used to import hosts from git by cloning the repo
 def Git(request):
     unlist = []
+    #Checks if a path was give to the git repo
     if(request.GET.get('mybtn')):
         manifests = str(request.GET.get('gitpath'))
     else:
         manifests = None
+    #if a path was give this call parseGit which does the
+    #importing of FQDNs and syspatch_* parameters to the Server model
     if manifests:
         Server.objects.all().delete()
         hosts = ModMaint().parseGit(manifests)
     else:
         pass
+    #unsassignlist (not in an env) hosts are displayed on the patching-tasks.html template
     unassignlist = Server.objects.all().filter(env="unassigned").order_by('server')
     for each in unassignlist:
         unhost = each.server
