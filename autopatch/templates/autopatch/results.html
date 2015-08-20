@@ -6,7 +6,7 @@
     <article class="typicalArticle">
       <header>
 	<a href="/autopatch/{{server.env}}">&#8617; Back to {{server.env}}</a>
-	<h2>{{ server.server }}</h2>
+	<h3 style="color: rgb(50, 155, 100);">{{ server.server }}</h3>
       </header>
       <div class="server_meta">
 	<h4>The maint.yaml syspatch_* parameters:</h4>
@@ -16,7 +16,9 @@
 	<li>hostgroup: {{ server.hostgroup }}</li>
 	<li>Host skipped: {{ server.skip }}</li>
 	<li>Comments about this host: {{ server.comments }}</li>
+	<hr />
 	<li>Desired Errata: {{ server.plerrata }}</li>
+	<hr />
 	<li>Available Errata: {{ server.updates }}</li>
       </div>
     </article>
@@ -25,4 +27,4 @@
 <!--
 <a href="{% url 'autopatch:detail' server.id %}">{{ server.server }}</a>
 -->
-{% endblock  %}
+{% endblock %}
