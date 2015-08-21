@@ -18,7 +18,7 @@ from xmlrpc import client, server
 import xmlrpc.client, xmlrpc.server
 
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm
-from .models import Server, Hosttotal, Errata
+from .models import Server, Hosttotal, Errata, Owner
 from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 
 from django.views.decorators.debug import sensitive_variables
@@ -73,7 +73,7 @@ def Git(request):
     #if a path was give this call parseGit which does the
     #importing of FQDNs and syspatch_* parameters to the Server model
     if manifests:
-        Server.objects.all().delete()
+        #Server.objects.all().delete()
         hosts = ModMaint().parseGit(manifests)
     else:
         pass
@@ -92,7 +92,7 @@ def GetList(request):
     else:
         manifests = None
     if manifests:
-        Server.objects.all().delete()
+        #Server.objects.all().delete()
         url_list = []
         paths = []
         mgmt = []
@@ -144,18 +144,37 @@ class AllHosts(generic.ListView):
     def get_queryset(self):
         return Server.objects.all().order_by("server")
 
-def create(request):
-    if request.POST:
-        form = ServerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/autopatch/')
+#hosts of owners set here will be excluded from patching
+def SetOwners(request):
+    #owners is a test variable
+    owners_list = []
+    owner_list = Owner.objects.all().order_by('owner')
+    #If the "Set Owners" button is pressed
+    if request.GET.get('addowners'):
+        owners = str(request.GET.get('owners'))
+        owners_list = owners.split(",")
+        for each in owners_list:
+            cl_owner = each.strip()
+            if not Owner.objects.filter(owner=cl_owner).exists():
+                owner = Owner(owner=cl_owner)
+                owner.owner = cl_owner
+                owner.save()
+                #owners_list = ['success']
+            else:
+                #owners_list = ['failure']
+                pass
+    #If the "Remove Owners" button is pressed
+    elif request.GET.get('delowners'):
+        Owner.objects.all().delete()
     else:
-        form = ServerForm()
-    args = {}
-    args.update(csrf(request))
-    args['form'] = form
-    return render_to_response('autopatch/create_server.html', args)
+        pass
+    #Creates a list for output to the autopatch/owners.html template
+    if Owner.objects.all():
+        owners_list = Owner.objects.all().order_by('owner')
+    else:
+        owners_list = []
+    context = {'owner_list': owner_list, 'encouragement': encouragement(), 'owners_list': owners_list}
+    return render(request, 'autopatch/owners.html', context)
 
 def UpdateErrata(request):
     #This view used to update the top level errata
@@ -400,3 +419,18 @@ def SatUpdates(request):
 
 def index(request):
     return render(request, 'autopatch/index.html')
+
+#Views not currently being used
+###########################################
+def create(request):
+    if request.POST:
+        form = ServerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/autopatch/')
+    else:
+        form = ServerForm()
+    args = {}
+    args.update(csrf(request))
+    args['form'] = form
+    return render_to_response('autopatch/create_server.html', args)

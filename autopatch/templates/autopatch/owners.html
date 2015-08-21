@@ -1,0 +1,40 @@
+{% extends "autopatch/index.html" %}
+
+{% block content %}
+<a href="/autopatch/tasks/">&#8617; Back to Patching Tasks</a>
+
+<!-- form for updating latest desired errata -->
+<hr />
+<p><i>Enter a comma separate list of owners to exclude</i></p>
+<form action="/autopatch/owners/" method="get">
+  <div class="row">
+    <div class="col-xs-7">
+      <input type="text" name="owners" class="form-control" placeholder="Brofaces, Slytherin">
+    </div>
+    <div class="col-xs-3">
+      <input type="submit" class="btn btn-info" value="Set Owners" name="addowners">
+    </div>
+  </div>
+</form>
+
+<hr />
+
+<form action="/autopatch/owners/" method="get">
+  <div class="row">
+    <div class="col-xs-3">
+      <input type="submit" class="btn btn-info" value="Remove Owners" name="delowners">
+    </div>
+  </div>
+</form>
+
+{% if owners_list %}
+<p>
+<ul>
+  <h4 style="text-decoration: underline;">List of Owners We will be Excluding</h4>
+  {% for each in owners_list %}
+  <li>{{ each.owner }}</li>
+  {% endfor %}
+</ul>
+
+{% endif %}
+{% endblock %}
