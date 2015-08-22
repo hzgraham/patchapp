@@ -33,6 +33,12 @@ setup:
 	. $(NAME)env/bin/activate && python3 manage.py makemigrations
 	. $(NAME)env/bin/activate && python3 manage.py migrate --noinput
 
+pep8:
+	@echo "#############################################"
+	@echo "# Running PEP8 Compliance Tests in virtualenv"
+	@echo "#############################################"
+	. $(NAME)env/bin/activate && pep8 --ignore=E501,E121,E124 $(SRC)/
+
 pyflakes:
 	@echo "#############################################"
 	@echo "# Running Pyflakes Sanity Tests in virtualenv"
