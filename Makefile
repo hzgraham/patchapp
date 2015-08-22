@@ -10,6 +10,7 @@
 
 
 NAME := patchapp
+SRC := autopatch
 
 clean:
 	@rm -fR $(NAME)env
@@ -31,6 +32,13 @@ setup:
 	. $(NAME)env/bin/activate && python3 manage.py collectstatic --noinput
 	. $(NAME)env/bin/activate && python3 manage.py makemigrations
 	. $(NAME)env/bin/activate && python3 manage.py migrate --noinput
+
+pyflakes:
+	@echo "#############################################"
+	@echo "# Running Pyflakes Sanity Tests in virtualenv"
+	@echo "# Note: most import errors may be ignored"
+	@echo "#############################################"
+	. $(NAME)env/bin/activate && pyflakes $(SRC)
 
 setupdb:
 	@echo "#############################################"
