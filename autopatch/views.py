@@ -57,11 +57,6 @@ def CreateCSV(request):
     #return render(request, 'autopatch/create_csv.html', context)
     return response
 
-def devTotal(request):
-    if(request.GET.get('mybtn')):
-        ModMaint().hostCount("Dev")
-    template_name = 'autopatch/dev-servers.html'
-
 #Funtion used to import hosts from git by cloning the repo
 def Git(request):
     unlist = []
@@ -84,60 +79,6 @@ def Git(request):
         unlist.append(unhost)
     context = {'unlist': unlist, 'encouragement': encouragement()}
     return render(request, 'autopatch/patching-tasks.html', context)
-
-def GetList(request):
-    if(request.GET.get('mybtn')):
-        #mypythoncode.mypythonfunction( int(request.GET.get('mytextbox')) )
-        manifests = str(request.GET.get('mytextbox'))
-    else:
-        manifests = None
-    if manifests:
-        #Server.objects.all().delete()
-        url_list = []
-        paths = []
-        mgmt = []
-        #host_list = HostList()
-        myurl = urllib.request.urlopen(manifests)
-        html = myurl.read()
-        soup = bs4.BeautifulSoup(html, "html.parser")
-        for link in soup.findAll("a"):
-            if ".com" in link.string:
-                path = link.get("href")
-                maint_path = manifests+"/"+link.string+'/maint.yaml'
-                syspatch_data = ModMaint().getMaint(maint_path)
-                mgmt1 = syspatch_data.get('mgmt')
-                exclude1 = syspatch_data.get('exclude')
-                skip1 = syspatch_data.get('skip')
-                hostgroup1 = syspatch_data.get('hostgroup')
-                if not Server.objects.filter(server=link.string).exists():
-                    s = Server(server=link.string)
-                    s.server = link.string
-                    s.mgmt = mgmt1
-                    s.exclude = exclude1
-                    s.skip = skip1
-                    s.hostgroup = hostgroup1
-                else:
-                    s = Server(server=link.string)
-                    s.server = link.string
-                    s.mgmt = mgmt1
-                    s.exclude = exclude1
-                    s.skip = skip1
-                    s.hostgroup = hostgroup1
-                s.save()
-                #mgmt.append(syspatch)
-                #mgmt.append(syspatch.get('mgmt'))
-                #if not Server.objects.filter(server=link.string).exists():
-                    #s = Server(server=link.string)
-                    #s.save()
-                #url_list.append(link.get("href"))
-                url_list.append(link.string)
-                #paths.append(maint_path)
-            else:
-                pass
-        context = {'manifests': manifests, 'url_list': url_list, 'check': "worked", 'paths': paths, 'mgmt1': mgmt1, 'skip1': skip1}
-    else:
-        context = {'manifests': manifests}
-    return render(request, 'autopatch/get_list.html', context)
 
 class AllHosts(generic.ListView):
     template_name = 'autopatch/serverlist.html'
@@ -417,9 +358,6 @@ def SatUpdates(request):
     return render_to_response('autopatch/patching-tasks.html', context,
                               context_instance=RequestContext(request))
 
-def index(request):
-    return render(request, 'autopatch/index.html')
-
 #Views not currently being used
 ###########################################
 def create(request):
@@ -434,3 +372,57 @@ def create(request):
     args.update(csrf(request))
     args['form'] = form
     return render_to_response('autopatch/create_server.html', args)
+
+def GetList(request):
+    if(request.GET.get('mybtn')):
+        #mypythoncode.mypythonfunction( int(request.GET.get('mytextbox')) )
+        manifests = str(request.GET.get('mytextbox'))
+    else:
+        manifests = None
+    if manifests:
+        #Server.objects.all().delete()
+        url_list = []
+        paths = []
+        mgmt = []
+        #host_list = HostList()
+        myurl = urllib.request.urlopen(manifests)
+        html = myurl.read()
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        for link in soup.findAll("a"):
+            if ".com" in link.string:
+                path = link.get("href")
+                maint_path = manifests+"/"+link.string+'/maint.yaml'
+                syspatch_data = ModMaint().getMaint(maint_path)
+                mgmt1 = syspatch_data.get('mgmt')
+                exclude1 = syspatch_data.get('exclude')
+                skip1 = syspatch_data.get('skip')
+                hostgroup1 = syspatch_data.get('hostgroup')
+                if not Server.objects.filter(server=link.string).exists():
+                    s = Server(server=link.string)
+                    s.server = link.string
+                    s.mgmt = mgmt1
+                    s.exclude = exclude1
+                    s.skip = skip1
+                    s.hostgroup = hostgroup1
+                else:
+                    s = Server(server=link.string)
+                    s.server = link.string
+                    s.mgmt = mgmt1
+                    s.exclude = exclude1
+                    s.skip = skip1
+                    s.hostgroup = hostgroup1
+                s.save()
+                #mgmt.append(syspatch)
+                #mgmt.append(syspatch.get('mgmt'))
+                #if not Server.objects.filter(server=link.string).exists():
+                    #s = Server(server=link.string)
+                    #s.save()
+                #url_list.append(link.get("href"))
+                url_list.append(link.string)
+                #paths.append(maint_path)
+            else:
+                pass
+        context = {'manifests': manifests, 'url_list': url_list, 'check': "worked", 'paths': paths, 'mgmt1': mgmt1, 'skip1': skip1}
+    else:
+        context = {'manifests': manifests}
+    return render(request, 'autopatch/get_list.html', context)
