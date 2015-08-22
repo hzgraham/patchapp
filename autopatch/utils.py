@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 import xmlrpc.client, xmlrpc.server
 from .forms import LoginForm
 
+#TaskScripts are simple debugging functions
 class TaskScripts():
     def parseForm(self, form):
         print("This is the form:",form)
@@ -32,6 +33,7 @@ class TaskScripts():
         #print("This is the form : ", form)
         #print("This is the button: ", btn)
 
+#Satellite related util functions
 class Satellite():
     def getIds(self, client, request, session, env):
         #This function currently isn't used
@@ -58,6 +60,7 @@ class Satellite():
             errata_levels['rhsa'] = errata.RHSA
             errata_levels['rhba'] = errata.RHBA
         #print("The errata levels", errata_levels)
+        #Parses the errata levels for the date and ID
         if errata_levels:
             if errata_levels['rhea']:
                 rhea_date = errata_levels['rhea'].split('-')[1].split(':')[0]
@@ -83,12 +86,16 @@ class Satellite():
                 rhba_date = 0
                 rhba_id = 0
                 #print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
+            #Iteritively checks each available errata with the errata level
             for each in updates:
                 if any(x in each for x in advisories):
                     adv_type = each.split('-')[0]
                     date = each.split('-')[1].split(':')[0]
                     errata_id = each.split('-')[1].split(':')[1]
                     #print("The data and id of the advisory are: ", date, errata_id)
+                    #If the available errata is equal to or older than the level
+                    #it is added to the needed_updates list
+                    #and it be saved as Server.plerrata
                     if adv_type == 'RHEA':
                         if date < rhea_date:
                             needed_updates.append(each)
@@ -114,6 +121,32 @@ class Satellite():
                     pass
             #print("These are the needed updates!:",needed_updates)
             return needed_updates
+
+    #Used when errata levels are set to recalc Server.plerrata or planned errata
+    def recalcPlerrata(self):
+        if Server.objects.all():
+            for host in Server.objects.all():
+                updates = host.updates
+                #print("hostname:",host.server)
+                #If updates it will calculate the needed_updates
+                if updates:
+                    needed_updates = Satellite().desiredErrata(updates)
+                    host.plerrata = needed_updates
+                    #print("recalcErrata info:",host,":",updates,":",needed_updates)
+                    #Updates whether the host still needs patched
+                    if needed_updates:
+                        host.plerrata = needed_updates
+                        host.uptodate = 0
+                    #host doesn't need patched
+                    else:
+                        host.uptodate = 1
+                #marks host as not need patched if no "updates"
+                else:
+                    host.uptodate = 1
+                host.save()
+        else:
+            print("No servers to update the desired errata.")
+            pass
 
 class ModMaint():
     #Function called by Git view that imports host data from a git repo by cloning

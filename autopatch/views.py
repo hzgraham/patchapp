@@ -156,6 +156,8 @@ def UpdateErrata(request):
             else:
                 pass
             errata.save()
+            #recalculates the desired errata for each host
+            Satellite().recalcPlerrata()
             return HttpResponseRedirect('/autopatch/errata/')
     else:
         form = ErrataForm()
