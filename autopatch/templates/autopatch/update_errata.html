@@ -3,13 +3,32 @@
 {% block content %}
 <div class="container">
   <a href="/autopatch/tasks/">&#8617; Back to Patching Tasks</a>
-
+  <br /><br />
   <!-- form for updating latest desired errata -->
-  <form action="/autopatch/errata/" method="post">{% csrf_token %}
-    <ul>
-      {{ form.as_ul }}
-    </ul>
-    <input type="submit" name="submit" value="Update Errata">
+  <form action="/autopatch/errata/" method="post" class="form-horizontal">{% csrf_token %}
+    <div class="form-group">
+      <label class="col-sm-1 control-label">RHEA</label>
+      <div class="col-sm-4">
+	<input class="form-control" id="id_RHEA" name="RHEA" placeholder="RHEA-2015:1625" size="25" type="text" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-1 control-label">RHSA</label>
+      <div class="col-sm-4">
+	<input class="form-control" id="id_RHSA" name="RHSA" placeholder="RHSA-2015:1640" size="25" type="text" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-1 control-label">RHBA</label>
+      <div class="col-sm-4">
+	<input class="form-control" id="id_RHBA" name="RHBA" placeholder="RHBA-2015:1532" size="25" type="text" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-1 col-sm-4">
+	<input type="submit" name="submit" value="Update Errata" class="btn btn-info">
+      </div>
+    </div>
   </form>
   {% if RHEA %}
   <p>

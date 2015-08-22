@@ -17,11 +17,10 @@ class LoginForm(forms.Form):
     satellite = forms.CharField(max_length=256)
     environment = forms.ChoiceField(choices=[('dev', 'dev'),('qa', 'qa'),('stage', 'stage'), ('prod', 'prod')], required=True, label='Environment')
 
-class ErrataForm(forms.ModelForm):
-
-    class Meta:
-        model = Errata
-        fields = "__all__"
+class ErrataForm(forms.Form):
+    RHEA = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'RHEA-2015:1625'}))
+    RHSA = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'RHSA-2015:1640'}))
+    RHBA = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'RHBA-2015:1532'}))
 
 class ServerForm(forms.Form):
     server = forms.CharField(widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'server01.example.com'}))
