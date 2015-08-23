@@ -53,11 +53,9 @@ def CreateCSV(request):
     writer = csv.writer(response)
     for each in params:
         writer.writerow(each)
-    #context = {'params': params}
-    #return render(request, 'autopatch/create_csv.html', context)
     return response
 
-#Funtion used to import hosts from git by cloning the repo
+# Funtion used to import hosts from git by cloning the repo
 def Git(request):
     unlist = []
     #Checks if a path was give to the git repo
@@ -65,14 +63,14 @@ def Git(request):
         manifests = str(request.GET.get('gitpath'))
     else:
         manifests = None
-    #if a path was give this call parseGit which does the
-    #importing of FQDNs and syspatch_* parameters to the Server model
+    # if a path was give this call parseGit which does the
+    # importing of FQDNs and syspatch_* parameters to the Server model
     if manifests:
-        #Server.objects.all().delete()
+        # Server.objects.all().delete()
         hosts = ModMaint().parseGit(manifests)
     else:
         pass
-    #unsassignlist (not in an env) hosts are displayed on the patching-tasks.html template
+    # unsassignlist (not in an env) hosts are displayed on the patching-tasks.html template
     unassignlist = Server.objects.all().filter(env="unassigned").order_by('server')
     for each in unassignlist:
         unhost = each.server
@@ -80,17 +78,12 @@ def Git(request):
     context = {'unlist': unlist, 'encouragement': encouragement()}
     return render(request, 'autopatch/patching-tasks.html', context)
 
-class AllHosts(generic.ListView):
-    template_name = 'autopatch/serverlist.html'
-    def get_queryset(self):
-        return Server.objects.all().order_by("server")
-
-#hosts of owners set here will be excluded from patching
+# hosts of owners set here will be excluded from patching
 def SetOwners(request):
-    #owners is a test variable
+    # owners is a test variable
     owners_list = []
     owner_list = Owner.objects.all().order_by('owner')
-    #If the "Set Owners" button is pressed
+    # If the "Set Owners" button is pressed
     if request.GET.get('addowners'):
         owners = str(request.GET.get('owners'))
         owners_list = owners.split(",")
@@ -100,16 +93,16 @@ def SetOwners(request):
                 owner = Owner(owner=cl_owner)
                 owner.owner = cl_owner
                 owner.save()
-                #owners_list = ['success']
+                # owners_list = ['success']
             else:
-                #owners_list = ['failure']
+                # owners_list = ['failure']
                 pass
-    #If the "Remove Owners" button is pressed
+    # If the "Remove Owners" button is pressed
     elif request.GET.get('delowners'):
         Owner.objects.all().delete()
     else:
         pass
-    #Creates a list for output to the autopatch/owners.html template
+    # Creates a list for output to the autopatch/owners.html template
     if Owner.objects.all():
         owners_list = Owner.objects.all().order_by('owner')
     else:
@@ -118,19 +111,19 @@ def SetOwners(request):
     return render(request, 'autopatch/owners.html', context)
 
 def UpdateErrata(request):
-    #This view used to update the top level errata
+    # This view used to update the top level errata
     if request.POST:
-        #errata = Errata.objects.filter(pk=1)
+        # errata = Errata.objects.filter(pk=1)
         form = ErrataForm(request.POST)
-        #form = ErrataForm(pk=1)
+        # form = ErrataForm(pk=1)
         if form.is_valid():
-            #TaskScripts().parseForm(form)
-            #saving the errata levels entered in the form
+            # TaskScripts().parseForm(form)
+            # saving the errata levels entered in the form
             RHEA = form.data['RHEA']
             RHSA = form.data['RHSA']
             RHBA = form.data['RHBA']
             errata = Errata.objects.first()
-            #This keeps the exists errata levels set if none are entered in the form
+            # This keeps the exists errata levels set if none are entered in the form
             if not errata:
                 errata = Errata(RHEA=form.data['RHEA'])
             else:
@@ -156,7 +149,7 @@ def UpdateErrata(request):
             else:
                 pass
             errata.save()
-            #recalculates the desired errata for each host
+            # recalculates the desired errata for each host
             Satellite().recalcPlerrata()
             return HttpResponseRedirect('/autopatch/errata/')
     else:
@@ -168,16 +161,11 @@ def UpdateErrata(request):
         args['RHEA'] = errata.RHEA
         args['RHSA'] = errata.RHSA
         args['RHBA'] = errata.RHBA
-        #updates = {'RHEA': RHEA, 'RHSA': RHSA, 'RHBA': RHBA}
     else:
-        #updates = {'RHEA': 0, 'RHSA': 0, 'RHBA': 0}
         args['RHEA'] = 0
         args['RHSA'] = 0
         args['RHBA'] = 0
-    #args = {'form': form}
-    #args.append(updates)
     args['form'] = form
-    #args['RHEA'] = errata.RHEA
     return render_to_response('autopatch/update_errata.html', args)
 
 def Home(request):
@@ -261,37 +249,37 @@ def DevView(request):
 @sensitive_post_parameters()
 @sensitive_variables()
 def SatId(request):
-    #SatId will get the ID of each server in Satellite
-    #There are 4 buttons on the patching tasks page, one for each env
+    # SatId will get the ID of each server in Satellite
+    # There are 4 buttons on the patching tasks page, one for each env
     context = {'encouragement': encouragement()}
     if request.POST:
         form = LoginForm(request.POST)
-        #TaskScripts().parseSatForm(request, form)
+        # TaskScripts().parseSatForm(request, form)
         if form.is_valid():
-            #Get variables from the form
+            # Get variables from the form
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
             url = form.cleaned_data['satellite']
             URL = "https://"+url+"/rpc/api"
             env = form.cleaned_data['environment']
-            #using xmlrpc to get a session key from the satellite server
+            # using xmlrpc to get a session key from the satellite server
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
-            #Get list of hosts in an env
+            # Get list of hosts in an env
             host_list = Server.objects.all().filter(env=env).order_by('server')
-            #Loop through each host and get satellite ID
+            # Loop through each host and get satellite ID
             for host in host_list:
                 servername = host.server
                 client = xmlrpc.client.Server(URL, verbose=0)
                 data = client.system.getId(session, servername)
-                #TaskScripts().parseSatForm(servername, data)
+                # TaskScripts().parseSatForm(servername, data)
                 if data:
                     getid = data[0].get('id')
                     host.satid = getid
                 else:
                     pass
                 host.save()
-                #context = {'getid': getid}
+                # context = {'getid': getid}
             client.auth.logout(session)
     else:
         pass
@@ -301,8 +289,8 @@ def SatId(request):
 @sensitive_variables('pswd', 'password', 'form')
 @sensitive_post_parameters('password')
 def SatUpdates(request):
-    #SatId will get the ID of each server in Satellite
-    #There are 4 buttons on the patching tasks page, one for each env
+    # SatId will get the ID of each server in Satellite
+    # There are 4 buttons on the patching tasks page, one for each env
     context = {'encouragement': encouragement()}
     errata_levels = {}
     errata = Errata.objects.first()
@@ -314,34 +302,31 @@ def SatUpdates(request):
         pass
     if request.POST:
         form = LoginForm(request.POST)
-        #TaskScripts().parseSatForm(request, form)
+        # TaskScripts().parseSatForm(request, form)
         if form.is_valid():
             user = form.cleaned_data['loginname']
             pswd = form.cleaned_data['password']
             url = form.cleaned_data['satellite']
             URL = "https://"+url+"/rpc/api"
             env = form.cleaned_data['environment']
-            #name = form.cleaned_data['hostname']
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
-            #session = 'temp'
-            #context = Satellite().getIds(request, client, session, env)
             host_list = Server.objects.all().filter(env=env).order_by('server')
             for host in host_list:
                 servername = host.server
                 if host.satid:
                     updates = []
                     satid = host.satid
-                    #TaskScripts().parseSatForm(servername, env)
+                    # TaskScripts().parseSatForm(servername, env)
                     client = xmlrpc.client.Server(URL, verbose=0)
                     erratas = client.system.getRelevantErrata(session,satid)
                     if erratas:
-                        #TaskScripts().parseSatForm(servername, erratas)
+                        # TaskScripts().parseSatForm(servername, erratas)
                         for errata in erratas:
                             updates.append(errata['advisory_name']+' ')
                             Updates = ''.join(updates).strip()
                         needed_updates = Satellite().desiredErrata(updates)
-                        #TaskScripts().parseSatForm(servername, Updates)
+                        # TaskScripts().parseSatForm(servername, Updates)
                         if needed_updates:
                             host.plerrata = needed_updates
                             host.uptodate = 0
@@ -353,14 +338,13 @@ def SatUpdates(request):
                     host.save()
                 else:
                     pass
-                #context = {'getid': getid}
             client.auth.logout(session)
     else:
         pass
     return render_to_response('autopatch/patching-tasks.html', context,
                               context_instance=RequestContext(request))
 
-#Views not currently being used
+# Views not currently being used
 ###########################################
 def create(request):
     if request.POST:
@@ -377,16 +361,16 @@ def create(request):
 
 def GetList(request):
     if(request.GET.get('mybtn')):
-        #mypythoncode.mypythonfunction( int(request.GET.get('mytextbox')) )
+        # mypythoncode.mypythonfunction( int(request.GET.get('mytextbox')) )
         manifests = str(request.GET.get('mytextbox'))
     else:
         manifests = None
     if manifests:
-        #Server.objects.all().delete()
+        # Server.objects.all().delete()
         url_list = []
         paths = []
         mgmt = []
-        #host_list = HostList()
+        # host_list = HostList()
         myurl = urllib.request.urlopen(manifests)
         html = myurl.read()
         soup = bs4.BeautifulSoup(html, "html.parser")
@@ -414,14 +398,7 @@ def GetList(request):
                     s.skip = skip1
                     s.hostgroup = hostgroup1
                 s.save()
-                #mgmt.append(syspatch)
-                #mgmt.append(syspatch.get('mgmt'))
-                #if not Server.objects.filter(server=link.string).exists():
-                    #s = Server(server=link.string)
-                    #s.save()
-                #url_list.append(link.get("href"))
                 url_list.append(link.string)
-                #paths.append(maint_path)
             else:
                 pass
         context = {'manifests': manifests, 'url_list': url_list, 'check': "worked", 'paths': paths, 'mgmt1': mgmt1, 'skip1': skip1}

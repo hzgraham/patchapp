@@ -2,21 +2,21 @@ import urllib.request, urllib.error, git, shutil, os, glob, random
 from django.http import Http404
 from .models import Server,Hosttotal,Errata
 from django.shortcuts import get_object_or_404
-#for satellite
+# for satellite
 import xmlrpc.client, xmlrpc.server
 from .forms import LoginForm
 
-#TaskScripts are simple debugging functions
+# TaskScripts are simple debugging functions
 class TaskScripts():
     def parseForm(self, form):
         print("This is the form:",form)
         RHEA = form.data['RHEA']
         errata = Errata.objects.first()
-        #errata = errata.RHBA
-        #errata = get_object_or_404(Errata, pk=1)
-        #errata = Errata.objects.all()
-        #server = Server.objects.filter(pk=1)
-        #print(server)
+        # errata = errata.RHBA
+        # errata = get_object_or_404(Errata, pk=1)
+        # errata = Errata.objects.all()
+        # server = Server.objects.filter(pk=1)
+        # print(server)
         print("This is the errata: ",errata)
         print("This is RHEA",RHEA)
         print("############################")
@@ -28,17 +28,17 @@ class TaskScripts():
         #     print("This is the Satellite URL",URL)
         # #env = form.data['environment']
         # submit = form.data['submit']
-        #print("Form data: ", env, submit)
+        # print("Form data: ", env, submit)
         print("This is the request: ", servername, erratas)
-        #print("This is the form : ", form)
-        #print("This is the button: ", btn)
+        # print("This is the form : ", form)
+        # print("This is the button: ", btn)
 
-#Satellite related util functions
+# Satellite related util functions
 class Satellite():
     def getIds(self, client, request, session, env):
-        #This function currently isn't used
+        # This function currently isn't used
         form = LoginForm(request.POST)
-        #env = form.data['environment']
+        # env = form.data['environment']
         context = {'encouragement': encouragement()}
         print("Made it to utils: ",request)
         print("This is the environment: ",env)
@@ -59,43 +59,43 @@ class Satellite():
             errata_levels['rhea'] = errata.RHEA
             errata_levels['rhsa'] = errata.RHSA
             errata_levels['rhba'] = errata.RHBA
-        #print("The errata levels", errata_levels)
-        #Parses the errata levels for the date and ID
+        # print("The errata levels", errata_levels)
+        # Parses the errata levels for the date and ID
         if errata_levels:
             if errata_levels['rhea']:
                 rhea_date = errata_levels['rhea'].split('-')[1].split(':')[0]
                 rhea_id = errata_levels['rhea'].split('-')[1].split(':')[1]
-                #print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
+                # print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
             else:
                 rhea_date = 0
                 rhea_id = 0
-                #print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
+                # print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
             if errata_levels['rhsa']:
                 rhsa_date = errata_levels['rhsa'].split('-')[1].split(':')[0]
                 rhsa_id = errata_levels['rhsa'].split('-')[1].split(':')[1]
-                #print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
+                # print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
             else:
                 rhsa_date = 0
                 rhsa_id = 0
-                #print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
+                # print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
             if errata_levels['rhba']:
                 rhba_date = errata_levels['rhba'].split('-')[1].split(':')[0]
                 rhba_id = errata_levels['rhba'].split('-')[1].split(':')[1]
-                #print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
+                # print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
             else:
                 rhba_date = 0
                 rhba_id = 0
-                #print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
-            #Iteritively checks each available errata with the errata level
+                # print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
+            # Iteritively checks each available errata with the errata level
             for each in updates:
                 if any(x in each for x in advisories):
                     adv_type = each.split('-')[0]
                     date = each.split('-')[1].split(':')[0]
                     errata_id = each.split('-')[1].split(':')[1]
-                    #print("The data and id of the advisory are: ", date, errata_id)
-                    #If the available errata is equal to or older than the level
-                    #it is added to the needed_updates list
-                    #and it be saved as Server.plerrata
+                    # print("The data and id of the advisory are: ", date, errata_id)
+                    # If the available errata is equal to or older than the level
+                    # it is added to the needed_updates list
+                    # and it be saved as Server.plerrata
                     if adv_type == 'RHEA':
                         if date < rhea_date:
                             needed_updates.append(each)
@@ -119,28 +119,28 @@ class Satellite():
                             pass
                 else:
                     pass
-            #print("These are the needed updates!:",needed_updates)
+            # print("These are the needed updates!:",needed_updates)
             return needed_updates
 
-    #Used when errata levels are set to recalc Server.plerrata or planned errata
+    # Used when errata levels are set to recalc Server.plerrata or planned errata
     def recalcPlerrata(self):
         if Server.objects.all():
             for host in Server.objects.all():
                 updates = host.updates
-                #print("hostname:",host.server)
-                #If updates it will calculate the needed_updates
+                # print("hostname:",host.server)
+                # If updates it will calculate the needed_updates
                 if updates:
                     needed_updates = Satellite().desiredErrata(updates)
                     host.plerrata = needed_updates
-                    #print("recalcErrata info:",host,":",updates,":",needed_updates)
-                    #Updates whether the host still needs patched
+                    # print("recalcErrata info:",host,":",updates,":",needed_updates)
+                    # Updates whether the host still needs patched
                     if needed_updates:
                         host.plerrata = needed_updates
                         host.uptodate = 0
-                    #host doesn't need patched
+                    # host doesn't need patched
                     else:
                         host.uptodate = 1
-                #marks host as not need patched if no "updates"
+                # marks host as not need patched if no "updates"
                 else:
                     host.uptodate = 1
                 host.save()
@@ -149,21 +149,21 @@ class Satellite():
             pass
 
 class ModMaint():
-    #Function called by Git view that imports host data from a git repo by cloning
+    # Function called by Git view that imports host data from a git repo by cloning
     def parseGit(self, manifests):
         git_path = 'autopatch/manifests'
         if not os.path.isdir(git_path):
             repo = git.Repo.clone_from(manifests,'autopatch/manifests')
-            #print("this is the repo: ",repo)
+            # print("this is the repo: ",repo)
         else:
             shutil.rmtree(git_path)
             repo = git.Repo.clone_from(manifests,'autopatch/manifests')
-            #print("The path already exists",git_path)
+            # print("The path already exists",git_path)
         host_paths = []
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
-        #print("Host Paths",host_paths)
+        # print("Host Paths",host_paths)
         for each in host_paths:
-            #print("This is the host path: ",each)
+            # print("This is the host path: ",each)
             mgmt = ''
             hostgroup = ''
             exclude = ''
@@ -181,7 +181,7 @@ class ModMaint():
                         if 'syspatch_yum_excludes' == i.split(":")[0]:
                             exclude = i.split(":")[1].strip().split("\n")[0]
                         if 'syspatch_skip' == i.split(":")[0]:
-                            #skip = i.split(":")[1].strip().split("\n")[0]
+                            # skip = i.split(":")[1].strip().split("\n")[0]
                             if i.split(":")[1].strip().split("\n")[0] is '1':
                                 skip = True
                             elif i.split(":")[1].strip().split("\n")[0] is '0':
@@ -209,19 +209,19 @@ class ModMaint():
         env = ""
         if ".prod." in server or ".util" in server:
             env = "prod"
-            #print("1st check:", server, " in: ",env)
+            # print("1st check:", server, " in: ",env)
         elif ".dev" not in server and  ".stage." not in server and ".qa." not in server:
             env = "prod"
-            #print("2nd check:", server, " in: ",env)
+            # print("2nd check:", server, " in: ",env)
         elif ".stage" in server:
             env = "stage"
-            #print("3rd check:", server, " in: ",env)
+            # print("3rd check:", server, " in: ",env)
         elif ".qa." in server:
             env = "qa"
-            #print("4rd check:", server, " in: ",env)
+            # print("4rd check:", server, " in: ",env)
         elif ".dev" in server:
             env = "dev"
-            #print("5rd check:", server, " in: ",env)
+            # print("5rd check:", server, " in: ",env)
         else:
             env = "unassigned"
         return env
@@ -233,7 +233,7 @@ class ModMaint():
             myurl = urllib.request.urlopen(url)
             lines = myurl.readlines()
         except urllib.error.HTTPError as e:
-            #raise Http404("Poll does not exist")
+            # raise Http404("Poll does not exist")
             pass
         mgmt = ""
         hostgroup = ""
@@ -249,20 +249,20 @@ class ModMaint():
             if b'syspatch_skip' == i.split(b":")[0]:
                 skip = i.split(b":")[1].strip().split(b"\n")[0]
             syspatch = {'mgmt': mgmt, 'hostgroup': hostgroup, 'exclude': exclude, 'skip': skip}
-        #print(syspatch)
-            #if syspatch is not dict:
-            #syspatch = {}
+            # print(syspatch)
+            # if syspatch is not dict:
+            # syspatch = {}
         return syspatch
 
     def genCSV(self, servers):
         s = []
         params = [['Hostname','Excluded packages','Skip','Hostgroup','Comments','Pastebin Link (If Errors Are Present)']]
-        #for host in Server.objects.all():
+        # for host in Server.objects.all():
         for each in servers:
             host = Server.objects.all().get(server=each)
-            #print("THIS IS THE HOST: ",host)
+            # print("THIS IS THE HOST: ",host)
             hostname = host.server
-            #print("THIS IS THE HOSTNAME: ",hostname)
+            # print("THIS IS THE HOSTNAME: ",hostname)
             exclude = host.exclude
             skip = host.skip
             hostgroup = host.hostgroup
@@ -278,19 +278,19 @@ class ModMaint():
             if env == 'Prod':
                 if ".prod." in s or ".util" in s:
                     total += 1
-                    #print("1st check servername: ",s)
+                    # print("1st check servername: ",s)
                 elif ".dev" not in s and  ".stage." not in s and ".qa." not in s:
                     total += 1
-                    #print("2nd check servername: ",s)
+                    # print("2nd check servername: ",s)
                 else:
-                    #print(s,"Not a server in: ",env)
+                    # print(s,"Not a server in: ",env)
                     pass
             else:
                 if field in s:
                     total += 1
-                    #print("servername: ",s)
+                    # print("servername: ",s)
                 else:
-                    #print("Not a server in: ",env)
+                    # print("Not a server in: ",env)
                     pass
         t = Hosttotal(env=env)
         t.env = env
