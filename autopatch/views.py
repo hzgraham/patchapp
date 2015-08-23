@@ -187,7 +187,6 @@ class DetailView(generic.DetailView):
        return Server.objects.all().order_by("server")
 
 def ProdView(request):
-    prod_list = Server.objects.all().order_by('server')
     env = "Prod"
     field = ".prod."
     if Hosttotal.objects.filter(env=env).exists():
@@ -198,11 +197,11 @@ def ProdView(request):
     if(request.GET.get('mybtn')):
         total = ModMaint().hostCount(env, field)
         prodtotal = total.get("total")
-    context = {'prod_list': prod_list, 'total': prodtotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/prod-servers.html', context)
+    prod_list = Server.objects.all().filter(env="prod").order_by('server')
+    context = {'host_list': prod_list, 'total': prodtotal, 'env': env, 'encouragement': encouragement()}
+    return render(request, 'autopatch/host_list.html', context)
 
 def StageView(request):
-    stage_list = Server.objects.all().order_by('server')
     env = "Stage"
     field = ".stage."
     if Hosttotal.objects.filter(env=env).exists():
@@ -213,11 +212,11 @@ def StageView(request):
     if(request.GET.get('mybtn')):
         total = ModMaint().hostCount(env, field)
         stagetotal = total.get("total")
-    context = {'stage_list': stage_list, 'total': stagetotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/stage-servers.html', context)
+    stage_list = Server.objects.all().filter(env="stage").order_by('server')
+    context = {'host_list': stage_list, 'total': stagetotal, 'env': env, 'encouragement': encouragement()}
+    return render(request, 'autopatch/host_list.html', context)
 
 def QAView(request):
-    qa_list = Server.objects.all().order_by('server')
     env = "QA"
     field = ".qa."
     if Hosttotal.objects.filter(env=env).exists():
@@ -228,11 +227,11 @@ def QAView(request):
     if(request.GET.get('mybtn')):
         total = ModMaint().hostCount(env, field)
         qatotal = total.get("total")
-    context = {'qa_list': qa_list, 'total': qatotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/qa-servers.html', context)
+    qa_list = Server.objects.all().filter(env="qa").order_by('server')
+    context = {'host_list': qa_list, 'total': qatotal, 'env': env, 'encouragement': encouragement()}
+    return render(request, 'autopatch/host_list.html', context)
 
 def DevView(request):
-    dev_list = Server.objects.all().order_by('server')
     env = "Dev"
     field = ".dev"
     if Hosttotal.objects.filter(env=env).exists():
@@ -243,8 +242,9 @@ def DevView(request):
     if(request.GET.get('mybtn')):
         total = ModMaint().hostCount(env, field)
         devtotal = total.get("total")
-    context = {'dev_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/dev-servers.html', context)
+    dev_list = Server.objects.all().filter(env="dev").order_by('server')
+    context = {'host_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
+    return render(request, 'autopatch/host_list.html', context)
 
 @sensitive_post_parameters()
 @sensitive_variables()
