@@ -10,17 +10,39 @@
       </header>
       <div class="server_meta">
 	<h4>The maint.yaml syspatch_* parameters:</h4>
-	<li>yum_excludes: {{ server.exclude }}</li>
       </div>
+      <p>This is the server ID: {{ server.id }}</p>
       <div class = "server_body">
-	<li>hostgroup: {{ server.hostgroup }}</li>
-	<li>Host skipped: {{ server.skip }}</li>
-	<li>Comments about this host: {{ server.comments }}</li>
+	<!-- <form action="/autopatch/{{ server.id }}/" method="post" class="form-horizontal">{% csrf_token %} -->
+	<form action="{% url 'autopatch:resultView' pk=server.id %}" method="post" class="form-horizontal">{% csrf_token %}
+	  <div class="form-group">
+	    <div class="col-sm-4">
+	      <li>Host skipped:
+		<input class="form-control" id="id_skip" name="skip" value="{{ server.skip }}" size="25" type="text" />
+	      </li>
+	      <li>yum_excludes:
+		<input class="form-control" id="id_exclude" name="exclude" value="{{ server.exclude }}" size="25" type="text" />
+	      </li>
+	      <li>Hostgroup:
+		<input class="form-control" id="id_hostgroup" name="hostgroup" value="{{ server.hostgroup }}" size="25" type="text" />
+	      </li>
+	      <li>Comments about this host:
+		<input class="form-control" id="id_comments" name="comments" value="{{ server.comments }}" size="25" type="text" />
+	      </li>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <input type="submit" name="set_param" value="Submit Changes" class="btn btn-info">
+	  </div>
+	</form>
 	<hr />
 	<li>Desired Errata: {{ server.plerrata }}</li>
 	<hr />
 	<li>Available Errata: {{ server.updates }}</li>
       </div>
+      {% if hostgroup %}
+      <p>{{ hostgroup }}</p>
+      {% endif %}
     </article>
   </div>
 </div>

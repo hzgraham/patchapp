@@ -33,6 +33,9 @@ class TaskScripts():
         # print("This is the form : ", form)
         # print("This is the button: ", btn)
 
+    def parseServerForm(self, test1, test2):
+        print("This is the request: ", test1, test2)
+
 # Satellite related util functions
 class Satellite():
     def getIds(self, client, request, session, env):

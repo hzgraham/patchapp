@@ -180,12 +180,6 @@ class TasksView(generic.ListView):
     def get_context_data(self):
         return {'encouragement': encouragement()}
     
-class DetailView(generic.DetailView):
-   model = Server
-   template_name = 'autopatch/results.html'
-   def get_queryset(self):
-       return Server.objects.all().order_by("server")
-
 def ProdView(request):
     env = "Prod"
     field = ".prod."
@@ -342,6 +336,57 @@ def SatUpdates(request):
     else:
         pass
     return render_to_response('autopatch/patching-tasks.html', context,
+                              context_instance=RequestContext(request))
+
+def resultView(request, pk):
+    args = []
+    server = get_object_or_404(Server, pk=pk)
+    template_name = 'autopatch/results.html'
+    hostgroup = "nothing"
+    exclude = "nothing"
+    skip = []
+    if request.POST.get('set_param'):
+        form = ServerForm(request.POST)
+        # test1 = "Recognizes form"
+        # test2 = pk
+        # TaskScripts().parseServerForm(test1, test2)
+        if form.is_valid():
+            exclude = form.data['exclude']
+            hostgroup = form.data['hostgroup']
+            skip = form.cleaned_data['skip']
+            comments = form.cleaned_data['comments']
+            s = Server.objects.get(pk=pk)
+            # test1 = [exclude, hostgroup, skip, comments]
+            # test2 = pk
+            # TaskScripts().parseServerForm(test1, test2)
+            if exclude:
+                s.exclude = exclude
+            if hostgroup:
+                s.hostgroup = hostgroup
+            if skip:
+                s.skip = skip
+            if comments:
+                s.comments = comments
+            s.save()
+        else:
+            # test1 = "Form not valid"
+            # test2 = ""
+            # TaskScripts().parseServerForm(test1, test2)
+            pass
+    else:
+        # test1 = "Doesn't recognize form"
+        # test2 = ""
+        # TaskScripts().parseServerForm(test1, test2)
+        pass
+    id_number = pk
+    context = {'exclude': exclude, 'encouragement': encouragement(), 'hostgroup': hostgroup, 'skip': skip}
+    return HttpResponseRedirect(reverse('autopatch:detail', kwargs={'pk':id_number}), context)
+
+def DetailView(request, pk):
+    server = get_object_or_404(Server, pk=pk)
+    template_name = 'autopatch/results.html'
+    context = {'encouragement': encouragement(), 'server': server}
+    return render_to_response('autopatch/results.html', context,
                               context_instance=RequestContext(request))
 
 # Views not currently being used
