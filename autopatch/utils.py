@@ -1,6 +1,6 @@
 import urllib.request, urllib.error, git, shutil, os, glob, random
 from django.http import Http404
-from .models import Server,Hosttotal,Errata
+from .models import Server,Hosttotal,Errata,Owner
 from django.shortcuts import get_object_or_404
 # for satellite
 import xmlrpc.client, xmlrpc.server
@@ -154,6 +154,8 @@ class Satellite():
 class ModMaint():
     # Function called by Git view that imports host data from a git repo by cloning
     def parseGit(self, manifests):
+        # unwanted_owners is a list of syspatch_owner attribs that will be ignored
+        unwanted_owners = ModMaint().unwantedOwners()
         git_path = 'autopatch/manifests'
         if not os.path.isdir(git_path):
             repo = git.Repo.clone_from(manifests,'autopatch/manifests')
@@ -172,6 +174,7 @@ class ModMaint():
             exclude = ''
             skip = ''
             comments = ''
+            owner = ''
             pathname = each+'/maint.yaml'
             if os.path.exists(pathname):
                 with open(pathname, 'rt') as myfile:
@@ -191,22 +194,37 @@ class ModMaint():
                                 skip = False
                         if 'syspatch_comment' == i.split(":")[0]:
                             comments = i.split(":")[1].strip().split("\n")[0]
+                        if 'syspatch_owner' == i.split(":")[0]:
+                            owner = i.split(":")[1].strip().split("\n")[0]
                     servername = each.split('/')[-1]
-                    print("servername: ",servername)
-                    s = Server(server=servername)
-                    s.server = each.split('/')[-1]
-                    s.mgmt = mgmt
-                    s.exclude = exclude
-                    s.skip = skip
-                    s.hostgroup = hostgroup
-                    s.comments = comments
-                    s.env = ModMaint().setEnv(servername)
-                    print("server: ",s.server)
-                    s.save()
+                    # ignoring hosts that have an owner in unwanted_owners
+                    if any(x in owner for x in unwanted_owners):
+                        print("The following server is unwanted: ", servername)
+                    else:
+                        # print("servername is being created/modified: ",servername)
+                        s = Server(server=servername)
+                        s.server = each.split('/')[-1]
+                        s.mgmt = mgmt
+                        s.exclude = exclude
+                        s.skip = skip
+                        s.hostgroup = hostgroup
+                        s.comments = comments
+                        s.env = ModMaint().setEnv(servername)
+                        # print("server: ",s.server)
+                        s.save()
                 myfile.close()
         envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
         for env,field in envs:
             total = ModMaint().hostCount(env, field)
+
+    # Function use to create list of hosts to ignore
+    def unwantedOwners(self):
+        owner_list = []
+        owners = Owner.objects.all()
+        for item in owners:
+            owner = item.owner
+            owner_list.append(owner)
+        return owner_list
 
     def setEnv(self, server):
         env = ""
