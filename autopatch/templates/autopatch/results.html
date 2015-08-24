@@ -8,31 +8,52 @@
 	<a href="/autopatch/{{server.env}}">&#8617; Back to {{server.env}}</a>
 	<h3 style="color: rgb(50, 155, 100);">{{ server.server }}</h3>
       </header>
-      <div class="server_meta">
-	<h4>The maint.yaml syspatch_* parameters:</h4>
-      </div>
       <p>This is the server ID: {{ server.id }}</p>
       <div class = "server_body">
 	<!-- <form action="/autopatch/{{ server.id }}/" method="post" class="form-horizontal">{% csrf_token %} -->
 	<form action="{% url 'autopatch:resultView' pk=server.id %}" method="post" class="form-horizontal">{% csrf_token %}
 	  <div class="form-group">
-	    <div class="col-sm-4">
-	      <li>Host skipped:
-		<input class="form-control" id="id_skip" name="skip" value="{{ server.skip }}" size="25" type="text" />
-	      </li>
-	      <li>yum_excludes:
-		<input class="form-control" id="id_exclude" name="exclude" value="{{ server.exclude }}" size="25" type="text" />
-	      </li>
-	      <li>Hostgroup:
-		<input class="form-control" id="id_hostgroup" name="hostgroup" value="{{ server.hostgroup }}" size="25" type="text" />
-	      </li>
-	      <li>Comments about this host:
-		<input class="form-control" id="id_comments" name="comments" value="{{ server.comments }}" size="25" type="text" />
-	      </li>
+	    <label class="col-sm-1 control-label">Host skipped:</label>
+	    <div class="col-sm-1">
+	      <label class="checkbox" for="id_skip">
+		{% if server.skip %}
+		<input type="checkbox" class="custom-checkbox" id="id_skip" data-toggle="checkbox" name="skip" value="skip" checked="checked">
+		<span class="icons">
+		  <span class="icon-unchecked"></span>
+		  <span class="icon-checked"></span>
+		</span>
+		{% else %}
+		<input type="checkbox" class="custom-checkbox" id="id_skip" data-toggle="checkbox" name="skip" value="skip" >
+		<span class="icons">
+		  <span class="icon-checked"></span>
+		  <span class="icon-unchecked"></span>
+		</span>
+		{% endif %}
+	      </label>
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <input type="submit" name="set_param" value="Submit Changes" class="btn btn-info">
+	    <label class="col-sm-1 control-label">yum excludes:</label>
+	    <div class="col-sm-4">
+		<input class="form-control" id="id_exclude" name="exclude" value="{{ server.exclude }}" size="25" type="text" />
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-1 control-label">Hostgroup:</label>
+	    <div class="col-sm-4">
+	      <input class="form-control" id="id_hostgroup" name="hostgroup" value="{{ server.hostgroup }}" size="25" type="text" />
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-1 control-label">Comments about this host:</label>
+	    <div class="col-sm-4">
+	      <textarea class="form-control" id="id_comments" name="comments" rows="3">{{ server.comments }}</textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-1 col-sm-4">
+	      <input type="submit" name="set_param" value="Submit Changes" class="btn btn-info">
+	    </div>
 	  </div>
 	</form>
 	<hr />

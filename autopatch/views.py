@@ -366,8 +366,7 @@ def resultView(request, pk):
                 s.exclude = exclude
             if hostgroup:
                 s.hostgroup = hostgroup
-            if skip:
-                s.skip = skip
+            s.skip = skip
             if comments:
                 s.comments = comments
             s.save()

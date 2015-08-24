@@ -1035,5 +1035,7 @@
 	    }
 	}
     });
-    $(":checkbox").radiocheck();
+
+    $('.checkbox').checkbox();
+
 })(jQuery);
