@@ -61,6 +61,9 @@ def Git(request):
     #Checks if a path was give to the git repo
     if(request.GET.get('mybtn')):
         manifests = str(request.GET.get('gitpath'))
+    elif(request.GET.get('clear')):
+        Server.objects.all().delete()
+        manifests = None
     else:
         manifests = None
     # if a path was give this call parseGit which does the
@@ -76,7 +79,7 @@ def Git(request):
         unhost = each.server
         unlist.append(unhost)
     context = {'unlist': unlist, 'encouragement': encouragement()}
-    return render(request, 'autopatch/patching-tasks.html', context)
+    return HttpResponseRedirect(reverse('autopatch:tasks'), context)
 
 # hosts of owners set here will be excluded from patching
 def SetOwners(request):
@@ -179,7 +182,7 @@ class TasksView(generic.ListView):
         return Server.objects.all().order_by("server")
     def get_context_data(self):
         return {'encouragement': encouragement()}
-    
+
 def ProdView(request):
     env = "Prod"
     field = ".prod."

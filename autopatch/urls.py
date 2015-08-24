@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^modify/(?P<pk>\d+)/$', views.resultView, name='resultView'),
 
     # Patching Tasks
-    url(r'^tasks/', views.TasksView.as_view()),
+    url(r'^tasks/', views.TasksView.as_view(), name='tasks'),
     # where the errata levels are set manually
     url(r'^errata/$', views.UpdateErrata),
     # Where excluded owners are set
