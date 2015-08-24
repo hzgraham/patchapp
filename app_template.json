@@ -194,6 +194,149 @@
 	    }
 	},
 	{
+	    "kind": "ImageStream",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchautomate",
+		"annotations": {
+		    "description": "Keeps track of changes in the application image"
+		}
+	    }
+	},
+	{
+	    "kind": "BuildConfig",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchautomate",
+		"annotations": {
+		    "description": "Defines how to build the application"
+		}
+	    },
+	    "spec": {
+		"source": {
+		    "type": "Git",
+		    "git": {
+			"uri": "https://github.com/hzgraham/patchautomate.git"
+		    },
+		    "contextDir": "${CONTEXT_DIR}"
+		},
+		"strategy": {
+		    "type": "Source",
+		    "sourceStrategy": {
+			"from": {
+			    "kind": "ImageStreamTag",
+			    "namespace": "openshift",
+			    "name": "python:3.3"
+			}
+		    }
+		},
+		"output": {
+		    "to": {
+			"kind": "ImageStreamTag",
+			"name": "patchautomate:latest"
+		    }
+		},
+		"triggers": [
+		    {
+			"type": "ImageChange"
+		    },
+		    {
+			"type": "GitHub",
+			"github": {
+			    "secret": "${GITHUB_WEBHOOK_SECRET}"
+			}
+		    }
+		]
+	    }
+	},
+	{
+	    "kind": "DeploymentConfig",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchautomate",
+		"annotations": {
+		    "description": "Defines how to deploy the application server"
+		}
+	    },
+	    "spec": {
+		"strategy": {
+		    "type": "Rolling"
+		},
+		"triggers": [
+		    {
+			"type": "ImageChange",
+			"imageChangeParams": {
+			    "automatic": true,
+			    "containerNames": [
+				"patchautomate"
+			    ],
+			    "from": {
+				"kind": "ImageStreamTag",
+				"name": "patchautomate:latest"
+			    }
+			}
+		    },
+		    {
+			"type": "ConfigChange"
+		    }
+		],
+		"replicas": 1,
+		"selector": {
+		    "name": "patchautomate"
+		},
+		"template": {
+		    "metadata": {
+			"name": "patchautomate",
+			"labels": {
+			    "name": "patchautomate"
+			}
+		    },
+		    "spec": {
+			"containers": [
+			    {
+				"name": "patchautomate",
+				"image": "patchautomate",
+				"env": [
+				    {
+					"name": "DATABASE_SERVICE_NAME",
+					"value": "${DATABASE_SERVICE_NAME}"
+				    },
+				    {
+					"name": "DATABASE_ENGINE",
+					"value": "${DATABASE_ENGINE}"
+				    },
+				    {
+					"name": "DATABASE_NAME",
+					"value": "${DATABASE_NAME}"
+				    },
+				    {
+					"name": "DATABASE_USER",
+					"value": "${DATABASE_USER}"
+				    },
+				    {
+					"name": "DATABASE_PASSWORD",
+					"value": "${DATABASE_PASSWORD}"
+				    },
+				    {
+					"name":"SATELLITE_HOST",
+					"value":"${SATELLITE_HOST}"
+				    },
+				    {
+					"name":"SATELLITE_USER",
+					"value":"${SATELLITE_USER}"
+				    },
+				    {
+					"name":"SATELLITE_PASSWORD",
+					"value":"${SATELLITE_PASSWORD}"
+				    }
+				]
+			    }
+			]
+		    }
+		}
+	    }
+	},
+	{
 	    "kind": "Service",
 	    "apiVersion": "v1",
 	    "metadata": {
@@ -322,6 +465,21 @@
 	    "description": "Set this to a long random string",
 	    "generate": "expression",
 	    "from": "[\\w]{50}"
+	},
+	{
+	    "name": "SATELLITE_HOST",
+	    "description": "Satellite host",
+	    "value": ""
+	},
+	{
+	    "name": "SATELLITE_USER",
+	    "description": "Satellite user",
+	    "value": ""
+	},
+	{
+	    "name": "SATELLITE_PASSWORD",
+	    "description": "Satellite password",
+	    "value": ""
 	}
     ]
 }

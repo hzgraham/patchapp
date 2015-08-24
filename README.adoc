@@ -20,7 +20,10 @@ Install and launch the app from a template:
 [source, bash]
 ----
 oc create -f https://raw.githubusercontent.com/hzgraham/patchapp/master/app_template.json
-oc process patchapp | oc create -f -
+export SATELLITE_HOST="satellite.example.com"
+export SATELLITE_USER="user"
+export SATELLITE_PASSWORD="password"
+oc process -v="SATELLITE_HOST=${SATELLITE_HOST},SATELLITE_USER=${SATELLITE_USER},SATELLITE_PASSWORD=${SATELLITE_PASSWORD}" patchapp | oc create -f -
 ----
 
 Then, check the results:
