@@ -8,7 +8,7 @@
 	<a href="/autopatch/{{server.env}}">&#8617; Back to {{server.env}}</a>
 	<h3 style="color: rgb(50, 155, 100);">{{ server.server }}</h3>
       </header>
-      <p>This is the server ID: {{ server.id }}</p>
+      <!-- <p>This is the server ID: {{ server.id }}</p> -->
       <div class = "server_body">
 	<!-- <form action="/autopatch/{{ server.id }}/" method="post" class="form-horizontal">{% csrf_token %} -->
 	<form action="{% url 'autopatch:resultView' pk=server.id %}" method="post" class="form-horizontal">{% csrf_token %}
@@ -35,6 +35,7 @@
 	  <div class="form-group">
 	    <label class="col-sm-1 control-label">yum excludes:</label>
 	    <div class="col-sm-4">
+	      <p style="font-size:16px">(<i>enter packages or globs separated by a space</i>)
 		<input class="form-control" id="id_exclude" name="exclude" value="{{ server.exclude }}" size="25" type="text" />
 	    </div>
 	  </div>
