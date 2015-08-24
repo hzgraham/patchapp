@@ -200,8 +200,18 @@ class ModMaint():
                     # ignoring hosts that have an owner in unwanted_owners
                     if any(x in owner for x in unwanted_owners):
                         print("The following server is unwanted: ", servername)
-                    else:
+                    elif Server.objects.filter(server=servername).exists():
                         # print("servername is being created/modified: ",servername)
+                        s = Server.objects.get(server=servername)
+                        s.mgmt = mgmt
+                        s.exclude = exclude
+                        s.skip = skip
+                        s.hostgroup = hostgroup
+                        s.comments = comments
+                        s.env = ModMaint().setEnv(servername)
+                        # print("server: ",s.server)
+                        s.save()
+                    else:
                         s = Server(server=servername)
                         s.server = each.split('/')[-1]
                         s.mgmt = mgmt
