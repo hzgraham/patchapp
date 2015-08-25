@@ -408,6 +408,10 @@ def resultView(request, pk):
 
 def DetailView(request, pk):
     server = get_object_or_404(Server, pk=pk)
+    if server.updates != None:
+        server.updates = server.updates.strip('{}').replace('"','').replace(' ', '').split(',')
+    if server.plerrata != None:
+        server.plerrata = server.plerrata.strip('{}').replace('"','').replace(' ', '').split(',')
     template_name = 'autopatch/results.html'
     context = {'encouragement': encouragement(), 'server': server}
     return render_to_response('autopatch/results.html', context,

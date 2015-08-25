@@ -58,16 +58,34 @@
 	  </div>
 	</form>
 	<hr />
-	<li>Desired Errata: {{ server.plerrata }}</li>
+	<h4>Desired Errata:</h4>
+	{% if server.plerrata == None %}
+	<p>None</p>
+	{% else %}
+	<ul>
+	  {% for erratum in server.plerrata %}
+	  <li><a href="https://access.redhat.com/errata/{{ erratum }}">{{ erratum }}</a></li>
+	  {% endfor %}
+	</ul>
+	{% endif %}
 	<hr />
-	<li>Available Errata: {{ server.updates }}</li>
+	<h4>Available Errata:</h4>
+	{% if server.updates == None %}
+	<p>None</p>
+	{% else %}
+	<ul>
+	  {% for erratum in server.updates %}
+	  <li><a href="https://access.redhat.com/errata/{{ erratum }}">{{ erratum }}</a></li>
+	  {% endfor %}
+	</ul>
+	{% endif %}
       </div>
-      {% if hostgroup %}
-      <p>{{ hostgroup }}</p>
-      {% endif %}
     </article>
   </div>
 </div>
+<br />
+<br />
+<br />
 <!--
 <a href="{% url 'autopatch:detail' server.id %}">{{ server.server }}</a>
 -->
