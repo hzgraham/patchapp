@@ -107,7 +107,19 @@ def SetOwners(request):
         pass
     # Creates a list for output to the autopatch/owners.html template
     if Owner.objects.all():
+        servers = []
+        server_list = []
         owners_list = Owner.objects.all().order_by('owner')
+        for item in owners_list:
+            exclude = item.owner
+            # if Server.objects.filter(owner=exclude).exists():
+            #     for host in servers:
+            #         s = Server.objects.filter(owner=exclude)
+            #         server_list.append(s.server)
+            # else:
+            #     pass
+            Server.objects.filter(owner=exclude).delete()
+            # TaskScripts().parseServerForm(server_list,exclude)
     else:
         owners_list = []
     context = {'owner_list': owner_list, 'encouragement': encouragement(), 'owners_list': owners_list}

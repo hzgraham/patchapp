@@ -209,6 +209,7 @@ class ModMaint():
                         s.hostgroup = hostgroup
                         s.comments = comments
                         s.env = ModMaint().setEnv(servername)
+                        s.owner = owner
                         # print("server: ",s.server)
                         s.save()
                     else:
@@ -220,6 +221,7 @@ class ModMaint():
                         s.hostgroup = hostgroup
                         s.comments = comments
                         s.env = ModMaint().setEnv(servername)
+                        s.owner = owner
                         # print("server: ",s.server)
                         s.save()
                 myfile.close()

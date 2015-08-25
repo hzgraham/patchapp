@@ -25,6 +25,7 @@ class Server(models.Model):
     # skip - whether the host will be skipped or not
     skip = models.BooleanField(default=True)
     hostgroup = models.CharField(max_length=50, null=True, blank=True)
+    owner = models.CharField(max_length=50, null=True, blank=True)
     comments = models.TextField(max_length=256, null=True, blank=True)
     satid = models.IntegerField(default=0)
     env = models.CharField(max_length=50, null=True, blank=True)
