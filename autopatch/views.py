@@ -183,6 +183,16 @@ class TasksView(generic.ListView):
     def get_context_data(self):
         return {'encouragement': encouragement()}
 
+class Unicorns(generic.ListView):
+    template_name = 'autopatch/unicorns.html'
+    def get_queryset(self):
+        return Server.objects.all().order_by("server")
+    def get_context_data(self):
+        return {'encouragement': encouragement()}
+
+def security(request):
+    return render(request, 'autopatch/security.html')
+
 def ProdView(request):
     env = "Prod"
     field = ".prod."

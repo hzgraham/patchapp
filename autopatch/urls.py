@@ -26,6 +26,9 @@ urlpatterns = [
     url(r'^csv/', views.CreateCSV),
     # Clones a git repo and imports server info
     url(r'^git/', views.Git),
+    # Unlinked url
+    url(r'^unicorns/', views.Unicorns.as_view()),
+    url(r'^security/', views.security),
 
     # Satellite links
     url(r'^satid/', views.SatId),
