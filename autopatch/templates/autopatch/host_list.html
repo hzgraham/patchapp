@@ -15,8 +15,9 @@
 	<th>Server Name</th>
 	<th>Updated</th>
 	<th>Skip Patching</th>
-	<th>Group Owner</th>
-	<th>Exclude Packages</th>
+	<th>Hostgroup</th>
+	<th style="text-align:left">Exclude Packages</th>
+	<th style="text-align:left">Comments</th>
       </tr>
     </thead>
     <tbody id="list-servers">
@@ -48,7 +49,8 @@
 	  </label>
 	</td>
 	<td align="center" width="10%">{{ host.hostgroup }}</td>
-	<td align="center" width="60%">{{ host.exclude }}</td>
+	<td align="left" width="45%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">{{ host.exclude }}</td>
+	<td align="left" width="10%" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">{{ host.comments }}</td>
       </tr>
       {% endfor %}
     </tbody>
