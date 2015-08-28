@@ -19,7 +19,7 @@ urlpatterns = [
     # Patching Tasks
     url(r'^tasks/', views.TasksView.as_view(), name='tasks'),
     # where the errata levels are set manually
-    url(r'^errata/$', views.UpdateErrata),
+    url(r'^errata/$', views.UpdateErrata, name='errata'),
     # Where excluded owners are set
     url(r'^owners/$', views.SetOwners),
     # Creates the .csv files

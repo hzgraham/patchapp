@@ -6,12 +6,13 @@
   <br /><br />
   <!-- form for updating latest desired errata -->
   <form action="/autopatch/errata/" method="post" class="form-horizontal">{% csrf_token %}
-    <div class="form-group">
-      <label class="col-sm-1 control-label">RHEA</label>
-      <div class="col-sm-4">
-	<input class="form-control" id="id_RHEA" name="RHEA" placeholder="RHEA-2015:1625" size="25" type="text" />
+    <p style="text-indent:160px"><i>Type "clear" in a field to clear the Errata level</i><p>
+      <div class="form-group">
+	<label class="col-sm-1 control-label">RHEA</label>
+	<div class="col-sm-4">
+	  <input class="form-control" id="id_RHEA" name="RHEA" placeholder="RHEA-2015:1625" size="25" type="text" />
+	</div>
       </div>
-    </div>
     <div class="form-group">
       <label class="col-sm-1 control-label">RHSA</label>
       <div class="col-sm-4">
@@ -30,7 +31,7 @@
       </div>
     </div>
   </form>
-  {% if RHEA %}
+  {% if RHEA or RHSA or RHBA %}
   <p>
     <ul>
       <h4 style="text-decoration: underline;">Current Errata Levels</h4>
@@ -38,6 +39,14 @@
       <li>RHSA: {{ RHSA }}</li>
       <li>RHBA: {{ RHBA }}</li>
     </ul>
+    {% else %}
+  <p>
+    <ul>
+      <h4 style="text-decoration: underline;">Current Errata Levels</h4>
+      <li>RHEA:</li>
+      <li>RHSA:</li>
+      <li>RHBA:</li>
+    </ul>
+    {% endif %}
 </div>
-{% endif %}
 {% endblock %}

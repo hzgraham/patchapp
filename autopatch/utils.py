@@ -332,6 +332,22 @@ class ModMaint():
         t.save()
         return total
 
+    def checkErrata(self, errata_list):
+        clear = ['Clear', 'clear', 'CLEAR']
+        new_erratas = {}
+        #print("This is the errata_list: ", errata_list)
+        for key,item in errata_list.items():
+            if any(x in item for x in clear):
+                errata_object = 'clear'
+                TaskScripts().parseServerForm('clearing',errata_object)
+                new_erratas[key] = errata_object
+            else:
+                errata_object = item
+                TaskScripts().parseServerForm('saving',errata_object)
+                new_erratas[key] = errata_object
+        #print("this is the new_erratas: ",new_erratas)
+        return new_erratas
+
 def encouragement():
     return random.choice(['You are wonderful.',
                           'You have a phenomenal attitude.',

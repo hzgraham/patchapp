@@ -132,32 +132,47 @@ def UpdateErrata(request):
         form = ErrataForm(request.POST)
         # form = ErrataForm(pk=1)
         if form.is_valid():
+            new_erratas = {}
             # TaskScripts().parseForm(form)
             # saving the errata levels entered in the form
             RHEA = form.data['RHEA']
             RHSA = form.data['RHSA']
             RHBA = form.data['RHBA']
-            errata = Errata.objects.first()
+            oldrhea = ''
+            oldrhsa = ''
+            oldrhba = ''
+            # errata = Errata.objects.get(pk=1)
+            # TaskScripts().parseServerForm('Errata',errata)
             # This keeps the exists errata levels set if none are entered in the form
-            if not errata:
-                errata = Errata(RHEA=form.data['RHEA'])
+            if not Errata.objects.exists():
+                errata = Errata(pk=1)
             else:
+                errata = Errata.objects.get(pk=1)
                 oldrhea = errata.RHEA
                 oldrhsa = errata.RHSA
                 oldrhba = errata.RHBA
-            if RHEA:
+            errata_list = {'RHEA': RHEA, 'RHSA': RHSA, 'RHBA': RHBA}
+            # checkErrata is a check for any clear returns to remove errata levels
+            new_erratas = ModMaint().checkErrata(errata_list)
+            if new_erratas['RHEA'] == 'clear':
+                errata.RHEA = ''
+            elif new_erratas['RHEA']:
                 errata.RHEA = RHEA
             elif oldrhea:
                 errata.RHEA = oldrhea
             else:
                 pass
-            if RHSA:
+            if new_erratas['RHSA'] == 'clear':
+                errata.RHSA = ''
+            elif new_erratas['RHSA']:
                 errata.RHSA = RHSA
             elif oldrhsa:
                 errata.RHSA = oldrhsa
             else:
                 pass
-            if RHBA:
+            if new_erratas['RHBA'] == 'clear':
+                errata.RHBA = ''
+            elif new_erratas['RHBA']:
                 errata.RHBA = RHBA
             elif oldrhba:
                 errata.RHBA = oldrhba
@@ -166,20 +181,25 @@ def UpdateErrata(request):
             errata.save()
             # recalculates the desired errata for each host
             Satellite().recalcPlerrata()
-            return HttpResponseRedirect('/autopatch/errata/')
+            return HttpResponseRedirect(reverse('autopatch:errata'))
     else:
         form = ErrataForm()
     args = {}
     args.update(csrf(request))
+    # Checking if errata levels exist
+    # if they exist then they are returned to the template
     if Errata.objects.exists():
+        # errata = Errata.objects.first()
         errata = Errata.objects.first()
         args['RHEA'] = errata.RHEA
         args['RHSA'] = errata.RHSA
         args['RHBA'] = errata.RHBA
+        # TaskScripts().parseServerForm('Errata does exist',errata)
     else:
         args['RHEA'] = 0
         args['RHSA'] = 0
         args['RHBA'] = 0
+        # TaskScripts().parseServerForm('Errata doesnt exist!','no errata')
     args['form'] = form
     return render_to_response('autopatch/update_errata.html', args)
 
