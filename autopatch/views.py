@@ -208,23 +208,6 @@ def Home(request):
     context = {'encouragement': encouragement()}
     return render(request, template, context)
 
-class TasksView(generic.ListView):
-    template_name = 'autopatch/patching-tasks.html'
-    def get_queryset(self):
-        return Server.objects.all().order_by("server")
-    def get_context_data(self):
-        return {'encouragement': encouragement()}
-
-class Unicorns(generic.ListView):
-    template_name = 'autopatch/unicorns.html'
-    def get_queryset(self):
-        return Server.objects.all().order_by("server")
-    def get_context_data(self):
-        return {'encouragement': encouragement()}
-
-def security(request):
-    return render(request, 'autopatch/security.html')
-
 def ProdView(request):
     env = "Prod"
     field = ".prod."
@@ -309,21 +292,25 @@ def SatId(request):
             # Loop through each host and get satellite ID
             for host in host_list:
                 servername = host.server
-                client = xmlrpc.client.Server(URL, verbose=0)
-                data = client.system.getId(session, servername)
-                # TaskScripts().parseSatForm(servername, data)
-                if data:
-                    getid = data[0].get('id')
-                    host.satid = getid
-                else:
+                if host.satid:
+                    # TaskScripts().parseSatForm(servername, "already has a satid")
                     pass
-                host.save()
-                # context = {'getid': getid}
+                else:
+                    client = xmlrpc.client.Server(URL, verbose=0)
+                    data = client.system.getId(session, servername)
+                    # TaskScripts().parseSatForm(servername, data)
+                    if data:
+                        getid = data[0].get('id')
+                        host.satid = getid
+                        # TaskScripts().parseSatForm(servername, getid)
+                        host.save()
+                    else:
+                        pass
+            # context = {'getid': getid}
             client.auth.logout(session)
     else:
         pass
-    return render_to_response('autopatch/patching-tasks.html', context,
-                              context_instance=RequestContext(request))
+    return HttpResponseRedirect(reverse('autopatch:tasks'), context)
 
 @sensitive_variables('pswd', 'password', 'form')
 @sensitive_post_parameters('password')
@@ -365,7 +352,7 @@ def SatUpdates(request):
                             updates.append(errata['advisory_name']+' ')
                             Updates = ''.join(updates).strip()
                         needed_updates = Satellite().desiredErrata(updates)
-                        # TaskScripts().parseSatForm(servername, Updates)
+                        # TaskScripts().parseSatForm(servername, needed_updates)
                         if needed_updates:
                             host.plerrata = needed_updates
                             host.uptodate = 0
@@ -380,8 +367,7 @@ def SatUpdates(request):
             client.auth.logout(session)
     else:
         pass
-    return render_to_response('autopatch/patching-tasks.html', context,
-                              context_instance=RequestContext(request))
+    return HttpResponseRedirect(reverse('autopatch:tasks'), context,)
 
 def resultView(request, pk):
     args = []
@@ -437,8 +423,27 @@ def DetailView(request, pk):
     return render_to_response('autopatch/results.html', context,
                               context_instance=RequestContext(request))
 
+# Patching Task Related Views
+# ##########################################
+class TasksView(generic.ListView):
+    template_name = 'autopatch/patching-tasks.html'
+    def get_queryset(self):
+        return Server.objects.all().order_by("server")
+    def get_context_data(self):
+        return {'encouragement': encouragement()}
+
+class Unicorns(generic.ListView):
+    template_name = 'autopatch/unicorns.html'
+    def get_queryset(self):
+        return Server.objects.all().order_by("server")
+    def get_context_data(self):
+        return {'encouragement': encouragement()}
+
+def security(request):
+    return render(request, 'autopatch/security.html')
+
 # Views not currently being used
-###########################################
+# ##########################################
 def create(request):
     if request.POST:
         form = ServerForm(request.POST)
