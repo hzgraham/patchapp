@@ -127,11 +127,14 @@ class Satellite():
     # Used when errata levels are set to recalc Server.plerrata or planned errata
     def recalcPlerrata(self):
         if Server.objects.all():
-            for host in Server.objects.all().order_by('server')[:20]:
+            for host in Server.objects.all().filter(env="dev").order_by('server'):
                 print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
-                    updates = host.updates.replace(" ","").split(',')
+                    updates = str(host.updates)
+                    for x in [" ", '"']:
+                        updates = updates.strip("[]").strip("{}").replace(x,"")
+                    updates = updates.split(',')
                     print("These are the stored updates: ", host.updates)
                     print("These are the formatted host updates: ", updates)
                     needed_updates = Satellite().desiredErrata(updates)

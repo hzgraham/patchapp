@@ -354,9 +354,10 @@ def SatUpdates(request):
                             all_updates = str(updates).strip('[]').replace("'","")
                             # TaskScripts().parseSatForm(host.server,all_updates)
                         needed_updates = Satellite().desiredErrata(updates)
-                        # TaskScripts().parseSatForm(Updates, updates)
+                        TaskScripts().parseSatForm(needed_updates, updates)
                         if needed_updates:
                             host.plerrata = str(needed_updates).strip('[]').replace("'","")
+                            #host.plerrata = needed_updates
                             host.uptodate = 0
                         else:
                             host.uptodate = 1
