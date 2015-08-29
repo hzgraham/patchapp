@@ -131,15 +131,16 @@ class Satellite():
                 # print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
-                    updates = host.updates.split(',')
-                    # print("These are the host updates: ", host.updates, updates)
+                    updates = host.updates.replace(" ","").split(',')
+                    # print("These are the host updates: ", updates)
                     needed_updates = Satellite().desiredErrata(updates)
-                    host.plerrata = needed_updates
-                    # print("recalcErrata info:",host.server,":",host.updates,":",needed_updates)
+                    host.plerrata = str(needed_updates).strip('[]').replace("'","")
+                    # print("recalcErrata info:",host.server,":",needed_updates)
                     # Updates whether the host still needs patched
                     if needed_updates:
-                        host.plerrata = needed_updates
+                        # host.plerrata = needed_updates
                         host.uptodate = 0
+                        host.save()
                     # host doesn't need patched
                     else:
                         host.uptodate = 1

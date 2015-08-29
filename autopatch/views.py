@@ -351,7 +351,6 @@ def SatUpdates(request):
                         for erratum in errata_list:
                             # updates.append(erratum['advisory_name']+' ')
                             updates.append(erratum['advisory_name'])
-                            Updates = ''.join(updates).strip()
                             all_updates = str(updates).strip('[]').replace("'","")
                             # TaskScripts().parseSatForm(host.server,all_updates)
                         needed_updates = Satellite().desiredErrata(updates)
