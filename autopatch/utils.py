@@ -9,7 +9,7 @@ from .forms import LoginForm
 # TaskScripts are simple debugging functions
 class TaskScripts():
     def parseForm(self, form):
-        print("This is the form:",form)
+        # print("This is the form:",form)
         RHEA = form.data['RHEA']
         errata = Errata.objects.first()
         # errata = errata.RHBA
@@ -20,7 +20,6 @@ class TaskScripts():
         print("This is the errata: ",errata)
         print("This is RHEA",RHEA)
         print("############################")
-        print("This is the form: ",form)
 
     def parseSatForm(self, servername, erratas):
         # if form.is_valid():
@@ -43,8 +42,8 @@ class Satellite():
         form = LoginForm(request.POST)
         # env = form.data['environment']
         context = {'encouragement': encouragement()}
-        print("Made it to utils: ",request)
-        print("This is the environment: ",env)
+        # print("Made it to utils: ",request)
+        # print("This is the environment: ",env)
         if(env=="dev"):
             dev_list = Server.objects.all().filter(env="dev").order_by('server')[:5]
             for host in dev_list:
@@ -62,7 +61,7 @@ class Satellite():
             errata_levels['rhea'] = errata.RHEA
             errata_levels['rhsa'] = errata.RHSA
             errata_levels['rhba'] = errata.RHBA
-        # print("The errata levels", errata_levels)
+        # print("The errata levels", errata_levels, "These are the updates available",updates)
         # Parses the errata levels for the date and ID
         if errata_levels:
             if errata_levels['rhea']:
@@ -95,7 +94,7 @@ class Satellite():
                     adv_type = each.split('-')[0]
                     date = each.split('-')[1].split(':')[0]
                     errata_id = each.split('-')[1].split(':')[1]
-                    # print("The data and id of the advisory are: ", date, errata_id)
+                    # print("The data and id of the advisory are: ", each, adv_type,date, errata_id)
                     # If the available errata is equal to or older than the level
                     # it is added to the needed_updates list
                     # and it be saved as Server.plerrata
@@ -128,14 +127,15 @@ class Satellite():
     # Used when errata levels are set to recalc Server.plerrata or planned errata
     def recalcPlerrata(self):
         if Server.objects.all():
-            for host in Server.objects.all():
-                updates = host.updates
+            for host in Server.objects.all().filter(env="dev").order_by('server'):
                 # print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
-                if updates:
+                if host.updates and host.satid:
+                    updates = host.updates.split(',')
+                    # print("These are the host updates: ", host.updates, updates)
                     needed_updates = Satellite().desiredErrata(updates)
                     host.plerrata = needed_updates
-                    # print("recalcErrata info:",host,":",updates,":",needed_updates)
+                    # print("recalcErrata info:",host.server,":",host.updates,":",needed_updates)
                     # Updates whether the host still needs patched
                     if needed_updates:
                         host.plerrata = needed_updates
@@ -143,12 +143,18 @@ class Satellite():
                     # host doesn't need patched
                     else:
                         host.uptodate = 1
+                        host.save()
+                        # print("host.uptodate",host.server, host.uptodate)
                 # marks host as not need patched if no "updates"
-                else:
+                elif host.satid:
                     host.uptodate = 1
-                host.save()
+                    host.save()
+                    # print("host.uptodate",host.server, host.uptodate)
+                else:
+                    # print("host.uptodate",host.server, "no updates")
+                    pass
         else:
-            print("No servers to update the desired errata.")
+            # print("No servers to update the desired errata.")
             pass
 
 class ModMaint():

@@ -345,23 +345,27 @@ def SatUpdates(request):
                     satid = host.satid
                     # TaskScripts().parseSatForm(servername, env)
                     client = xmlrpc.client.Server(URL, verbose=0)
-                    erratas = client.system.getRelevantErrata(session,satid)
-                    if erratas:
+                    errata_list = client.system.getRelevantErrata(session,satid)
+                    if errata_list:
                         # TaskScripts().parseSatForm(servername, erratas)
-                        for errata in erratas:
-                            updates.append(errata['advisory_name']+' ')
+                        for erratum in errata_list:
+                            # updates.append(erratum['advisory_name']+' ')
+                            updates.append(erratum['advisory_name'])
                             Updates = ''.join(updates).strip()
+                            all_updates = str(updates).strip('[]').replace("'","")
+                            # TaskScripts().parseSatForm(host.server,all_updates)
                         needed_updates = Satellite().desiredErrata(updates)
-                        # TaskScripts().parseSatForm(servername, needed_updates)
+                        # TaskScripts().parseSatForm(Updates, updates)
                         if needed_updates:
-                            host.plerrata = needed_updates
+                            host.plerrata = str(needed_updates).strip('[]').replace("'","")
                             host.uptodate = 0
                         else:
                             host.uptodate = 1
-                        host.updates = Updates
+                        host.updates = all_updates
+                        host.save()
                     else:
                         pass
-                    host.save()
+
                 else:
                     pass
             client.auth.logout(session)
