@@ -337,7 +337,8 @@ def SatUpdates(request):
             env = form.cleaned_data['environment']
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
-            host_list = Server.objects.all().filter(env=env).order_by('server')
+            #host_list = Server.objects.all().filter(env=env).order_by('server')
+            host_list = Server.objects.all().order_by('server')
             for host in host_list:
                 servername = host.server
                 if host.satid:
@@ -350,18 +351,20 @@ def SatUpdates(request):
                         # TaskScripts().parseSatForm(servername, erratas)
                         for erratum in errata_list:
                             # updates.append(erratum['advisory_name']+' ')
-                            updates.append(erratum['advisory_name'])
-                            all_updates = str(updates).strip('[]').replace("'","")
+                            updates.append(erratum["advisory_name"])
+                            # all_updates = str(updates).strip('[]').replace("'","")
+                            all_updates = set(updates)
                             # TaskScripts().parseSatForm(host.server,all_updates)
-                        needed_updates = Satellite().desiredErrata(updates)
-                        TaskScripts().parseSatForm(needed_updates, updates)
+                        needed_updates = Satellite().desiredErrata(all_updates)
+                        # TaskScripts().parseSatForm(needed_updates, all_updates)
                         if needed_updates:
-                            host.plerrata = str(needed_updates).strip('[]').replace("'","")
-                            #host.plerrata = needed_updates
+                            # host.plerrata = str(needed_updates).strip('[]').replace("'","")
+                            host.plerrata = str(needed_updates).replace("'",'"')
+                            # TaskScripts().parseSatForm(servername, host.plerrata)
                             host.uptodate = 0
                         else:
                             host.uptodate = 1
-                        host.updates = all_updates
+                        host.updates = str(all_updates).replace("'",'"')
                         host.save()
                     else:
                         pass

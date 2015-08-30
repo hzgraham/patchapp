@@ -53,6 +53,8 @@ class Satellite():
         return context
 
     def desiredErrata(self, updates):
+        updates = list(updates)
+        # print("attempting to make a list of updates:",type(updates), type(list_updates))
         advisories = ['RHEA','RHSA','RHBA']
         needed_updates = []
         errata = Errata.objects.first()
@@ -122,24 +124,30 @@ class Satellite():
                 else:
                     pass
             # print("These are the needed updates!:",needed_updates)
+            needed_updates = set(needed_updates)
             return needed_updates
 
     # Used when errata levels are set to recalc Server.plerrata or planned errata
     def recalcPlerrata(self):
         if Server.objects.all():
-            for host in Server.objects.all().filter(env="dev").order_by('server'):
-                print("hostname:",host.server)
+            # for host in Server.objects.all().filter(env="dev").order_by('server'):
+            for host in Server.objects.all().order_by('server'):
+                # print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
-                    updates = str(host.updates)
-                    for x in [" ", '"']:
-                        updates = updates.strip("[]").strip("{}").replace(x,"")
-                    updates = updates.split(',')
-                    print("These are the stored updates: ", host.updates)
-                    print("These are the formatted host updates: ", updates)
+                    #updates = str(host.updates)
+                    #updates = host.updates.replace('"',"'")
+                    # The eval method should make the host.updates a set
+                    updates = eval(host.updates)
+                    # for x in [" ", '"']:
+                    #     updates = updates.strip("[]").strip("{}").replace(x,"")
+                    # updates = updates.split(',')
+                    # print("These are the stored updates: ", type(host.updates), host.updates)
+                    # print("These are the formatted host updates: ", type(updates), updates)
                     needed_updates = Satellite().desiredErrata(updates)
-                    host.plerrata = str(needed_updates).strip('[]').replace("'","")
-                    print("This is the needed errata:", needed_updates, host.plerrata)
+                    # host.plerrata = str(needed_updates).strip('[]').replace("'","")
+                    host.plerrata = str(needed_updates).replace("'",'"')
+                    # print("This is the needed errata:", needed_updates, host.plerrata)
                     # print("recalcErrata info:",host.server,":",needed_updates)
                     # Updates whether the host still needs patched
                     if needed_updates:
