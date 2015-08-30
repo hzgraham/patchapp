@@ -21,7 +21,7 @@ urlpatterns = [
     # where the errata levels are set manually
     url(r'^errata/$', views.UpdateErrata, name='errata'),
     # Where excluded owners are set
-    url(r'^owners/$', views.SetOwners),
+    url(r'^owners/$', views.SetOwners, name='owners'),
     # Creates the .csv files
     url(r'^csv/', views.CreateCSV),
     # Clones a git repo and imports server info

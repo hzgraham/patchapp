@@ -85,44 +85,31 @@ def Git(request):
 def SetOwners(request):
     # owners is a test variable
     owners_list = []
+    context = {'encouragement': encouragement()}
     owner_list = Owner.objects.all().order_by('owner')
     # If the "Set Owners" button is pressed
-    if request.GET.get('addowners'):
-        owners = str(request.GET.get('owners'))
-        owners_list = owners.split(",")
-        for each in owners_list:
-            cl_owner = each.strip()
-            if not Owner.objects.filter(owner=cl_owner).exists():
-                owner = Owner(owner=cl_owner)
-                owner.owner = cl_owner
-                owner.save()
-                # owners_list = ['success']
-            else:
-                # owners_list = ['failure']
-                pass
-    # If the "Remove Owners" button is pressed
-    elif request.GET.get('delowners'):
-        Owner.objects.all().delete()
-    else:
-        pass
-    # Creates a list for output to the autopatch/owners.html template
-    if Owner.objects.all():
-        servers = []
-        server_list = []
-        owners_list = Owner.objects.all().order_by('owner')
-        for item in owners_list:
-            exclude = item.owner
-            # if Server.objects.filter(owner=exclude).exists():
-            #     for host in servers:
-            #         s = Server.objects.filter(owner=exclude)
-            #         server_list.append(s.server)
-            # else:
-            #     pass
-            Server.objects.filter(owner=exclude).delete()
-            # TaskScripts().parseServerForm(server_list,exclude)
-    else:
-        owners_list = []
-    context = {'owner_list': owner_list, 'encouragement': encouragement(), 'owners_list': owners_list}
+    if request.method == 'GET':
+        if request.GET.get('addowners'):
+            owners = str(request.GET.get('owners'))
+            owners_list = owners.split(",")
+            for each in owners_list:
+                cl_owner = each.strip()
+                if not Owner.objects.filter(owner=cl_owner).exists():
+                    owner = Owner(owner=cl_owner)
+                    owner.owner = cl_owner
+                    owner.save()
+                else:
+                    pass
+            context['owners_list'] = ModMaint().excludedOwners()
+            return HttpResponseRedirect(reverse('autopatch:owners'), context)
+        # If the "Remove Owners" button is pressed
+        elif request.GET.get('delowners'):
+            Owner.objects.all().delete()
+            context['owners_list'] = ModMaint().excludedOwners()
+            return HttpResponseRedirect(reverse('autopatch:owners'), context)
+        else:
+            pass
+    context['owners_list'] = ModMaint().excludedOwners()
     return render(request, 'autopatch/owners.html', context)
 
 def UpdateErrata(request):

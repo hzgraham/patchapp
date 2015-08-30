@@ -370,6 +370,22 @@ class ModMaint():
         #print("this is the new_erratas: ",new_erratas)
         return new_erratas
 
+    # Used delete servers of owners who were excluded and to get a list of the owners
+    def excludedOwners(self):
+        # Creates a list for output to the autopatch/owners.html template
+        if Owner.objects.all():
+            servers = []
+            server_list = []
+            owners_list = Owner.objects.all().order_by('owner')
+            # Deleting the servers owned by each excluded owner
+            for item in owners_list:
+                exclude = item.owner
+                Server.objects.filter(owner=exclude).delete()
+                # TaskScripts().parseServerForm(server_list,exclude)
+        else:
+            owners_list = []
+        return owners_list
+
 def encouragement():
     return random.choice(['You are wonderful.',
                           'You have a phenomenal attitude.',
