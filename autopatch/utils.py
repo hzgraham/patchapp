@@ -131,8 +131,8 @@ class Satellite():
     def recalcPlerrata(self):
         if Server.objects.all():
             # for host in Server.objects.all().filter(env="dev").order_by('server'):
-            for host in Server.objects.all().order_by('server')[:5]:
-                # print("hostname:",host.server)
+            for host in Server.objects.all().order_by('server')[:100]:
+                print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
                     #updates = str(host.updates)
