@@ -363,6 +363,7 @@ def SatUpdates(request):
                             # TaskScripts().parseSatForm(servername, host.plerrata)
                             host.uptodate = 0
                         else:
+                            host.plerrata = ""
                             host.uptodate = 1
                         host.updates = str(all_updates).replace("'",'"')
                         host.save()
