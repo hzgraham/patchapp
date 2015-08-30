@@ -45,7 +45,7 @@ class Satellite():
         # print("Made it to utils: ",request)
         # print("This is the environment: ",env)
         if(env=="dev"):
-            dev_list = Server.objects.all().filter(env="dev").order_by('server')[:5]
+            dev_list = Server.objects.all().filter(env="dev").order_by('server')
             for host in dev_list:
                 servername = host.server
                 URL = "https://satellite.corp.redhat.com/rpc/api"
@@ -131,7 +131,7 @@ class Satellite():
     def recalcPlerrata(self):
         if Server.objects.all():
             # for host in Server.objects.all().filter(env="dev").order_by('server'):
-            for host in Server.objects.all().order_by('server')[:100]:
+            for host in Server.objects.all().order_by('server'):
                 print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
@@ -146,12 +146,12 @@ class Satellite():
                     print("These are the formatted host updates: ", type(updates), updates)
                     needed_updates = Satellite().desiredErrata(updates)
                     # host.plerrata = str(needed_updates).strip('[]').replace("'","")
-                    host.plerrata = str(needed_updates).replace("'",'"')
-                    print("This is the needed errata:", type(needed_updates), needed_updates, ":", host.plerrata)
                     # print("recalcErrata info:",host.server,":",needed_updates)
                     # Updates whether the host still needs patched
                     if needed_updates:
                         # host.plerrata = needed_updates
+                        host.plerrata = str(needed_updates).replace("'",'"')
+                        print("This is the needed errata:", type(needed_updates), needed_updates, ":", host.plerrata)
                         host.uptodate = 0
                         host.save()
                     # host doesn't need patched
