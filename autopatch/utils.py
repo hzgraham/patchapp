@@ -359,11 +359,11 @@ class ModMaint():
         for key,item in errata_list.items():
             if any(x in item for x in clear):
                 errata_object = 'clear'
-                TaskScripts().parseServerForm('clearing',errata_object)
+                # TaskScripts().parseServerForm('clearing',errata_object)
                 new_erratas[key] = errata_object
             else:
                 errata_object = item
-                TaskScripts().parseServerForm('saving',errata_object)
+                # TaskScripts().parseServerForm('saving',errata_object)
                 new_erratas[key] = errata_object
         #print("this is the new_erratas: ",new_erratas)
         return new_erratas
