@@ -63,6 +63,9 @@ def Git(request):
         manifests = str(request.GET.get('gitpath'))
     elif(request.GET.get('clear')):
         Server.objects.all().delete()
+        envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
+        for env,field in envs:
+            total = ModMaint().hostCount(env, field)
         manifests = None
     else:
         manifests = None
