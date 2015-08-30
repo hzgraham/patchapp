@@ -156,13 +156,13 @@ class Satellite():
                         host.save()
                     # host doesn't need patched
                     else:
-                        host.plerrata = ""
+                        host.plerrata = None
                         host.uptodate = 1
                         host.save()
                         # print("host.uptodate",host.server, host.uptodate)
                 # marks host as not need patched if no "updates"
                 elif host.satid:
-                    host.plerrata = ""
+                    host.plerrata = None
                     host.uptodate = 1
                     host.save()
                     # print("host.uptodate",host.server, host.uptodate)

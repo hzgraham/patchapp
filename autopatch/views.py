@@ -326,6 +326,7 @@ def SatUpdates(request):
         errata_levels['rhba'] = errata.RHBA
     else:
         pass
+    # If the form in patching-tasks.html returns successfully
     if request.POST:
         form = LoginForm(request.POST)
         # TaskScripts().parseSatForm(request, form)
@@ -337,7 +338,7 @@ def SatUpdates(request):
             env = form.cleaned_data['environment']
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
-            #host_list = Server.objects.all().filter(env=env).order_by('server')
+            # host_list = Server.objects.all().filter(env=env).order_by('server')
             host_list = Server.objects.all().order_by('server')
             for host in host_list:
                 servername = host.server
@@ -347,29 +348,26 @@ def SatUpdates(request):
                     # TaskScripts().parseSatForm(servername, env)
                     client = xmlrpc.client.Server(URL, verbose=0)
                     errata_list = client.system.getRelevantErrata(session,satid)
+                    # If a list of errata is returned from satellite
                     if errata_list:
                         # TaskScripts().parseSatForm(servername, erratas)
                         for erratum in errata_list:
-                            # updates.append(erratum['advisory_name']+' ')
                             updates.append(erratum["advisory_name"])
-                            # all_updates = str(updates).strip('[]').replace("'","")
                             all_updates = set(updates)
                             # TaskScripts().parseSatForm(host.server,all_updates)
                         needed_updates = Satellite().desiredErrata(all_updates)
                         # TaskScripts().parseSatForm(needed_updates, all_updates)
                         if needed_updates:
-                            # host.plerrata = str(needed_updates).strip('[]').replace("'","")
                             host.plerrata = str(needed_updates).replace("'",'"')
                             # TaskScripts().parseSatForm(servername, host.plerrata)
                             host.uptodate = 0
                         else:
-                            host.plerrata = ""
+                            host.plerrata = None
                             host.uptodate = 1
                         host.updates = str(all_updates).replace("'",'"')
                         host.save()
                     else:
                         pass
-
                 else:
                     pass
             client.auth.logout(session)
