@@ -117,6 +117,8 @@ def SetOwners(request):
 
 def UpdateErrata(request):
     # This view used to update the top level errata
+    args = {}
+    args['encouragement'] = encouragement()
     if request.POST:
         # errata = Errata.objects.filter(pk=1)
         form = ErrataForm(request.POST)
@@ -174,7 +176,6 @@ def UpdateErrata(request):
             return HttpResponseRedirect(reverse('autopatch:errata'))
     else:
         form = ErrataForm()
-    args = {}
     args.update(csrf(request))
     # Checking if errata levels exist
     # if they exist then they are returned to the template
