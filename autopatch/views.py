@@ -386,13 +386,10 @@ def resultView(request, pk):
             # test1 = [exclude, hostgroup, skip, comments]
             # test2 = pk
             # TaskScripts().parseServerForm(test1, test2)
-            if exclude:
-                s.exclude = exclude
-            if hostgroup:
-                s.hostgroup = hostgroup
+            s.exclude = exclude
+            s.hostgroup = hostgroup
             s.skip = skip
-            if comments:
-                s.comments = comments
+            s.comments = comments
             s.save()
         else:
             # test1 = "Form not valid"
