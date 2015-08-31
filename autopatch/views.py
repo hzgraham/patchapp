@@ -261,7 +261,7 @@ def DevView(request):
 
 @sensitive_post_parameters()
 @sensitive_variables()
-def SatId(request):
+def SatInfo(request):
     # SatId will get the ID of each server in Satellite
     # There are 4 buttons on the patching tasks page, one for each env
     context = {'encouragement': encouragement()}
@@ -281,67 +281,28 @@ def SatId(request):
             # Get list of hosts in an env
             host_list = Server.objects.all().filter(env=env).order_by('server')
             # Loop through each host and get satellite ID
+            client = xmlrpc.client.Server(URL, verbose=0)
             for host in host_list:
                 servername = host.server
-                if host.satid:
-                    # TaskScripts().parseSatForm(servername, "already has a satid")
-                    pass
-                else:
-                    client = xmlrpc.client.Server(URL, verbose=0)
+                if not host.satid:
                     data = client.system.getId(session, servername)
                     # TaskScripts().parseSatForm(servername, data)
                     if data:
                         getid = data[0].get('id')
                         host.satid = getid
                         # TaskScripts().parseSatForm(servername, getid)
-                        host.save()
                     else:
                         pass
-            # context = {'getid': getid}
-            client.auth.logout(session)
-    else:
-        pass
-    return HttpResponseRedirect(reverse('autopatch:tasks'), context)
-
-@sensitive_variables('pswd', 'password', 'form')
-@sensitive_post_parameters('password')
-def SatUpdates(request):
-    # SatId will get the ID of each server in Satellite
-    # There are 4 buttons on the patching tasks page, one for each env
-    context = {'encouragement': encouragement()}
-    errata_levels = {}
-    errata = Errata.objects.first()
-    if errata:
-        errata_levels['rhea'] = errata.RHEA
-        errata_levels['rhsa'] = errata.RHSA
-        errata_levels['rhba'] = errata.RHBA
-    else:
-        pass
-    # If the form in patching-tasks.html returns successfully
-    if request.POST:
-        form = LoginForm(request.POST)
-        # TaskScripts().parseSatForm(request, form)
-        if form.is_valid():
-            user = form.cleaned_data['loginname']
-            pswd = form.cleaned_data['password']
-            url = form.cleaned_data['satellite']
-            URL = "https://"+url+"/rpc/api"
-            env = form.cleaned_data['environment']
-            client = xmlrpc.client.Server(URL, verbose=0)
-            session = client.auth.login(user, pswd)
-            # host_list = Server.objects.all().filter(env=env).order_by('server')
-            host_list = Server.objects.all().order_by('server')
-            for host in host_list:
-                servername = host.server
+                else:
+                    # TaskScripts().parseSatForm(servername, "already has a satid")
+                    pass
                 if host.satid:
                     updates = []
-                    satid = host.satid
                     # TaskScripts().parseSatForm(servername, env)
-                    client = xmlrpc.client.Server(URL, verbose=0)
-                    errata_list = client.system.getRelevantErrata(session,satid)
+                    errata_list = client.system.getRelevantErrata(session,host.satid)
                     # If a list of errata is returned from satellite
                     if errata_list:
-                        # TaskScripts().parseSatForm(servername, erratas)
+                        # TaskScripts().parseSatForm(servername, errata_list)
                         for erratum in errata_list:
                             updates.append(erratum["advisory_name"])
                             all_updates = set(updates)
@@ -364,7 +325,7 @@ def SatUpdates(request):
             client.auth.logout(session)
     else:
         pass
-    return HttpResponseRedirect(reverse('autopatch:tasks'), context,)
+    return HttpResponseRedirect(reverse('autopatch:tasks'), context)
 
 def resultView(request, pk):
     args = []

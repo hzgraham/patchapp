@@ -34,9 +34,9 @@
   <hr />
   <h4>Query Satellite</h4>
   <p>
-    Enter the following details to get the IDs for hosts from the specified environment from Satellite:
+    Enter the following details to get the IDs and available Errata for hosts in the specified environment from Satellite:
   </p>
-  <form action="/autopatch/satid/" method="post">{% csrf_token %}
+  <form action="/autopatch/satinfo/" method="post">{% csrf_token %}
     <div class="row">
       <div class="col-xs-2">
 	<p>Satellite FQDN</p>
@@ -79,63 +79,6 @@
     <input type="submit" name="submit" value="Get Satellite IDs" class="btn btn-info btn-lg">
   </form>
   <br />
-  {% if getid %}
-  <p>This be the Server ID: {{ getid }}</p>
-  {% else %}
-  <p>Couldn't get the server ID</p>
-  {% endif %}
-  <!--
-      <ul class="nav nav-pills nav-stacked">
-	<li role="presentation"><a><form action="/autopatch/csv/" method="get"><input type="submit" class="btn" value="Create a .csv file" name="mybtn"></form></a></li>
-	<li role="presentation"><a href="#">Sort Git Data</a></li>
-      </ul>
-      -->
-  <hr />
-  <h4>Get Errata from Satellite</h4>
-  <p>
-    Enter the following details to get the available Errata from Satellite:
-  </p>
-  <form action="/autopatch/satupdates/" method="post">{% csrf_token %}
-    <div class="row">
-      <div class="col-xs-2">
-	<p>Satellite FQDN</p>
-      </div>
-      <div class="col-xs-6">
-	<input id="id_satellite" type="text" name="satellite" maxlength="100" class="form-control" placeholder="satellite.corp.example.com"/>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-2">
-	<p>Login</p>
-      </div>
-      <div class="col-xs-6">
-	<input id="id_loginname" type="text" name="loginname" maxlength="100" class="form-control" placeholder="username"/>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-2">
-	<p>Password</p>
-      </div>
-      <div class="col-xs-6">
-	<input type="password" name="password" id="id_password" class="form-control" placeholder="" />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-2">
-	<p>Environment</p>
-      </div>
-      <div class="col-xs-6">
-	<select name="environment">
-	  <option value="prod" selected="selected">Prod Env</option>
-	  <option value="stage" selected="selected">Stage Env</option>
-	  <option value="qa" selected="selected">QA Env</option>
-	  <option value="dev" selected="selected">Dev Env</option>
-	</select>
-      </div>
-    </div>
-    <br />
-    <input type="submit" name="errata" value="Get Available Errata" class="btn btn-info btn-lg">
-  </form>
   <hr />
   <li style="font-size:30px"><a href="/autopatch/security/" font="100px;">Access Main Security Grid</a></li>
 </div>

@@ -30,9 +30,8 @@ urlpatterns = [
     url(r'^unicorns/', views.Unicorns.as_view()),
     url(r'^security/', views.security),
 
-    # Satellite links
-    url(r'^satid/', views.SatId),
-    url(r'^satupdates/', views.SatUpdates),
+    # Satellite task that gets SatIDs and Errata
+    url(r'^satinfo/', views.SatInfo),
 
     # List views of hosts for the different environments
     url(r'^prod/$', views.ProdView),
