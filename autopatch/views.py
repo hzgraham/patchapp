@@ -268,7 +268,12 @@ def erratumView(request):
                 host_list = []
                 env = form.data['environment']
                 erratum = form.data['erratum']
-                for host in Server.objects.filter(env=env).order_by('server'):
+                if env == 'all':
+                    server_objs = Server.objects.all().order_by('server')
+                    env = 'whole'
+                else:
+                    server_objs = Server.objects.filter(env=env).order_by('server')
+                for host in server_objs:
                     if host.updates:
                         updates = eval(host.updates)
                         updates = list(updates)
