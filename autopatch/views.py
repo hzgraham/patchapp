@@ -17,7 +17,7 @@ import urllib, bs4, urllib.request, csv
 from xmlrpc import client, server
 import xmlrpc.client, xmlrpc.server
 
-from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm
+from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm, ErratumForm
 from .models import Server, Hosttotal, Errata, Owner
 from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 
@@ -258,6 +258,33 @@ def DevView(request):
     dev_list = Server.objects.all().filter(env="dev").order_by('server')
     context = {'host_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
     return render(request, 'autopatch/host_list.html', context)
+
+def erratumView(request):
+    context = {}
+    if request.method == "GET":
+        if(request.GET.get("erratum_hosts")):
+            form = ErratumForm(request.GET)
+            if form.is_valid():
+                host_list = []
+                env = form.data['environment']
+                erratum = form.data['erratum']
+                for host in Server.objects.filter(env=env).order_by('server'):
+                    if host.updates:
+                        updates = eval(host.updates)
+                        updates = list(updates)
+                    else:
+                        updates = []
+                    #TaskScripts().parseServerForm(host.server, updates)
+                    if any(x in erratum for x in updates):
+                        host_list.append(host)
+                    else:
+                        pass
+                total = len(host_list)
+                #TaskScripts().parseServerForm(total, host_list)
+                context = {'host_list': host_list, 'env': env, 'total': total}
+                return render(request,'autopatch/erratum_hosts.html', context)
+    context['encouragement'] = encouragement()
+    return render(request, 'autopatch/erratum_hosts.html', context)
 
 @sensitive_post_parameters()
 @sensitive_variables()

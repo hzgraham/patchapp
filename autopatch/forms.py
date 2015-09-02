@@ -17,6 +17,10 @@ class LoginForm(forms.Form):
     satellite = forms.CharField(max_length=256)
     environment = forms.ChoiceField(choices=[('dev', 'dev'),('qa', 'qa'),('stage', 'stage'), ('prod', 'prod')], required=True, label='Environment')
 
+class ErratumForm(forms.Form):
+    erratum = forms.CharField(max_length=256)
+    environment = forms.ChoiceField(choices=[('dev', 'dev'),('qa', 'qa'),('stage', 'stage'), ('prod', 'prod')], required=True, label='Environment')
+
 class ErrataForm(forms.Form):
     RHEA = forms.CharField(required=False, widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'RHEA-2015:1625'}))
     RHSA = forms.CharField(required=False, widget=forms.TextInput(attrs={'size': 25, 'class': 'form-control', 'placeholder': 'RHSA-2015:1640'}))
