@@ -259,15 +259,15 @@ def DevView(request):
     context = {'host_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
     return render(request, 'autopatch/host_list.html', context)
 
-def erratumView(request):
+def errataView(request):
     context = {}
     if request.method == "GET":
-        if(request.GET.get("erratum_hosts")):
+        if(request.GET.get("errata_hosts")):
             form = ErratumForm(request.GET)
             if form.is_valid():
                 host_list = []
                 env = form.data['environment']
-                erratum = form.data['erratum']
+                errata = form.data['errata']
                 if env == 'all':
                     server_objs = Server.objects.all().order_by('server')
                     env = 'whole'
@@ -280,16 +280,16 @@ def erratumView(request):
                     else:
                         updates = []
                     #TaskScripts().parseServerForm(host.server, updates)
-                    if any(x in erratum for x in updates):
+                    if any(x in errata for x in updates):
                         host_list.append(host)
                     else:
                         pass
                 total = len(host_list)
                 #TaskScripts().parseServerForm(total, host_list)
                 context = {'host_list': host_list, 'env': env, 'total': total}
-                return render(request,'autopatch/erratum_hosts.html', context)
+                return render(request,'autopatch/errata_hosts.html', context)
     context['encouragement'] = encouragement()
-    return render(request, 'autopatch/erratum_hosts.html', context)
+    return render(request, 'autopatch/errata_hosts.html', context)
 
 @sensitive_post_parameters()
 @sensitive_variables()
