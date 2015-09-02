@@ -38,5 +38,5 @@ urlpatterns = [
     url(r'^stage/$', views.StageView),
     url(r'^qa/$', views.QAView),
     url(r'^dev/$', views.DevView),
-    url(r'^erratahosts/$', views.errataView, name='errataView'),
+    url(r'^erratumhosts/$', views.erratumView, name='erratumView'),
 ]

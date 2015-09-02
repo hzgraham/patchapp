@@ -8,13 +8,13 @@
     </div>
   </div>
   <hr />
-  <form action="/autopatch/erratahosts/" method="get">
+  <form action="/autopatch/erratumhosts/" method="get">
     <div class="row">
       <div class="col-xs-2">
-	<p>Errata <i>(enter a single errata here)</i></p>
+	<p>Erratum <i>(enter a single erratum here)</i></p>
       </div>
       <div class="col-xs-6">
-	<input id="id_errata" type="text" name="errata" maxlength="100" class="form-control" placeholder="RHBA-2015:1301"/>
+	<input id="id_erratum" type="text" name="erratum" maxlength="100" class="form-control" placeholder="RHBA-2015:1301"/>
       </div>
     </div>
     <div class="row">
@@ -32,7 +32,7 @@
       </div>
     </div>
     <br />
-    <input type="submit" name="errata_hosts" value="Get all hosts needing this errata" class="btn btn-info btn-lg">
+    <input type="submit" name="erratum_hosts" value="Get all hosts needing this erratum" class="btn btn-info btn-lg">
   </form>
   <hr />
   <p>    <i>Servers not registered with Satellite are marked as "N/A"</i></p>

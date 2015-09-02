@@ -18,7 +18,7 @@ class LoginForm(forms.Form):
     environment = forms.ChoiceField(choices=[('dev', 'dev'),('qa', 'qa'),('stage', 'stage'), ('prod', 'prod')], required=True, label='Environment')
 
 class ErratumForm(forms.Form):
-    errata = forms.CharField(max_length=256)
+    erratum = forms.CharField(max_length=256)
     environment = forms.ChoiceField(choices=[('dev', 'dev'),('qa', 'qa'),('stage', 'stage'), ('prod', 'prod'), ('all', 'all')], required=True, label='Environment')
 
 class ErrataForm(forms.Form):
