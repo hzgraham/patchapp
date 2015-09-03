@@ -326,6 +326,11 @@ class ModMaint():
         t.save()
         return total
 
+    def allHostTotals(self):
+        envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
+        for env,field in envs:
+            total = ModMaint().hostCount(env, field)
+
     def checkErrata(self, errata_list):
         clear = ['Clear', 'clear', 'CLEAR']
         new_erratas = {}

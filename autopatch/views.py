@@ -104,11 +104,13 @@ def SetOwners(request):
                 else:
                     pass
             context['owners_list'] = ModMaint().excludedOwners()
+            ModMaint().allHostTotals()
             return HttpResponseRedirect(reverse('autopatch:owners'), context)
         # If the "Remove Owners" button is pressed
         elif request.GET.get('delowners'):
             Owner.objects.all().delete()
             context['owners_list'] = ModMaint().excludedOwners()
+            ModMaint().allHostTotals()
             return HttpResponseRedirect(reverse('autopatch:owners'), context)
         else:
             pass
