@@ -60,6 +60,25 @@
 	    }
 	},
 	{
+	    "kind": "ImageStream",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "patchdocker",
+		"annotations": {
+		    "description": "Keeps track of changes in the application image"
+		},
+		"labels": {
+		    "servicegroup": "patchappdocker"
+		},
+		"creationTimestamp": null
+	    },
+	    "spec": {},
+	    "status": {
+		"dockerImageRepository": "docker.io/hzgraham/patchapp"
+		}
+	},
+
+	{
 	    "kind": "BuildConfig",
 	    "apiVersion": "v1",
 	    "metadata": {
@@ -81,8 +100,7 @@
 		    "sourceStrategy": {
 			"from": {
 			    "kind": "ImageStreamTag",
-			    "namespace": "openshift",
-			    "name": "python:3.3"
+			    "name": "patchapp:latest"
 			}
 		    }
 		},
