@@ -63,7 +63,7 @@
 	    "kind": "ImageStream",
 	    "apiVersion": "v1",
 	    "metadata": {
-		"name": "patchdocker",
+		"name": "python-33-centos7",
 		"creationTimestamp": null
 	    },
 	    "spec": {
@@ -107,11 +107,11 @@
 		    "contextDir": "${CONTEXT_DIR}"
 		},
 		"strategy": {
-		    "type": "Docker",
+		    "type": "Source",
 		    "sourceStrategy": {
 			"from": {
 			    "kind": "ImageStreamTag",
-			    "name": "patchdocker:latest"
+			    "name": "python-33-centos7:latest"
 			},
 			"forcePull": true
 		    }
