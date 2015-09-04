@@ -38,7 +38,12 @@ class Server(models.Model):
     def __unicode__(self):
         return self.server
 
-#Model containing syspatch_owner entries
-#that will be ignored by views and templates
+# Model containing syspatch_owner entries
+# that will be ignored by views and templates
 class Owner(models.Model):
     owner = models.CharField(max_length=128)
+
+# For recording when changes occur to other models
+class Audit(models.Model):
+    user = models.CharField(max_length=128)
+    record = models.CharField(max_length=128)

@@ -175,7 +175,7 @@ def UpdateErrata(request):
             errata.save()
             # recalculates the desired errata for each host
             Satellite().recalcPlerrata()
-            return HttpResponseRedirect(reverse('autopatch:errata'))
+            return render(request, 'autopatch/update_errata.html', args)
     else:
         form = ErrataForm()
     args.update(csrf(request))
