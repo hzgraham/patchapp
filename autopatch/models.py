@@ -44,6 +44,6 @@ class Owner(models.Model):
     owner = models.CharField(max_length=128)
 
 # For recording when changes occur to other models
-class Audit(model.Model):
+class Audit(models.Model):
     user = models.CharField(max_length=128)
     record = models.CharField(max_length=128)
