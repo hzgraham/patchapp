@@ -100,7 +100,7 @@
 		    "sourceStrategy": {
 			"from": {
 			    "kind": "ImageStreamTag",
-			    "name": "patchdocker"
+			    "name": "patchdocker:latest"
 			}
 		    }
 		},
