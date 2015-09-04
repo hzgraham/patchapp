@@ -57,6 +57,14 @@
 		"annotations": {
 		    "description": "Keeps track of changes in the application image"
 		}
+		"labels": {
+		    "servicegroup": "patchapp"
+		},
+		"creationTimestamp": null
+	    }
+	    "spec": {},
+	    "status": {
+		"dockerImageRepository": "docker.io/hzgraham/patchapp"
 	    }
 	},
 	{
