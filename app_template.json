@@ -67,7 +67,7 @@
 		"creationTimestamp": null
 	    },
 	    "spec": {
-		"dockerImageRepository": "hzgraham/patchapp",
+		"dockerImageRepository": "abutcher/python-33-centos7",
 		"tags": [
 		    {
 			"name": "latest"
