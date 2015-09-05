@@ -1,0 +1,22 @@
+{% extends 'autopatch/index.html' %}
+
+{% block content %}
+<div class="container">
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    {{state}}
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Log in" />
+    </form>
+  </body>
+</div>
+<br />
+<br />
+<br />
+{% endblock  %}
+<br />
+<br />
