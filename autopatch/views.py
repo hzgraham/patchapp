@@ -25,9 +25,12 @@ from django.views.decorators.debug import sensitive_variables
 from django.views.decorators.debug import sensitive_post_parameters
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 # if not request.user.is_authenticated():
 #             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+# to get the uid of a user
+# uid = request.user.username
 
 def userLogin(request):
     username = request.POST['username']
@@ -437,7 +440,7 @@ def DetailView(request, pk):
 
 # Patching Task Related Views
 # ##########################################
-@login_required(login_url='autopatch/login/')
+# @login_required(login_url='autopatch/login/')
 class TasksView(generic.ListView):
     template_name = 'autopatch/patching-tasks.html'
     def get_queryset(self):
