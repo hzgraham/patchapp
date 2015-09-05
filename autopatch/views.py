@@ -24,6 +24,29 @@ from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 from django.views.decorators.debug import sensitive_variables
 from django.views.decorators.debug import sensitive_post_parameters
 
+from django.contrib.auth import authenticate, login, logout
+
+# if not request.user.is_authenticated():
+#             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+def userLogin(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=request.REQUEST.get('uid'), password=request.REQUEST.get('password'))
+    if user is not None:
+        # the password verified for the user
+        if user.is_active:
+            print("User is valid, active and authenticated")
+        else:
+            print("The password is valid, but the account has been disabled!")
+    else:
+        # the authentication system was unable to verify the username and password
+        print("The username and password were incorrect.")
+    login(request, user)
+
+def logout_view(request):
+        logout(request)
+
 def CreateCSV(request):
     s = []
     q = []
@@ -414,6 +437,7 @@ def DetailView(request, pk):
 
 # Patching Task Related Views
 # ##########################################
+@login_required(login_url='autopatch/login/')
 class TasksView(generic.ListView):
     template_name = 'autopatch/patching-tasks.html'
     def get_queryset(self):
