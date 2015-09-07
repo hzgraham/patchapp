@@ -67,7 +67,7 @@
 		"creationTimestamp": null
 	    },
 	    "spec": {
-		"dockerImageRepository": "abutcher/python-33-centos7",
+		"dockerImageRepository": "hzgraham/python-33-centos7",
 		"tags": [
 		    {
 			"name": "latest"
@@ -215,6 +215,14 @@
 				    {
 					"name": "DJANGO_SECRET_KEY",
 					"value": "${DJANGO_SECRET_KEY}"
+				    },
+				    {
+					"name": "LDAP_HOST",
+					"value": "${LDAP_HOST}"
+				    },
+				    {
+					"name": "LDAP_BASEDN",
+					"value": "${LDAP_BASEDN}"
 				    }
 				]
 			    }
