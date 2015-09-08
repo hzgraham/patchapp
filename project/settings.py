@@ -30,8 +30,8 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -71,12 +71,25 @@ AUTHENTICATION_BACKENDS = (
     )
 
 
+
+LDAP_HOST = os.getenv('LDAP_HOST')
+LDAP_BASEDN = os.getenv('LDAP_BASEDN')
+
+if not LDAP_HOST:
+    LDAP_HOST = ""
+else:
+    pass
+if not LDAP_BASEDN:
+    LDAP_BASEDN = ""
+else:
+    pass
+
 # LDAP authentication configuration
-AUTH_LDAP_SERVER_URI = "ldap://"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users,dc=example,dc=com",
-                                       ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
-                                        ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users"+LDAP_BASEDN,
+                                   ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups"+LDAP_BASEDN,
+                                    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
 )
 
 # Use LDAP group membership to calculate group permissions.
@@ -86,6 +99,7 @@ AUTH_LDAP_FIND_GROUP_PERMS = True
 AUTH_LDAP_CACHE_GROUPS = True
 AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 
+AUTH_LDAP_START_TLS = True
 
 ROOT_URLCONF = 'project.urls'
 
