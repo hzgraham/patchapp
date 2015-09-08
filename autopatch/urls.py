@@ -3,15 +3,18 @@ from django.conf.urls import url, patterns, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+from django.contrib.auth import urls
+from django.contrib.auth.views import login
 # importing autopatch app specific libraries
 from . import views
 
 urlpatterns = [
     # main templates for framework and home page
-    url(r'^$', views.Home ),
+    url(r'^$', views.Home),
     url(r'^home/$', views.Home, name='Home'),
 
+    # Authentication stuff
+    url(r'^login/$', login, kwargs={'template_name': 'autopatch/login.html'}, name='login'),
     # This uses a view that returns the results.html view for a host
     url(r'^server/(?P<pk>\d+)/$', views.DetailView, name='detail'),
     url(r'^modify/(?P<pk>\d+)/$', views.resultView, name='resultView'),

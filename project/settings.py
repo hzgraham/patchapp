@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.auth.decorators',
+    'django.contrib.auth.urls',
     'debug_toolbar',
     'autopatch',
 )
@@ -67,6 +69,37 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
     )
+
+
+
+LDAP_HOST = os.getenv('LDAP_HOST')
+LDAP_BASEDN = os.getenv('LDAP_BASEDN')
+
+if not LDAP_HOST:
+    LDAP_HOST = ""
+else:
+    pass
+if not LDAP_BASEDN:
+    LDAP_BASEDN = ""
+else:
+    pass
+
+# LDAP authentication configuration
+AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users"+LDAP_BASEDN,
+                                   ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups"+LDAP_BASEDN,
+                                    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+)
+
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+# Cache group memberships for an hour to minimize LDAP traffic
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+
+AUTH_LDAP_START_TLS = True
 
 ROOT_URLCONF = 'project.urls'
 
