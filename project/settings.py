@@ -30,8 +30,8 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,6 +82,7 @@ else:
 if not LDAP_BASEDN:
     LDAP_BASEDN = ""
 else:
+    LDAP_BASEDN = LDAP_BASEDN.replace(" ",",")
     pass
 
 # LDAP authentication configuration
