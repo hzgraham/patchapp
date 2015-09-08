@@ -1,4 +1,5 @@
-setuptools>=12.0.5
+pip>=7.1.2
+setuptools>=18.3.1
 Django==1.8.1
 gunicorn==19.3.0
 psycopg2==2.6
@@ -11,5 +12,7 @@ virtualenv>=12.0.7
 BeautifulSoup4==4.4.0
 pyflakes
 pep8
-git+https://github.com/rbarrois/python-ldap.git@py3
+#django-python3-ldap
+#-e git+https://github.com/rbarrois/python-ldap.git@py3#egg=python-ldap
+git+https://github.com/jonge-democraten/python-ldap.git@py3
 django-auth-ldap
