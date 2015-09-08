@@ -518,6 +518,16 @@
 	    "name": "SATELLITE_PASSWORD",
 	    "description": "Satellite password",
 	    "value": ""
+	},
+	{
+	    "name": "LDAP_HOST",
+	    "description": "hostname of LDAP server",
+	    "value": ""
+	},
+	{
+	    "name": "LDAP_BASEDN",
+	    "description": "LDAP base of search tree",
+	    "value": ""
 	}
     ]
 }
