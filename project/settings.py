@@ -30,8 +30,8 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -71,6 +71,7 @@ AUTHENTICATION_BACKENDS = (
     )
 
 
+LOGIN_REDIRECT_URL = "/autopatch/profile/"
 
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
@@ -87,9 +88,9 @@ else:
 
 # LDAP authentication configuration
 AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
-AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users"+LDAP_BASEDN,
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users,"+LDAP_BASEDN,
                                    ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups"+LDAP_BASEDN,
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,"+LDAP_BASEDN,
                                     ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
 )
 
