@@ -50,6 +50,11 @@ def userLogin(request):
 def logout_view(request):
         logout(request)
 
+@login_required
+def profile(request):
+    context = {}
+    return render_to_response('autopatch/profile.html', context, context_instance=RequestContext(request))
+
 def CreateCSV(request):
     s = []
     q = []

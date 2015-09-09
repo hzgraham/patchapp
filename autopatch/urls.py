@@ -15,6 +15,7 @@ urlpatterns = [
 
     # Authentication stuff
     url(r'^login/$', login, kwargs={'template_name': 'autopatch/login.html'}, name='login'),
+    url(r'^profile/$', views.profile, name='profile'),
     # This uses a view that returns the results.html view for a host
     url(r'^server/(?P<pk>\d+)/$', views.DetailView, name='detail'),
     url(r'^modify/(?P<pk>\d+)/$', views.resultView, name='resultView'),

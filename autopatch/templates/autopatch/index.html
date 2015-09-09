@@ -32,6 +32,11 @@
 	      <li {% if request.path|slice:":16" == "/autopatch/qa/" %}class="active"{% endif %}><a href="/autopatch/qa/">QA</a></li>
 	      <li {% if request.path|slice:":16" == "/autopatch/dev/" %}class="active"{% endif %}><a href="/autopatch/dev/">Dev</a></li>
 	      <li {% if request.path|slice:":16" == "/autopatch/tasks" %}class="active"{% endif %}><a href="/autopatch/tasks/">Patching Tasks</a></li>
+	      {% if user.is_authenticated %}
+	      <li {% if request.path|slice:":16" == "/autopatch/profile/" %}class="active"{% endif %}><a href="/autopatch/profile/">{{ user }}'s Profile</a></li>
+	      {% else %}
+	      <li {% if request.path|slice:":16" == "/autopatch/login/" %}class="active"{% endif %}><a href="/autopatch/login/">Login</a></li>
+	      {% endif %}
 	    </ul>
 	  </div>
 	</div>
