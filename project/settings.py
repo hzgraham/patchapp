@@ -76,7 +76,7 @@ LOGIN_REDIRECT_URL = "/autopatch/profile/"
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
 
-print("this should be the env variables for ldap: ", LDAP_HOST, LDAP_BASEDN)
+print("these should be the env variables for ldap: ", LDAP_HOST, LDAP_BASEDN)
 
 if not LDAP_HOST:
     LDAP_HOST = ""
@@ -87,6 +87,8 @@ if not LDAP_BASEDN:
 else:
     LDAP_BASEDN = LDAP_BASEDN.replace(" ",",")
     pass
+
+print("these are the corrected env variables for ldap: ", LDAP_HOST, LDAP_BASEDN)
 
 # LDAP authentication configuration
 AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
