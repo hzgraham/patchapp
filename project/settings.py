@@ -76,6 +76,8 @@ LOGIN_REDIRECT_URL = "/autopatch/profile/"
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
 
+print("this should be the env variables for ldap: ", LDAP_HOST, LDAP_BASEDN)
+
 if not LDAP_HOST:
     LDAP_HOST = ""
 else:
