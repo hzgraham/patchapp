@@ -47,9 +47,6 @@ def userLogin(request):
         print("The username and password were incorrect.")
     login(request, user)
 
-# def logout_view(request):
-#         logout(request)
-
 @login_required
 def profile(request):
     context = {}
