@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-import ldap
+import os, ldap, logging, urllib.request, shutil
 from django_auth_ldap.config import LDAPSearch
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,8 +75,6 @@ LOGIN_REDIRECT_URL = "/autopatch/profile/"
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
 
-print("these should be the env variables for ldap: ", LDAP_HOST, LDAP_BASEDN)
-
 if not LDAP_HOST:
     LDAP_HOST = ""
 else:
@@ -88,7 +85,35 @@ else:
     LDAP_BASEDN = LDAP_BASEDN.replace(" ",",")
     pass
 
-print("these are the corrected env variables for ldap: ", LDAP_HOST, LDAP_BASEDN)
+print("LDAP URL and basedn:", LDAP_HOST, LDAP_BASEDN)
+
+# LDAP CA cert
+LDAP_CACERTFILE = "autopatch/ca.crt"
+if not os.path.exists(LDAP_CACERTFILE):
+    LDAP_CACERT_URL = os.getenv('LDAP_CACERT_URL')
+    print("This is the CACERT URL:", LDAP_CACERT_URL)
+    if LDAP_CACERT_URL:
+        with urllib.request.urlopen(LDAP_CACERT_URL) as response, open(LDAP_CACERTFILE, 'wb') as out_file:
+            shutil.copyfileobj(response, out_file)
+    else:
+        print("No LDAP_CACERT_URL")
+        pass
+elif os.path.exists(LDAP_CACERTFILE):
+    AUTH_LDAP_START_TLS = True
+else:
+    AUTH_LDAP_START_TLS = False
+
+print("this is the AUTH_LDAP_START_TLS:", AUTH_LDAP_START_TLS)
+
+if os.path.exists(LDAP_CACERTFILE):
+    AUTH_LDAP_CONNECTION_OPTIONS = {
+        ldap.OPT_REFERRALS: 0,
+        ldap.OPT_X_TLS_CACERTFILE: LDAP_CACERTFILE
+    }
+else:
+    AUTH_LDAP_CONNECTION_OPTIONS = {
+        ldap.OPT_REFERRALS: 0
+    }
 
 # LDAP authentication configuration
 AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
@@ -104,10 +129,6 @@ AUTH_LDAP_FIND_GROUP_PERMS = True
 # Cache group memberships for an hour to minimize LDAP traffic
 AUTH_LDAP_CACHE_GROUPS = True
 AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
-
-AUTH_LDAP_START_TLS = True
-
-import logging
 
 logger = logging.getLogger('django_auth_ldap')
 logger.addHandler(logging.StreamHandler())

@@ -223,6 +223,10 @@
 				    {
 					"name": "LDAP_BASEDN",
 					"value": "${LDAP_BASEDN}"
+				    },
+				    {
+					"name": "LDAP_CACERT_URL",
+					"value": "${LDAP_CACERT_URL}"
 				    }
 				]
 			    }
@@ -527,6 +531,11 @@
 	{
 	    "name": "LDAP_BASEDN",
 	    "description": "LDAP base of search tree",
+	    "value": ""
+	},
+	{
+	    "name": "LDAP_CACERT_URL",
+	    "description": "URL where the CA cert can be retrieved",
 	    "value": ""
 	}
     ]
