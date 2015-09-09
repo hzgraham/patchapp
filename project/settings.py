@@ -90,6 +90,7 @@ print("LDAP URL and basedn:", LDAP_HOST, LDAP_BASEDN)
 # LDAP CA cert
 LDAP_CACERTFILE = "autopatch/ca.crt"
 if not os.path.exists(LDAP_CACERTFILE):
+    AUTH_LDAP_START_TLS = True
     LDAP_CACERT_URL = os.getenv('LDAP_CACERT_URL')
     print("This is the CACERT URL:", LDAP_CACERT_URL)
     if LDAP_CACERT_URL:
