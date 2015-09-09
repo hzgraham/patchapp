@@ -107,14 +107,18 @@ else:
 print("this is the AUTH_LDAP_START_TLS:", AUTH_LDAP_START_TLS)
 
 if os.path.exists(LDAP_CACERTFILE):
-    AUTH_LDAP_CONNECTION_OPTIONS = {
-        ldap.OPT_REFERRALS: 0,
+    AUTH_LDAP_GLOBAL_OPTIONS = {
         ldap.OPT_X_TLS_CACERTFILE: LDAP_CACERTFILE
     }
 else:
-    AUTH_LDAP_CONNECTION_OPTIONS = {
-        ldap.OPT_REFERRALS: 0
-    }
+    pass
+    # AUTH_LDAP_CONNECTION_OPTIONS = {
+    #     ldap.OPT_REFERRALS: 0
+    # }
+
+AUTH_LDAP_CONNECTION_OPTIONS = {
+    ldap.OPT_REFERRALS: 0
+}
 
 # LDAP authentication configuration
 AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
