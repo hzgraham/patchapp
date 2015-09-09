@@ -107,6 +107,13 @@ AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 
 AUTH_LDAP_START_TLS = True
 
+import logging
+
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
+
+
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
