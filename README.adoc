@@ -15,7 +15,7 @@ Create a project to house the app:
 oc new-project <project-name>
 ----
 
-Install and launch the app from a template:
+Install and launch the app from a template (current the LDAP_BASEDN needs to be separated by spaces not commas because it confuses the last command):
 
 [source, bash]
 ----
@@ -23,7 +23,10 @@ oc create -f https://raw.githubusercontent.com/hzgraham/patchapp/master/app_temp
 export SATELLITE_HOST="satellite.example.com"
 export SATELLITE_USER="user"
 export SATELLITE_PASSWORD="password"
-oc process -v="SATELLITE_HOST=${SATELLITE_HOST},SATELLITE_USER=${SATELLITE_USER},SATELLITE_PASSWORD=${SATELLITE_PASSWORD}" patchapp | oc create -f -
+export LDAP_HOST="ldap.example.com"
+export LDAP_CACERT_URL="http://server.example.com/ca.crt"
+export LDAP_BASEDN="dc=example dc=com"
+oc process -v="LDAP_CACERT_URL=${LDAP_CACERT_URL},LDAP_HOST=${LDAP_HOST},LDAP_BASEDN=${LDAP_BASEDN},SATELLITE_HOST=${SATELLITE_HOST},SATELLITE_USER=${SATELLITE_USER},SATELLITE_PASSWORD=${SATELLITE_PASSWORD}" patchapp | oc create -f -
 ----
 
 Then, check the results:
