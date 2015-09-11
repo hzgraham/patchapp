@@ -50,8 +50,15 @@ def userLogin(request):
 @login_required
 def profile(request):
     context = {}
+    # groups = ldap_user.group_names
+    # context['groups'] = groups
+    uid = request.user.username
+    all_groups = request.user.ldap_user.group_names
+    context['uid'] = uid
+    context['all_groups'] = all_groups
     return render_to_response('autopatch/profile.html', context, context_instance=RequestContext(request))
 
+@login_required
 def CreateCSV(request):
     s = []
     q = []
@@ -84,6 +91,7 @@ def CreateCSV(request):
     return response
 
 # Funtion used to import hosts from git by cloning the repo
+@login_required
 def Git(request):
     unlist = []
     #Checks if a path was give to the git repo
@@ -113,6 +121,7 @@ def Git(request):
     return HttpResponseRedirect(reverse('autopatch:tasks'), context)
 
 # hosts of owners set here will be excluded from patching
+@login_required
 def SetOwners(request):
     # owners is a test variable
     owners_list = []
@@ -145,6 +154,7 @@ def SetOwners(request):
     context['owners_list'] = ModMaint().excludedOwners()
     return render(request, 'autopatch/owners.html', context)
 
+@login_required
 def UpdateErrata(request):
     # This view used to update the top level errata
     args = {}
@@ -323,6 +333,7 @@ def erratumView(request):
 
 @sensitive_post_parameters()
 @sensitive_variables()
+@login_required
 def SatInfo(request):
     # SatId will get the ID of each server in Satellite
     # There are 4 buttons on the patching tasks page, one for each env
@@ -389,6 +400,7 @@ def SatInfo(request):
         pass
     return HttpResponseRedirect(reverse('autopatch:tasks'), context)
 
+@login_required
 def resultView(request, pk):
     args = []
     server = get_object_or_404(Server, pk=pk)
@@ -452,11 +464,14 @@ class TasksView(generic.ListView):
 
 class Unicorns(generic.ListView):
     template_name = 'autopatch/unicorns.html'
+    @login_required
     def get_queryset(self):
         return Server.objects.all().order_by("server")
+    @login_required
     def get_context_data(self):
         return {'encouragement': encouragement()}
 
+@login_required
 def security(request):
     return render(request, 'autopatch/security.html')
 

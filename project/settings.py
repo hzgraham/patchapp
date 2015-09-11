@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os, ldap, logging, urllib.request, shutil
-from django_auth_ldap.config import LDAPSearch
+from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -71,6 +71,7 @@ AUTHENTICATION_BACKENDS = (
 
 
 LOGIN_REDIRECT_URL = "/autopatch/profile/"
+LOGIN_URL = "/autopatch/login/"
 
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
@@ -120,12 +121,13 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
     ldap.OPT_REFERRALS: 0
 }
 
+AUTH_LDAP_GROUP_TYPE = PosixGroupType()
 # LDAP authentication configuration
 AUTH_LDAP_SERVER_URI = "ldap://"+LDAP_HOST
 AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users,"+LDAP_BASEDN,
                                    ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,"+LDAP_BASEDN,
-                                    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+                                    ldap.SCOPE_SUBTREE, "(objectClass=posixGroup)"
 )
 
 # Use LDAP group membership to calculate group permissions.
