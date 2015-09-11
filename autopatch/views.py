@@ -25,7 +25,7 @@ from django.views.decorators.debug import sensitive_variables
 from django.views.decorators.debug import sensitive_post_parameters
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 # if not request.user.is_authenticated():
 #             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -57,6 +57,20 @@ def profile(request):
     context['uid'] = uid
     context['all_groups'] = all_groups
     return render_to_response('autopatch/profile.html', context, context_instance=RequestContext(request))
+
+def is_member(request):
+    # uid = request.user.username
+    groups = request.ldap_user.group_names
+    # user = request.ldap_user.User
+    TaskScripts().parseServerForm("this is the test returns:", groups)
+    group = False
+    for each in groups:
+        if each == "admins":
+            group = True
+    return group
+
+def is_in_multiple_groups(user):
+    return user.groups.filter(name__in=['group1', 'group2']).exists()
 
 @login_required
 def CreateCSV(request):
@@ -122,6 +136,8 @@ def Git(request):
 
 # hosts of owners set here will be excluded from patching
 @login_required
+#@user_passes_test(is_member)
+@user_passes_test(is_member)
 def SetOwners(request):
     # owners is a test variable
     owners_list = []
