@@ -488,10 +488,8 @@ class TasksView(generic.ListView):
 
 class Unicorns(generic.ListView):
     template_name = 'autopatch/unicorns.html'
-    @login_required
     def get_queryset(self):
         return Server.objects.all().order_by("server")
-    @login_required
     def get_context_data(self):
         return {'encouragement': encouragement()}
 
