@@ -227,6 +227,10 @@
 				    {
 					"name": "LDAP_CACERT_URL",
 					"value": "${LDAP_CACERT_URL}"
+				    },
+				    {
+					"name": "LDAP_ADMIN_GROUP",
+					"value": "${LDAP_ADMIN_GROUP}"
 				    }
 				]
 			    }
@@ -536,6 +540,11 @@
 	{
 	    "name": "LDAP_CACERT_URL",
 	    "description": "URL where the CA cert can be retrieved",
+	    "value": ""
+	},
+	{
+	    "name": "LDAP_ADMIN_GROUP",
+	    "description": "LDAP group that can perform patching related admin tasks",
 	    "value": ""
 	}
     ]

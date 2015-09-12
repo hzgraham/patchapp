@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^login/$', login, kwargs={'template_name': 'autopatch/login.html'}, name='login'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^logout/$', logout, kwargs={'next_page': '/'}, name="homepage_logout"),
+    url(r'^denied/$', views.denied, name='denied'),
+
     # This uses a view that returns the results.html view for a host
     url(r'^server/(?P<pk>\d+)/$', views.DetailView, name='detail'),
     url(r'^modify/(?P<pk>\d+)/$', views.resultView, name='resultView'),

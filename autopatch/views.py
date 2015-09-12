@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.core.context_processors import csrf
 from time import sleep
 from django.contrib.auth.backends import RemoteUserBackend
-import urllib, bs4, urllib.request, csv
+import urllib, bs4, urllib.request, csv, os
 from xmlrpc import client, server
 import xmlrpc.client, xmlrpc.server
 
@@ -58,19 +58,18 @@ def profile(request):
     context['all_groups'] = all_groups
     return render_to_response('autopatch/profile.html', context, context_instance=RequestContext(request))
 
+# The group that can perform admin tasks is a build time env variable
 def is_member(request):
     # uid = request.user.username
     groups = request.ldap_user.group_names
+    admin_group = os.getenv('LDAP_ADMIN_GROUP')
     # user = request.ldap_user.User
-    TaskScripts().parseServerForm("this is the test returns:", groups)
+    # TaskScripts().parseServerForm(admin_group, groups)
     group = False
     for each in groups:
-        if each == "admins":
+        if each == admin_group:
             group = True
     return group
-
-def is_in_multiple_groups(user):
-    return user.groups.filter(name__in=['group1', 'group2']).exists()
 
 @login_required
 def CreateCSV(request):
@@ -137,7 +136,7 @@ def Git(request):
 # hosts of owners set here will be excluded from patching
 @login_required
 #@user_passes_test(is_member)
-@user_passes_test(is_member)
+@user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def SetOwners(request):
     # owners is a test variable
     owners_list = []
@@ -171,6 +170,7 @@ def SetOwners(request):
     return render(request, 'autopatch/owners.html', context)
 
 @login_required
+@user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def UpdateErrata(request):
     # This view used to update the top level errata
     args = {}
@@ -255,6 +255,11 @@ def Home(request):
     context = {'encouragement': encouragement()}
     return render(request, template, context)
 
+def denied(request):
+    template = 'autopatch/denied.html'
+    context = {'encouragement': encouragement()}
+    return render_to_response(template, context)
+
 def ProdView(request):
     env = "Prod"
     field = ".prod."
@@ -315,6 +320,8 @@ def DevView(request):
     context = {'host_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
     return render(request, 'autopatch/host_list.html', context)
 
+@login_required
+@user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def erratumView(request):
     context = {}
     if request.method == "GET":
@@ -350,6 +357,7 @@ def erratumView(request):
 @sensitive_post_parameters()
 @sensitive_variables()
 @login_required
+@user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def SatInfo(request):
     # SatId will get the ID of each server in Satellite
     # There are 4 buttons on the patching tasks page, one for each env

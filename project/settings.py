@@ -76,6 +76,9 @@ LOGIN_URL = "/autopatch/login/"
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
 
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 600
+
 if not LDAP_HOST:
     LDAP_HOST = ""
 else:
