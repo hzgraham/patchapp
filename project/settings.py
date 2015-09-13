@@ -29,8 +29,11 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+# For testing set Debug to True and SECURE_SSL_REDIRECT to False
 DEBUG = False
+# DEBUG = True
+SECURE_SSL_REDIRECT = True
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -68,7 +71,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
     )
-
 
 LOGIN_REDIRECT_URL = "/autopatch/profile/"
 LOGIN_URL = "/autopatch/login/"
