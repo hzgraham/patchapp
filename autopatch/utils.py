@@ -67,24 +67,24 @@ class Satellite():
         # Parses the errata levels for the date and ID
         if errata_levels:
             if errata_levels['rhea']:
-                rhea_date = errata_levels['rhea'].split('-')[1].split(':')[0]
-                rhea_id = errata_levels['rhea'].split('-')[1].split(':')[1]
+                rhea_date = int(errata_levels['rhea'].split('-')[1].split(':')[0])
+                rhea_id = int(errata_levels['rhea'].split('-')[1].split(':')[1])
                 # print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
             else:
                 rhea_date = 0
                 rhea_id = 0
                 # print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
             if errata_levels['rhsa']:
-                rhsa_date = errata_levels['rhsa'].split('-')[1].split(':')[0]
-                rhsa_id = errata_levels['rhsa'].split('-')[1].split(':')[1]
+                rhsa_date = int(errata_levels['rhsa'].split('-')[1].split(':')[0])
+                rhsa_id = int(errata_levels['rhsa'].split('-')[1].split(':')[1])
                 # print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
             else:
                 rhsa_date = 0
                 rhsa_id = 0
                 # print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
             if errata_levels['rhba']:
-                rhba_date = errata_levels['rhba'].split('-')[1].split(':')[0]
-                rhba_id = errata_levels['rhba'].split('-')[1].split(':')[1]
+                rhba_date = int(errata_levels['rhba'].split('-')[1].split(':')[0])
+                rhba_id = int(errata_levels['rhba'].split('-')[1].split(':')[1])
                 # print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
             else:
                 rhba_date = 0
@@ -94,8 +94,8 @@ class Satellite():
             for each in updates:
                 if any(x in each for x in advisories):
                     adv_type = each.split('-')[0]
-                    date = each.split('-')[1].split(':')[0]
-                    errata_id = each.split('-')[1].split(':')[1]
+                    date = int(each.split('-')[1].split(':')[0])
+                    errata_id = int(each.split('-')[1].split(':')[1])
                     # print("The data and id of the advisory are: ", each, adv_type,date, errata_id)
                     # If the available errata is equal to or older than the level
                     # it is added to the needed_updates list
