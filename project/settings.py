@@ -30,13 +30,15 @@ SECRET_KEY = os.getenv(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # For testing set Debug to True and SECURE_SSL_REDIRECT to False
-DEBUG = False
-# DEBUG = True
-SECURE_SSL_REDIRECT = True
+# DEBUG = False
+DEBUG = True
+# SECURE_SSL_REDIRECT = True
 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
