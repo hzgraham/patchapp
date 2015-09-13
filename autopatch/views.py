@@ -245,6 +245,7 @@ def UpdateErrata(request):
                 args['RHEA'] = ''
                 args['RHSA'] = ''
                 args['RHBA'] = ''
+            args.update(csrf(request))
             return render(request, 'autopatch/update_errata.html', args)
     else:
         form = ErrataForm()
