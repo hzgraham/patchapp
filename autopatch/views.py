@@ -193,7 +193,7 @@ def UpdateErrata(request):
             oldrhsa = ''
             oldrhba = ''
             # errata = Errata.objects.get(pk=1)
-            # TaskScripts().parseServerForm('Errata',errata)
+            # TaskScripts().parseServerForm(RHEA, RHBA)
             # This keeps the exists errata levels set if none are entered in the form
             if not Errata.objects.exists():
                 errata = Errata(pk=1)
@@ -205,6 +205,7 @@ def UpdateErrata(request):
             errata_list = {'RHEA': RHEA, 'RHSA': RHSA, 'RHBA': RHBA}
             # checkErrata is a check for any clear returns to remove errata levels
             new_erratas = ModMaint().checkErrata(errata_list)
+            # TaskScripts().parseServerForm('new errata', new_erratas)
             if new_erratas['RHEA'] == 'clear':
                 errata.RHEA = ''
             elif new_erratas['RHEA']:
@@ -232,6 +233,18 @@ def UpdateErrata(request):
             errata.save()
             # recalculates the desired errata for each host
             Satellite().recalcPlerrata()
+            # if they exist then they are returned to the template
+            if Errata.objects.exists():
+                # errata = Errata.objects.first()
+                errata = Errata.objects.first()
+                args['RHEA'] = errata.RHEA
+                args['RHSA'] = errata.RHSA
+                args['RHBA'] = errata.RHBA
+                # TaskScripts().parseServerForm('Errata does exist',errata)
+            else:
+                args['RHEA'] = ''
+                args['RHSA'] = ''
+                args['RHBA'] = ''
             return render(request, 'autopatch/update_errata.html', args)
     else:
         form = ErrataForm()
@@ -246,9 +259,9 @@ def UpdateErrata(request):
         args['RHBA'] = errata.RHBA
         # TaskScripts().parseServerForm('Errata does exist',errata)
     else:
-        args['RHEA'] = 0
-        args['RHSA'] = 0
-        args['RHBA'] = 0
+        args['RHEA'] = ''
+        args['RHSA'] = ''
+        args['RHBA'] = ''
         # TaskScripts().parseServerForm('Errata doesnt exist!','no errata')
     args['form'] = form
     return render_to_response('autopatch/update_errata.html', args)
