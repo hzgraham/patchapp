@@ -45,5 +45,9 @@ class Owner(models.Model):
 
 # For recording when changes occur to other models
 class Audit(models.Model):
+    skip = models.BooleanField(default=True)
+    exclude = models.TextField(max_length=256, null=True, blank=True)
+    hostgroup = models.CharField(max_length=50, null=True, blank=True)
+    comments = models.TextField(max_length=256, null=True, blank=True)
     user = models.CharField(max_length=128)
-    record = models.CharField(max_length=128)
+    mode_date = models.DateTimeField(auto_now=True, null=True)
