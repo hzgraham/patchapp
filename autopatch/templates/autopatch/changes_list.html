@@ -1,0 +1,41 @@
+{% extends 'autopatch/index.html' %}
+
+{% block content %}
+<div class="container">
+  <a href="/autopatch/tasks/">&#8617; Back to Patching Tasks</a>
+  <hr />
+  {% if changes_list %}
+  {% for change in changes_list %}
+    <div class = "server_body">
+      <h4 style="color: #38978D;">{{ change.server }}</h4>
+      <p>
+	<ul><b>Modifying User:</b>    {{ change.user }}</ul>
+	<ul><b>Modification date:</b>    {{ change.mod_date }}</ul>
+	<ul><b>Host skipped:</b>
+	  {% if change.skip %}
+	  <input type="checkbox" disabled="" class="custom-checkbox" id="id_skip" data-toggle="checkbox" name="skip" value="skip" checked="checked">
+	  <span class="icons">
+	    <span class="icon-unchecked"></span>
+	    <span class="icon-checked"></span>
+	  </span>
+	  {% else %}
+	  <input type="checkbox" disabled="" class="custom-checkbox" id="id_skip" data-toggle="checkbox" name="skip" value="skip" >
+	  <span class="icons">
+	    <span class="icon-checked"></span>
+	    <span class="icon-unchecked"></span>
+	  </span>
+	  {% endif %}
+	</ul>
+	<ul><b>Yum Excludes:</b> {{ change.exclude }}</ul>  
+	<ul><b>Hostgroup:</b>    {{ change.hostgroup }}</ul>
+	<ul><b>Comments:</b>    {{ change.comments }}</ul>
+      </p>
+      <hr />
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+<br />
+<br />
+<br />
+{% endblock %}

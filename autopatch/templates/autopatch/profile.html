@@ -7,7 +7,9 @@
   </head>
   <body>
     <hr/>
-    {{ user }}'s profile
+    {{ name }}'s profile
+    <br/>
+      Login: {{ uid }}
     <h4>Posix Groups</h4>
     <hr/>
     {% for group in user.ldap_user.group_names %}
@@ -15,9 +17,6 @@
     {% endfor %}
   </body>
 </div>
-<br />
-<br />
-<br />
 {% endblock  %}
 <br />
 <br />

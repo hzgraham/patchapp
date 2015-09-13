@@ -18,7 +18,7 @@ from xmlrpc import client, server
 import xmlrpc.client, xmlrpc.server
 
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm, ErratumForm
-from .models import Server, Hosttotal, Errata, Owner
+from .models import Server, Hosttotal, Errata, Owner, Audit
 from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 
 from django.views.decorators.debug import sensitive_variables
@@ -53,7 +53,9 @@ def profile(request):
     # groups = ldap_user.group_names
     # context['groups'] = groups
     uid = request.user.username
+    # TaskScripts().parseServerForm(request.user, request.user.ldap_user.attrs)
     all_groups = request.user.ldap_user.group_names
+    context['name'] = ''.join(request.user.ldap_user.attrs['displayname']+request.user.ldap_user.attrs['sn'])
     context['uid'] = uid
     context['all_groups'] = all_groups
     return render_to_response('autopatch/profile.html', context, context_instance=RequestContext(request))
@@ -123,6 +125,7 @@ def Git(request):
     if manifests:
         # Server.objects.all().delete()
         hosts = ModMaint().parseGit(manifests)
+        Audit.objects.all().delete()
     else:
         pass
     # unsassignlist (not in an env) hosts are displayed on the patching-tasks.html template
@@ -259,6 +262,13 @@ def denied(request):
     template = 'autopatch/denied.html'
     context = {'encouragement': encouragement()}
     return render_to_response(template, context)
+
+@login_required
+@user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
+def ChangesView(request):
+    changes_list = Audit.objects.all().order_by('mod_date')
+    context = {'changes_list': changes_list, 'encouragement': encouragement()}
+    return render(request, 'autopatch/changes_list.html', context)
 
 def ProdView(request):
     env = "Prod"
@@ -443,6 +453,9 @@ def resultView(request, pk):
             skip = form.cleaned_data['skip']
             comments = form.cleaned_data['comments']
             s = Server.objects.get(pk=pk)
+            # Creating a new Audit entry for the changes_list.html
+            cn = ''.join(request.user.ldap_user.attrs['cn'])
+            Audit.objects.create(server=s.server, skip=s.skip, exclude=s.exclude, hostgroup=s.hostgroup, comments=s.comments, user=cn)
             # test1 = [exclude, hostgroup, skip, comments]
             # test2 = pk
             # TaskScripts().parseServerForm(test1, test2)
