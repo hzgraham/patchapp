@@ -49,6 +49,8 @@ def userLogin(request):
 
 @login_required
 def profile(request):
+    TaskScripts().parseServerForm("request", request.META)
+    TaskScripts().parseServerForm("request", "attempted a request META displa")
     context = {}
     # groups = ldap_user.group_names
     # context['groups'] = groups
