@@ -276,7 +276,7 @@ def UpdateErrata(request):
 def Home(request):
     template = 'autopatch/base.html'
     context = {'encouragement': encouragement()}
-    return render(request, template, context)
+    return render(request, template, context, context_instance=RequestContext(request))
 
 def denied(request):
     template = 'autopatch/denied.html'
@@ -304,7 +304,7 @@ def ProdView(request):
         prodtotal = total.get("total")
     prod_list = Server.objects.all().filter(env="prod").order_by('server')
     context = {'host_list': prod_list, 'total': prodtotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/host_list.html', context)
+    return render(request, 'autopatch/host_list.html', context, context_instance=RequestContext(request))
 
 def StageView(request):
     env = "Stage"
@@ -319,7 +319,7 @@ def StageView(request):
         stagetotal = total.get("total")
     stage_list = Server.objects.all().filter(env="stage").order_by('server')
     context = {'host_list': stage_list, 'total': stagetotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/host_list.html', context)
+    return render(request, 'autopatch/host_list.html', context, context_instance=RequestContext(request))
 
 def QAView(request):
     env = "QA"
@@ -334,6 +334,7 @@ def QAView(request):
         qatotal = total.get("total")
     qa_list = Server.objects.all().filter(env="qa").order_by('server')
     context = {'host_list': qa_list, 'total': qatotal, 'env': env, 'encouragement': encouragement()}
+    context.update(csrf(request))
     return render(request, 'autopatch/host_list.html', context)
 
 def DevView(request):
