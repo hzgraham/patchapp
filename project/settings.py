@@ -77,7 +77,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.RemoteUserBackend',
     )
 
-HTTPS_SUPPORT = True
+HTTPS_SUPPORT = False
 SECURE_REQUIRED_PATHS = (
     '/autopatch/',
     '/',
@@ -85,8 +85,8 @@ SECURE_REQUIRED_PATHS = (
     '/dev/',
     )
 
-LOGIN_REDIRECT_URL = "/autopatch/profile/"
-LOGIN_URL = "/autopatch/login/"
+LOGIN_REDIRECT_URL = "//autopatch/profile/"
+LOGIN_URL = "//autopatch/login/"
 
 LDAP_HOST = os.getenv('LDAP_HOST')
 LDAP_BASEDN = os.getenv('LDAP_BASEDN')
