@@ -38,6 +38,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 USE_X_FORWARDED_HOST = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# APPEND_SLASH = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -67,12 +68,20 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'project.middleware.SecureRequiredMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
     'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
+    )
+
+HTTPS_SUPPORT = True
+SECURE_REQUIRED_PATHS = (
+    '/autopatch/',
+    '/',
+    '/autopatch/profile/',
     )
 
 LOGIN_REDIRECT_URL = "/autopatch/profile/"
