@@ -75,6 +75,7 @@ def is_member(request):
 
 @login_required
 def CreateCSV(request):
+    TaskScripts().parseServerForm("request", request.META)
     s = []
     q = []
     context = {}
