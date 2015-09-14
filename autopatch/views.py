@@ -364,6 +364,7 @@ def erratumView(request):
                 for host in server_objs:
                     if host.updates:
                         TaskScripts().parseServerForm(host.server, host.updates) 
+                        TaskScripts().parseServerForm("These are the types of updates",type(host.updates))
                         updates = eval(host.updates)
                         updates = list(updates)
                     else:

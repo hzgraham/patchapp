@@ -143,7 +143,7 @@ class Satellite():
                     # for x in [" ", '"']:
                     #     updates = updates.strip("[]").strip("{}").replace(x,"")
                     # updates = updates.split(',')
-                    # print("These are the stored updates: ", type(host.updates), host.updates)
+                    print("These are the stored updates: ", type(host.updates), host.updates)
                     # print("These are the formatted host updates: ", type(updates), updates)
                     needed_updates = Satellite().desiredErrata(updates)
                     # host.plerrata = str(needed_updates).strip('[]').replace("'","")
