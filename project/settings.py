@@ -37,8 +37,8 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 USE_X_FORWARDED_HOST = False
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# APPEND_SLASH = False
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+APPEND_SLASH = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,6 +82,7 @@ SECURE_REQUIRED_PATHS = (
     '/autopatch/',
     '/',
     '/autopatch/profile/',
+    '/dev/',
     )
 
 LOGIN_REDIRECT_URL = "/autopatch/profile/"
