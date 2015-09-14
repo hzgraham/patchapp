@@ -169,6 +169,7 @@ def SetOwners(request):
             return HttpResponseRedirect(reverse('autopatch:owners'), context)
         else:
             pass
+    context.update(csrf(request))
     context['owners_list'] = ModMaint().excludedOwners()
     return render(request, 'autopatch/owners.html', context)
 
