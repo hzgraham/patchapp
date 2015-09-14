@@ -141,6 +141,7 @@ def Git(request):
 #@user_passes_test(is_member)
 @user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def SetOwners(request):
+    TaskScripts().parseServerForm("request", request.META)
     # owners is a test variable
     owners_list = []
     context = {'encouragement': encouragement()}
@@ -176,6 +177,7 @@ def SetOwners(request):
 @login_required
 @user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def UpdateErrata(request):
+    TaskScripts().parseServerForm("request", request.META)
     # This view used to update the top level errata
     args = {}
     args['encouragement'] = encouragement()
@@ -286,6 +288,7 @@ def ChangesView(request):
     return render(request, 'autopatch/changes_list.html', context)
 
 def ProdView(request):
+    TaskScripts().parseServerForm("request", request.META)
     env = "Prod"
     field = ".prod."
     if Hosttotal.objects.filter(env=env).exists():

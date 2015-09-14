@@ -49,7 +49,7 @@ class Satellite():
             for host in dev_list:
                 servername = host.server
                 URL = "https://satellite.corp.redhat.com/rpc/api"
-                print("Servername: ",servername)
+                # print("Servername: ",servername)
         return context
 
     def desiredErrata(self, updates):
@@ -138,7 +138,7 @@ class Satellite():
                     #updates = str(host.updates)
                     #updates = host.updates.replace('"',"'")
                     # The eval method should make the host.updates a set
-                    print("Host updates: ", host.server, "host.updates:", host.updates, "host.satid", host.satid)
+                    # print("Host updates: ", host.server, "host.updates:", host.updates, "host.satid", host.satid)
                     updates = eval(host.updates)
                     # for x in [" ", '"']:
                     #     updates = updates.strip("[]").strip("{}").replace(x,"")
