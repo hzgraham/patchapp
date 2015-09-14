@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv(
 # For testing set Debug to True and SECURE_SSL_REDIRECT to False
 # DEBUG = False
 DEBUG = True
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = True
 
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
