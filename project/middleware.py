@@ -16,6 +16,7 @@ class SecureRequiredMiddleware(object):
                     request_url = request.build_absolute_uri(request.get_full_path())
                     secure_url = request_url.replace('http://', 'https://')
                     print("request and secure urls:",request_url," : ",secure_url)
+                    print("Request headers: ", request.META)
                     return HttpResponsePermanentRedirect(secure_url)
         print("returning nothing :(")
         return None
