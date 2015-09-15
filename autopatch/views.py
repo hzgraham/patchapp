@@ -530,18 +530,3 @@ class Unicorns(generic.ListView):
 @login_required
 def security(request):
     return render(request, 'autopatch/security.html')
-
-# Views not currently being used
-# ##########################################
-def create(request):
-    if request.POST:
-        form = ServerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/autopatch/')
-    else:
-        form = ServerForm()
-    args = {}
-    args.update(csrf(request))
-    args['form'] = form
-    return render_to_response('autopatch/create_server.html', args)
