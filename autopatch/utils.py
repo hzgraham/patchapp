@@ -54,7 +54,7 @@ class Satellite():
 
     def desiredErrata(self, updates):
         updates = list(updates)
-        # print("attempting to make a list of updates:",type(updates), updates, "updates")
+        print("attempting to make a list of updates:",type(updates), updates, "updates")
         advisories = ['RHEA','RHSA','RHBA']
         needed_updates = []
         errata = Errata.objects.first()
@@ -63,29 +63,29 @@ class Satellite():
             errata_levels['rhea'] = errata.RHEA
             errata_levels['rhsa'] = errata.RHSA
             errata_levels['rhba'] = errata.RHBA
-        # print("The errata levels", errata_levels, "These are the updates available",updates)
+        print("The errata levels", errata_levels, "These are the updates available",updates)
         # Parses the errata levels for the date and ID
         if errata_levels:
             if errata_levels['rhea']:
                 rhea_date = int(errata_levels['rhea'].split('-')[1].split(':')[0])
                 rhea_id = int(errata_levels['rhea'].split('-')[1].split(':')[1])
-                # print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
+                print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
             else:
                 rhea_date = 0
                 rhea_id = 0
-                # print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
+                print("These are the RHEA errata from utils.py:",rhea_date,rhea_id)
             if errata_levels['rhsa']:
                 rhsa_date = int(errata_levels['rhsa'].split('-')[1].split(':')[0])
                 rhsa_id = int(errata_levels['rhsa'].split('-')[1].split(':')[1])
-                # print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
+                print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
             else:
                 rhsa_date = 0
                 rhsa_id = 0
-                # print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
+                print("These are the RSEA errata from utils.py:",rhsa_date,rhsa_id)
             if errata_levels['rhba']:
                 rhba_date = int(errata_levels['rhba'].split('-')[1].split(':')[0])
                 rhba_id = int(errata_levels['rhba'].split('-')[1].split(':')[1])
-                # print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
+                print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
             else:
                 rhba_date = 0
                 rhba_id = 0
@@ -96,7 +96,8 @@ class Satellite():
                     adv_type = each.split('-')[0]
                     date = int(each.split('-')[1].split(':')[0])
                     errata_id = int(each.split('-')[1].split(':')[1])
-                    # print("The data and id of the advisory are: ", each, adv_type,date, errata_id)
+                    print("The data and id of the advisory are: ", each, adv_type,date, errata_id)
+                    print("these are the types: ", type(each), type(adv_type), type(date), type(errata_id))
                     # If the available errata is equal to or older than the level
                     # it is added to the needed_updates list
                     # and it be saved as Server.plerrata
@@ -123,7 +124,7 @@ class Satellite():
                             pass
                 else:
                     pass
-            # print("These are the needed updates!:",needed_updates)
+            print("These are the needed updates!:",needed_updates)
             needed_updates = set(needed_updates)
             return needed_updates
 
@@ -132,24 +133,27 @@ class Satellite():
         if Server.objects.all():
             # for host in Server.objects.all().filter(env="dev").order_by('server'):
             for host in Server.objects.all().order_by('server'):
-                # print("hostname:",host.server)
+                print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
                     #updates = str(host.updates)
                     #updates = host.updates.replace('"',"'")
                     # The eval method should make the host.updates a set
                     print("Host updates: ", host.server, "host.updates:", host.updates, "host.satid", host.satid)
-                    # updates = eval(host.updates)
+                    #updates = eval(host.updates)
+                    updates = host.updates.strip('{}').split(",")
+                    # for each in updates:
+                    #    print(each)
                     # for x in [" ", '"']:
                     #     updates = updates.strip("[]").strip("{}").replace(x,"")
                     # updates = updates.split(',')
                     print("These are the stored updates: ", type(host.updates), host.updates)
                     # print("These are the formatted host updates: ", type(updates), updates)
-                    # needed_updates = Satellite().desiredErrata(updates)
+                    needed_updates = Satellite().desiredErrata(updates)
                     # host.plerrata = str(needed_updates).strip('[]').replace("'","")
                     # print("recalcErrata info:",host.server,":",needed_updates)
                     # Updates whether the host still needs patched
-                    needed_updates = []
+                    # needed_updates = []
                     if needed_updates:
                         # host.plerrata = needed_updates
                         host.plerrata = str(needed_updates).replace("'",'"')

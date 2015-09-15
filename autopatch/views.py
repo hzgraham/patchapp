@@ -429,8 +429,8 @@ def SatInfo(request):
                         # TaskScripts().parseSatForm(servername, errata_list)
                         for erratum in errata_list:
                             updates.append(erratum["advisory_name"])
-                            all_updates = set(updates)
-                            # TaskScripts().parseSatForm(host.server,all_updates)
+                            all_updates = updates
+                            TaskScripts().parseSatForm(host.server,all_updates)
                         needed_updates = Satellite().desiredErrata(all_updates)
                         # TaskScripts().parseSatForm(needed_updates, all_updates)
                         if needed_updates:
@@ -440,7 +440,10 @@ def SatInfo(request):
                         else:
                             host.plerrata = None
                             host.uptodate = 1
-                        host.updates = str(all_updates).replace("'",'"')
+                        auto_format = str(all_updates).replace('"','').replace("'","").strip('[]').replace(" ","")
+                        # host.updates = str(all_updates).replace("'",'"')
+                        host.updates = "{"+auto_format+"}"
+                        TaskScripts().parseSatForm(host.server,host.updates)
                         host.save()
                     else:
                         pass
