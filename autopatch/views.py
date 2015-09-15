@@ -355,7 +355,7 @@ def erratumView(request):
                 host_list = []
                 env = form.data['environment']
                 erratum = form.data['erratum']
-                TaskScripts().parseServerForm(env, erratum)
+                # TaskScripts().parseServerForm(env, erratum)
                 if env == 'all':
                     server_objs = Server.objects.all().order_by('server')
                     env = 'whole'
@@ -363,14 +363,14 @@ def erratumView(request):
                     server_objs = Server.objects.filter(env=env).order_by('server')
                 for host in server_objs:
                     if host.updates:
-                        TaskScripts().parseServerForm(host.server, host.updates) 
-                        TaskScripts().parseServerForm("These are the types of updates",type(host.updates))
+                        # TaskScripts().parseServerForm(host.server, host.updates) 
+                        # TaskScripts().parseServerForm("These are the types of updates",type(host.updates))
                         #updates = eval(host.updates)
                         updates = host.updates.strip('{}').split(",")
                         updates = list(updates)
                     else:
                         updates = []
-                    TaskScripts().parseServerForm(host.server, updates)
+                    # TaskScripts().parseServerForm(host.server, updates)
                     if any(x in erratum for x in updates):
                         host_list.append(host)
                     else:
