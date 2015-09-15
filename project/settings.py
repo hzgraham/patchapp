@@ -30,8 +30,8 @@ SECRET_KEY = os.getenv(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # For testing set Debug to True and SECURE_SSL_REDIRECT to False
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 SECURE_SSL_REDIRECT = False
 
 # SESSION_COOKIE_SECURE = True
@@ -144,9 +144,9 @@ AUTH_LDAP_FIND_GROUP_PERMS = True
 AUTH_LDAP_CACHE_GROUPS = True
 AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 
-logger = logging.getLogger('django_auth_ldap')
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
+# logger = logging.getLogger('django_auth_ldap')
+# logger.addHandler(logging.StreamHandler())
+# logger.setLevel(logging.DEBUG)
 
 
 ROOT_URLCONF = 'project.urls'
