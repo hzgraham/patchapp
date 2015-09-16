@@ -15,7 +15,8 @@ Create a project to house the app:
 oc new-project <project-name>
 ----
 
-Install and launch the app from a template (current the LDAP_BASEDN needs to be separated by spaces not commas because it confuses the last command):
+Install and launch the app from a template:
+(currently the LDAP_BASEDN needs separate the dc=.. by spaces not commas because causes problems with last command oc process)
 
 [source, bash]
 ----
@@ -97,3 +98,11 @@ The 'run' Makefile target will install application dependencies within a python 
 ----
 make run
 ----
+
+You can enable Django debugging by setting the following in the project/settings.py
+
+```
+DEBUG = True
+```
+
+Return DEBUG to False or do not push changes to production.
