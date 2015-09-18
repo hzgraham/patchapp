@@ -37,6 +37,8 @@ urlpatterns = [
     # Unlinked url
     url(r'^unicorns/', views.Unicorns.as_view()),
     url(r'^security/', views.security),
+    # Re-calculate new host totals for each env
+    url(r'^hosttotals/', views.hostTotals, name="hosttotals"),
 
     # Satellite task that gets SatIDs and Errata
     url(r'^satinfo/', views.SatInfo),

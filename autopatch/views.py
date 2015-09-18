@@ -530,3 +530,13 @@ class Unicorns(generic.ListView):
 @login_required
 def security(request):
     return render(request, 'autopatch/security.html')
+
+# This is used to re-calculate the total number of hosts in each env
+@login_required
+def hostTotals(request):
+    context = {'encouragement': encouragement()}
+    if(request.GET.get('host_totals')):
+        envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
+        for env,field in envs:
+            total = ModMaint().hostCount(env, field)
+    return HttpResponseRedirect(reverse('autopatch:tasks'), context)
