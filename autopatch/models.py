@@ -35,8 +35,8 @@ class Server(models.Model):
     plerrata = models.TextField(max_length=2000, null=True, blank=True)
     # uptodate - true if server is updated
     uptodate = models.BooleanField(default=0)
-    def __unicode__(self):
-        return self.server
+    def __str__(self):
+        return '%s' % (self.server)
 
 # Model containing syspatch_owner entries
 # that will be ignored by views and templates
