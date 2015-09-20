@@ -32,21 +32,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 # to get the uid of a user
 # uid = request.user.username
 
-def userLogin(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=request.REQUEST.get('uid'), password=request.REQUEST.get('password'))
-    if user is not None:
-        # the password verified for the user
-        if user.is_active:
-            print("User is valid, active and authenticated")
-        else:
-            print("The password is valid, but the account has been disabled!")
-    else:
-        # the authentication system was unable to verify the username and password
-        print("The username and password were incorrect.")
-    login(request, user)
-
 @login_required
 def profile(request):
     context = {}
