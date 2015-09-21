@@ -12,25 +12,9 @@ class TaskScripts():
         # print("This is the form:",form)
         RHEA = form.data['RHEA']
         errata = Errata.objects.first()
-        # errata = errata.RHBA
-        # errata = get_object_or_404(Errata, pk=1)
-        # errata = Errata.objects.all()
-        # server = Server.objects.filter(pk=1)
-        # print(server)
         print("This is the errata: ",errata)
         print("This is RHEA",RHEA)
         print("############################")
-
-    def parseSatForm(self, servername, erratas):
-        # if form.is_valid():
-        #     URL = form.cleaned_data['satellite']
-        #     print("This is the Satellite URL",URL)
-        # #env = form.data['environment']
-        # submit = form.data['submit']
-        # print("Form data: ", env, submit)
-        print("This is the request: ", servername, erratas)
-        # print("This is the form : ", form)
-        # print("This is the button: ", btn)
 
     def parseServerForm(self, test1, test2):
         print("This is the request: ", test1, test2)

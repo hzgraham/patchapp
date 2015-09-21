@@ -377,7 +377,6 @@ def SatInfo(request):
     context = {'encouragement': encouragement()}
     if request.POST:
         form = LoginForm(request.POST)
-        # TaskScripts().parseSatForm(request, form)
         if form.is_valid():
             # Get variables from the form
             user = form.cleaned_data['loginname']
@@ -396,40 +395,32 @@ def SatInfo(request):
                 servername = host.server
                 if not host.satid:
                     data = client.system.getId(session, servername)
-                    # TaskScripts().parseSatForm(servername, data)
                     if data:
                         getid = data[0].get('id')
                         host.satid = getid
-                        # TaskScripts().parseSatForm(servername, getid)
                     else:
                         pass
                 else:
-                    # TaskScripts().parseSatForm(servername, "already has a satid")
                     pass
+                # If the host has a satid then check for avail updates
                 if host.satid:
                     updates = []
-                    # TaskScripts().parseSatForm(servername, env)
                     errata_list = client.system.getRelevantErrata(session,host.satid)
                     # If a list of errata is returned from satellite
                     if errata_list:
-                        # TaskScripts().parseSatForm(servername, errata_list)
                         for erratum in errata_list:
                             updates.append(erratum["advisory_name"])
                             all_updates = updates
-                            TaskScripts().parseSatForm(host.server,all_updates)
+                        # compare with the set errata levels to get list of desired errata
                         needed_updates = Satellite().desiredErrata(all_updates)
-                        # TaskScripts().parseSatForm(needed_updates, all_updates)
                         if needed_updates:
                             host.plerrata = str(needed_updates).replace("'",'"')
-                            # TaskScripts().parseSatForm(servername, host.plerrata)
                             host.uptodate = 0
                         else:
                             host.plerrata = None
                             host.uptodate = 1
                         auto_format = str(all_updates).replace('"','').replace("'","").strip('[]').replace(" ","")
-                        # host.updates = str(all_updates).replace("'",'"')
                         host.updates = "{"+auto_format+"}"
-                        TaskScripts().parseSatForm(host.server,host.updates)
                         host.save()
                     else:
                         pass
