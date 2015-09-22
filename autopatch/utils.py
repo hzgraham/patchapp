@@ -8,14 +8,6 @@ from .forms import LoginForm
 
 # TaskScripts are simple debugging functions
 class TaskScripts():
-    def parseForm(self, form):
-        # print("This is the form:",form)
-        RHEA = form.data['RHEA']
-        errata = Errata.objects.first()
-        print("This is the errata: ",errata)
-        print("This is RHEA",RHEA)
-        print("############################")
-
     def parseServerForm(self, test1, test2):
         print("This is the request: ", test1, test2)
 
@@ -24,7 +16,6 @@ class Satellite():
     def getIds(self, client, request, session, env):
         # This function currently isn't used
         form = LoginForm(request.POST)
-        # env = form.data['environment']
         context = {'encouragement': encouragement()}
         # print("Made it to utils: ",request)
         # print("This is the environment: ",env)
@@ -120,26 +111,15 @@ class Satellite():
                 # print("hostname:",host.server)
                 # If updates it will calculate the needed_updates
                 if host.updates and host.satid:
-                    #updates = str(host.updates)
-                    #updates = host.updates.replace('"',"'")
                     # The eval method should make the host.updates a set
                     # print("Host updates: ", host.server, "host.updates:", host.updates, "host.satid", host.satid)
-                    #updates = eval(host.updates)
                     updates = host.updates.strip('{}').split(",")
-                    # for each in updates:
-                    #    print(each)
-                    # for x in [" ", '"']:
-                    #     updates = updates.strip("[]").strip("{}").replace(x,"")
-                    # updates = updates.split(',')
                     # print("These are the stored updates: ", type(host.updates), host.updates)
                     # print("These are the formatted host updates: ", type(updates), updates)
                     needed_updates = Satellite().desiredErrata(updates)
-                    # host.plerrata = str(needed_updates).strip('[]').replace("'","")
                     # print("recalcErrata info:",host.server,":",needed_updates)
                     # Updates whether the host still needs patched
-                    # needed_updates = []
                     if needed_updates:
-                        # host.plerrata = needed_updates
                         host.plerrata = str(needed_updates).replace("'",'"')
                         # print("This is the needed errata:", type(needed_updates), needed_updates, ":", host.plerrata)
                         host.uptodate = 0
@@ -199,7 +179,6 @@ class ModMaint():
                         if 'syspatch_yum_excludes' == i.split(":")[0]:
                             exclude = i.split(":")[1].strip().split("\n")[0]
                         if 'syspatch_skip' == i.split(":")[0]:
-                            # skip = i.split(":")[1].strip().split("\n")[0]
                             if i.split(":")[1].strip().split("\n")[0] is '1':
                                 skip = True
                             elif i.split(":")[1].strip().split("\n")[0] is '0':
@@ -222,7 +201,6 @@ class ModMaint():
                         s.comments = comments
                         s.env = ModMaint().setEnv(servername)
                         s.owner = owner
-                        # print("server: ",s.server)
                         s.save()
                     else:
                         s = Server(server=servername)
@@ -234,7 +212,6 @@ class ModMaint():
                         s.comments = comments
                         s.env = ModMaint().setEnv(servername)
                         s.owner = owner
-                        # print("server: ",s.server)
                         s.save()
                 myfile.close()
         envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
@@ -305,9 +282,7 @@ class ModMaint():
             else:
                 if field in s:
                     total += 1
-                    # print("servername: ",s)
                 else:
-                    # print("Not a server in: ",env)
                     pass
         t = Hosttotal(env=env)
         t.env = env
@@ -328,11 +303,9 @@ class ModMaint():
         for key,item in errata_list.items():
             if any(x in item for x in clear):
                 errata_object = 'clear'
-                # TaskScripts().parseServerForm('clearing',errata_object)
                 new_erratas[key] = errata_object
             else:
                 errata_object = item
-                # TaskScripts().parseServerForm('saving',errata_object)
                 new_erratas[key] = errata_object
         #print("this is the new_erratas: ",new_erratas)
         return new_erratas
@@ -348,7 +321,6 @@ class ModMaint():
             for item in owners_list:
                 exclude = item.owner
                 Server.objects.filter(owner=exclude).delete()
-                # TaskScripts().parseServerForm(server_list,exclude)
         else:
             owners_list = []
         return owners_list

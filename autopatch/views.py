@@ -63,7 +63,6 @@ def CreateCSV(request):
     s = []
     q = []
     context = {}
-    #if request.GET:
     if(request.GET.get('devbtn')):
         dev_list = Server.objects.all().filter(env="dev").order_by('server')
         for host in dev_list:
@@ -164,12 +163,9 @@ def UpdateErrata(request):
     args = {}
     args['encouragement'] = encouragement()
     if request.POST:
-        # errata = Errata.objects.filter(pk=1)
         form = ErrataForm(request.POST)
-        # form = ErrataForm(pk=1)
         if form.is_valid():
             new_erratas = {}
-            # TaskScripts().parseForm(form)
             # saving the errata levels entered in the form
             RHEA = form.data['RHEA']
             RHSA = form.data['RHSA']
@@ -177,7 +173,6 @@ def UpdateErrata(request):
             oldrhea = ''
             oldrhsa = ''
             oldrhba = ''
-            # errata = Errata.objects.get(pk=1)
             # TaskScripts().parseServerForm(RHEA, RHBA)
             # This keeps the exists errata levels set if none are entered in the form
             if not Errata.objects.exists():
@@ -441,9 +436,6 @@ def resultView(request, pk):
     skip = []
     if request.POST.get('set_param'):
         form = ServerForm(request.POST)
-        # test1 = "Recognizes form"
-        # test2 = pk
-        # TaskScripts().parseServerForm(test1, test2)
         if form.is_valid():
             exclude = form.data['exclude']
             hostgroup = form.data['hostgroup']
@@ -453,23 +445,14 @@ def resultView(request, pk):
             # Creating a new Audit entry for the changes_list.html
             cn = ''.join(request.user.ldap_user.attrs['cn'])
             Audit.objects.create(server=s.server, skip=s.skip, exclude=s.exclude, hostgroup=s.hostgroup, comments=s.comments, user=cn)
-            # test1 = [exclude, hostgroup, skip, comments]
-            # test2 = pk
-            # TaskScripts().parseServerForm(test1, test2)
             s.exclude = exclude
             s.hostgroup = hostgroup
             s.skip = skip
             s.comments = comments
             s.save()
         else:
-            # test1 = "Form not valid"
-            # test2 = ""
-            # TaskScripts().parseServerForm(test1, test2)
             pass
     else:
-        # test1 = "Doesn't recognize form"
-        # test2 = ""
-        # TaskScripts().parseServerForm(test1, test2)
         pass
     id_number = pk
     context = {'exclude': exclude, 'encouragement': encouragement(), 'hostgroup': hostgroup, 'skip': skip}
@@ -488,7 +471,6 @@ def DetailView(request, pk):
 
 # Patching Task Related Views
 # ##########################################
-# @login_required(login_url='autopatch/login/')
 class TasksView(generic.ListView):
     template_name = 'autopatch/patching-tasks.html'
     def get_queryset(self):
