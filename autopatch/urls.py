@@ -44,9 +44,9 @@ urlpatterns = [
     url(r'^satinfo/', views.SatInfo),
 
     # List views of hosts for the different environments
-    url(r'^prod/$', views.ProdView),
-    url(r'^stage/$', views.StageView),
-    url(r'^qa/$', views.QAView),
-    url(r'^dev/$', views.DevView),
+    url(r'^prod/$', views.HostsView, {'env': 'Prod'}),
+    url(r'^stage/$', views.HostsView, {'env': 'Stage'}),
+    url(r'^qa/$', views.HostsView, {'env': 'QA'}),
+    url(r'^dev/$', views.HostsView, {'env': 'Dev'}),
     url(r'^erratumhosts/$', views.erratumView, name='erratumView'),
 ]

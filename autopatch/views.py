@@ -264,64 +264,34 @@ def ChangesView(request):
     context = {'changes_list': changes_list, 'encouragement': encouragement()}
     return render(request, 'autopatch/changes_list.html', context)
 
-def ProdView(request):
-    env = "Prod"
-    field = ".prod."
+def HostsView(request, env):
+    context = {'encouragement': encouragement()}
+    # TaskScripts().parseServerForm('Checking environment!',env)
+    if env == "Dev":
+        field = ".dev"
+        env_model = "dev"
+    elif env == "QA":
+        field = ".qa."
+        env_model = "qa"
+    elif env == "Stage":
+        field = ".stage."
+        env_model = "stage"
+        # TaskScripts().parseServerForm('Checking env_model!',env_model)
+    elif env == "Prod":
+        field = ".prod."
+        env_model = "prod"
+    else:
+        return render(request, 'autopatch:Home', context)
     if Hosttotal.objects.filter(env=env).exists():
         h = Hosttotal.objects.get(env=env)
-        prodtotal = h.total
+        total = h.total
     else:
-        prodtotal = None
-    if(request.GET.get('mybtn')):
-        total = ModMaint().hostCount(env, field)
-        prodtotal = total.get("total")
-    prod_list = Server.objects.all().filter(env="prod").order_by('server')
-    context = {'host_list': prod_list, 'total': prodtotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/host_list.html', context)
-
-def StageView(request):
-    env = "Stage"
-    field = ".stage."
-    if Hosttotal.objects.filter(env=env).exists():
-        h = Hosttotal.objects.get(env=env)
-        stagetotal = h.total
-    else:
-        stagetotal = None
-    if(request.GET.get('mybtn')):
-        total = ModMaint().hostCount(env, field)
-        stagetotal = total.get("total")
-    stage_list = Server.objects.all().filter(env="stage").order_by('server')
-    context = {'host_list': stage_list, 'total': stagetotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/host_list.html', context)
-
-def QAView(request):
-    env = "QA"
-    field = ".qa."
-    if Hosttotal.objects.filter(env=env).exists():
-        h = Hosttotal.objects.get(env=env)
-        qatotal = h.total
-    else:
-        qatotal = None
-    if(request.GET.get('mybtn')):
-        total = ModMaint().hostCount(env, field)
-        qatotal = total.get("total")
-    qa_list = Server.objects.all().filter(env="qa").order_by('server')
-    context = {'host_list': qa_list, 'total': qatotal, 'env': env, 'encouragement': encouragement()}
-    return render(request, 'autopatch/host_list.html', context)
-
-def DevView(request):
-    env = "Dev"
-    field = ".dev"
-    if Hosttotal.objects.filter(env=env).exists():
-        h = Hosttotal.objects.get(env=env)
-        devtotal = h.total
-    else:
-        devtotal = None
-    if(request.GET.get('mybtn')):
-        total = ModMaint().hostCount(env, field)
-        devtotal = total.get("total")
-    dev_list = Server.objects.all().filter(env="dev").order_by('server')
-    context = {'host_list': dev_list, 'total': devtotal, 'env': env, 'encouragement': encouragement()}
+        total = None
+    host_list = Server.objects.all().filter(env=env_model).order_by('server')
+    context['host_list'] = host_list
+    context['total'] = total
+    context['env'] = env
+    # TaskScripts().parseServerForm('Checking context!', context)
     return render(request, 'autopatch/host_list.html', context)
 
 @login_required
