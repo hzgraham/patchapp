@@ -2,6 +2,7 @@ import urllib.request, urllib.error, git, shutil, os, glob, random
 from django.http import Http404
 from .models import Server,Hosttotal,Errata,Owner
 from django.shortcuts import get_object_or_404
+
 # for satellite
 import xmlrpc.client, xmlrpc.server
 from .forms import LoginForm
@@ -27,6 +28,7 @@ class Satellite():
                 # print("Servername: ",servername)
         return context
 
+    # function that determines Errata that needs installed
     def desiredErrata(self, updates):
         updates = list(updates)
         # print("attempting to make a list of updates:",type(updates), updates, "updates")
@@ -158,7 +160,7 @@ class ModMaint():
             # print("The path already exists",git_path)
         host_paths = []
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
-        # print("Host Paths",host_paths)
+        # retrieve the syspatch_* parameters
         for each in host_paths:
             # print("This is the host path: ",each)
             mgmt = ''
@@ -190,8 +192,9 @@ class ModMaint():
                     servername = each.split('/')[-1]
                     # ignoring hosts that have an owner in unwanted_owners
                     if any(x in owner for x in unwanted_owners):
-                        print("The following server is unwanted: ", servername)
+                        # print("The following server is unwanted: ", servername)
                     elif Server.objects.filter(server=servername).exists():
+                        # Checks if the server exists and updates with what is in git
                         # print("servername is being created/modified: ",servername)
                         s = Server.objects.get(server=servername)
                         s.mgmt = mgmt
@@ -203,6 +206,7 @@ class ModMaint():
                         s.owner = owner
                         s.save()
                     else:
+                        # server didn't exist in database so it is created in the Server model
                         s = Server(server=servername)
                         s.server = each.split('/')[-1]
                         s.mgmt = mgmt
@@ -249,6 +253,7 @@ class ModMaint():
         return env
 
     def genCSV(self, servers):
+        # function that creates a .csv file with server and syspatch parameters from the Django database
         s = []
         params = [['Hostname','Excluded packages','Skip','Hostgroup','Comments','Pastebin Link (If Errors Are Present)']]
         # for host in Server.objects.all():

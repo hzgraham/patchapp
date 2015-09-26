@@ -60,6 +60,7 @@ def is_member(request):
 
 @login_required
 def CreateCSV(request):
+    # View that creates a .csv file when selected in the patching-tasks.html template
     s = []
     q = []
     context = {}
@@ -248,11 +249,13 @@ def UpdateErrata(request):
     return render_to_response('autopatch/update_errata.html', args)
 
 def Home(request):
+    # /autopatch/ url
     template = 'autopatch/base.html'
     context = {'encouragement': encouragement()}
     return render(request, template, context)
 
 def denied(request):
+    # if user isn't in the LDAP admin group that is required by some views
     template = 'autopatch/denied.html'
     context = {'encouragement': encouragement()}
     return render_to_response(template, context)
