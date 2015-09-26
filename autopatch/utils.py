@@ -193,6 +193,7 @@ class ModMaint():
                     # ignoring hosts that have an owner in unwanted_owners
                     if any(x in owner for x in unwanted_owners):
                         # print("The following server is unwanted: ", servername)
+                        pass
                     elif Server.objects.filter(server=servername).exists():
                         # Checks if the server exists and updates with what is in git
                         # print("servername is being created/modified: ",servername)
