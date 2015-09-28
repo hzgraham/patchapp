@@ -1,3 +1,7 @@
+import urllib, bs4, urllib.request, csv, os, xmlrpc.client, xmlrpc.server
+from xmlrpc import client, server
+from time import sleep
+
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -5,26 +9,21 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-
-from django.core.urlresolvers import reverse
-from django.template import RequestContext
-from django.utils import timezone
-
-from django.core.context_processors import csrf
-from time import sleep
-from django.contrib.auth.backends import RemoteUserBackend
-import urllib, bs4, urllib.request, csv, os
-from xmlrpc import client, server
-import xmlrpc.client, xmlrpc.server
+from django.views.decorators.debug import sensitive_variables
+from django.views.decorators.debug import sensitive_post_parameters
 
 from .forms import PostForm, EmailForm, ServerForm, HostListForm, LoginForm, ErrataForm, ErratumForm
 from .models import Server, Hosttotal, Errata, Owner, Audit
 from autopatch.utils import ModMaint, TaskScripts, encouragement, Satellite
 
-from django.views.decorators.debug import sensitive_variables
-from django.views.decorators.debug import sensitive_post_parameters
+from django.template import RequestContext
+from django.utils import timezone
+
+from django.core.context_processors import csrf
+from django.core.urlresolvers import reverse
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.backends import RemoteUserBackend
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 # if not request.user.is_authenticated():
