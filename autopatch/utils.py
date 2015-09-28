@@ -1,10 +1,10 @@
-import urllib.request, urllib.error, git, shutil, os, glob, random
-from django.http import Http404
+import urllib.request, urllib.error, git, shutil, os, glob, random, xmlrpc.client, xmlrpc.server
 from .models import Server,Hosttotal,Errata,Owner
+
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 # for satellite
-import xmlrpc.client, xmlrpc.server
 from .forms import LoginForm
 
 # TaskScripts are simple debugging functions
@@ -270,20 +270,19 @@ class ModMaint():
             params.append([hostname, exclude, skip, hostgroup])
         return params
 
+    # counts the total number of hosts in an environment
     def hostCount(self, env, field):
         Hosttotal.objects.all().filter(env=env).delete()
         total = 0
         for each in Server.objects.all().order_by("server"):
             s = each.server
+            # prod has .util. in the hostname so that needs checked as well
             if env == 'Prod':
                 if ".prod." in s or ".util" in s:
                     total += 1
-                    # print("1st check servername: ",s)
                 elif ".dev" not in s and  ".stage." not in s and ".qa." not in s:
                     total += 1
-                    # print("2nd check servername: ",s)
                 else:
-                    # print(s,"Not a server in: ",env)
                     pass
             else:
                 if field in s:
@@ -297,15 +296,17 @@ class ModMaint():
         t.save()
         return total
 
+    # function that sets host totals for each env
     def allHostTotals(self):
         envs = (('Prod',".prod."), ("Stage",".stage."), ("QA",".qa."), ("Dev",".dev"))
         for env,field in envs:
             total = ModMaint().hostCount(env, field)
 
+    # used to check if an errata leve needs cleared
     def checkErrata(self, errata_list):
         clear = ['Clear', 'clear', 'CLEAR']
         new_erratas = {}
-        #print("This is the errata_list: ", errata_list)
+        # checks if someone entered clear
         for key,item in errata_list.items():
             if any(x in item for x in clear):
                 errata_object = 'clear'
