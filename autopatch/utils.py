@@ -40,7 +40,6 @@ class Satellite():
             errata_levels['rhea'] = errata.RHEA
             errata_levels['rhsa'] = errata.RHSA
             errata_levels['rhba'] = errata.RHBA
-        # print("The errata levels", errata_levels, "These are the updates available",updates)
         # Parses the errata levels for the date and ID
         if errata_levels:
             if errata_levels['rhea']:
@@ -66,15 +65,12 @@ class Satellite():
             else:
                 rhba_date = 0
                 rhba_id = 0
-                # print("These are the RBEA errata from utils.py:",rhba_date,rhba_id)
             # Iteritively checks each available errata with the errata level
             for each in updates:
                 if any(x in each for x in advisories):
                     adv_type = each.split('-')[0]
                     date = int(each.split('-')[1].split(':')[0])
                     errata_id = int(each.split('-')[1].split(':')[1])
-                    # print("The data and id of the advisory are: ", each, adv_type,date, errata_id)
-                    # print("these are the types: ", type(each), type(adv_type), type(date), type(errata_id))
                     # If the available errata is equal to or older than the level
                     # it is added to the needed_updates list
                     # and it be saved as Server.plerrata
@@ -101,7 +97,6 @@ class Satellite():
                             pass
                 else:
                     pass
-            # print("These are the needed updates!:",needed_updates)
             needed_updates = set(needed_updates)
             return needed_updates
 
@@ -162,7 +157,6 @@ class ModMaint():
         host_paths.extend(glob.glob(git_path+'/nodes/*'))
         # retrieve the syspatch_* parameters
         for each in host_paths:
-            # print("This is the host path: ",each)
             mgmt = ''
             hostgroup = ''
             exclude = ''
@@ -236,19 +230,14 @@ class ModMaint():
         env = ""
         if ".prod." in server or ".util" in server:
             env = "prod"
-            # print("1st check:", server, " in: ",env)
         elif ".dev" not in server and  ".stage." not in server and ".qa." not in server:
             env = "prod"
-            # print("2nd check:", server, " in: ",env)
         elif ".stage" in server:
             env = "stage"
-            # print("3rd check:", server, " in: ",env)
         elif ".qa." in server:
             env = "qa"
-            # print("4rd check:", server, " in: ",env)
         elif ".dev" in server:
             env = "dev"
-            # print("5rd check:", server, " in: ",env)
         else:
             env = "unassigned"
         return env
