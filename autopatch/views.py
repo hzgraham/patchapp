@@ -33,7 +33,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 
 @login_required
 def profile(request):
-    context = {}
+    context = {'encouragement': encouragement()}
     # groups = ldap_user.group_names
     # context['groups'] = groups
     uid = request.user.username
