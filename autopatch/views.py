@@ -38,6 +38,8 @@ def profile(request):
     # context['groups'] = groups
     uid = request.user.username
     # TaskScripts().parseServerForm(request.user, request.user.ldap_user.attrs)
+    # TaskScripts().parseServerForm(request.user, request.user.ldap_user.attrs['mail'][0])
+    context['mail'] = request.user.ldap_user.attrs['mail'][0]
     all_groups = request.user.ldap_user.group_names
     context['name'] = ''.join(request.user.ldap_user.attrs['displayname']+request.user.ldap_user.attrs['sn'])
     context['uid'] = uid

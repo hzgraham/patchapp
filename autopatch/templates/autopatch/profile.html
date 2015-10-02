@@ -9,7 +9,9 @@
     <hr/>
     {{ name }}'s profile
     <br/>
-      Login: {{ uid }}
+    Login: {{ uid }}
+    <br />
+    Email: {{ mail }}
     <h4>Posix Groups</h4>
     <hr/>
     {% for group in user.ldap_user.group_names %}
