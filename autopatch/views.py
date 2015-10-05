@@ -359,25 +359,29 @@ def ErrataPackages(request):
             # Loop through each host and get satellite ID
             client = xmlrpc.client.Server(URL, verbose=0)
             for host in host_list:
-                errata_packages = []
+                errata_dict = {}
                 servername = host.server
                 # TaskScripts().parseServerForm("This is the Server's name", servername)
                 try:
                     plerrata = host.plerrata.strip('{}').replace('"', '').replace(" ","").split(",")
                     # TaskScripts().parseServerForm("The errata list is", plerrata)
-                    for each in plerrata:
+                    for errata in plerrata:
                         # TaskScripts().parseServerForm(type(plerrata), plerrata)
-                        packages = client.errata.listPackages(session, each)
+                        packages = client.errata.listPackages(session, errata)
                         if packages:
-                            for each in packages:
-                                # TaskScripts().parseServerForm("This is a package name", each['name'])
-                                if each['name'] not in errata_packages:
-                                    errata_packages.append(each['name'])
+                            errata_packages = []
+                            for package in packages:
+                                # TaskScripts().parseServerForm("This is a package name", package['name'])
+                                if package['name'] not in errata_packages:
+                                    errata_packages.append(package['name'])
                                 else:
                                     pass
+                            errata_dict.update({errata: errata_packages})
                             # TaskScripts().parseServerForm("This is the packages in the errata:", errata_packages)
                         else:
                             pass
+                    # TaskScripts().parseServerForm("The errata dictionary", errata_dict)
+                    # TaskScripts().parseServerForm("For host: ", host)
                 except:
                     pass
             client.auth.logout(session)
