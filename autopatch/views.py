@@ -336,6 +336,55 @@ def erratumView(request):
     context['encouragement'] = encouragement()
     return render(request, 'autopatch/erratum_hosts.html', context)
 
+@login_required
+@user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
+def ErrataPackages(request):
+    # Get packages affected by an errata
+    context = {'encouragement': encouragement()}
+    if request.POST:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # TaskScripts().parseServerForm("The form is valid", "")
+            # Get variables from the form
+            user = form.cleaned_data['loginname']
+            pswd = form.cleaned_data['password']
+            url = form.cleaned_data['satellite']
+            URL = "https://"+url+"/rpc/api"
+            env = form.cleaned_data['environment']
+            # using xmlrpc to get a session key from the satellite server
+            client = xmlrpc.client.Server(URL, verbose=0)
+            session = client.auth.login(user, pswd)
+            # Get list of hosts in an env
+            host_list = Server.objects.all().filter(env=env).order_by('server')[:10]
+            # Loop through each host and get satellite ID
+            client = xmlrpc.client.Server(URL, verbose=0)
+            for host in host_list:
+                errata_packages = []
+                servername = host.server
+                # TaskScripts().parseServerForm("This is the Server's name", servername)
+                try:
+                    plerrata = host.plerrata.strip('{}').replace('"', '').replace(" ","").split(",")
+                    # TaskScripts().parseServerForm("The errata list is", plerrata)
+                    for each in plerrata:
+                        # TaskScripts().parseServerForm(type(plerrata), plerrata)
+                        packages = client.errata.listPackages(session, each)
+                        if packages:
+                            for each in packages:
+                                # TaskScripts().parseServerForm("This is a package name", each['name'])
+                                if each['name'] not in errata_packages:
+                                    errata_packages.append(each['name'])
+                                else:
+                                    pass
+                            # TaskScripts().parseServerForm("This is the packages in the errata:", errata_packages)
+                        else:
+                            pass
+                except:
+                    pass
+            client.auth.logout(session)
+    else:
+        pass
+    return HttpResponseRedirect(reverse('autopatch:tasks'), context)
+
 @sensitive_post_parameters()
 @sensitive_variables()
 @login_required

@@ -48,7 +48,7 @@
 	<p>Satellite FQDN</p>
       </div>
       <div class="col-xs-6">
-	<input id="id_satellite" type="text" name="satellite" maxlength="100" class="form-control" placeholder="satellite.corp.example.com"/>
+	<input id="id_satellite" type="text" name="satellite" maxlength="100" class="form-control" placeholder="satellite.example.com"/>
       </div>
     </div>
     <div class="row">
@@ -82,7 +82,55 @@
       </div>
     </div>
     <br />
-    <input type="submit" name="submit" value="Get Satellite IDs" class="btn btn-info btn-lg">
+    <input type="submit" name="submit" value="Get Satellite IDs and Errata" class="btn btn-info btn-lg">
+  </form>
+  <br />
+  <hr />
+  <h4>Filter Needed Packages</h4>
+  <p>
+    Enter the following details to get the IDs and available Errata for hosts in the specified environment from Satellite:
+  </p>
+  <form action="/autopatch/erratapackages/" method="post">{% csrf_token %}
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Satellite FQDN</p>
+      </div>
+      <div class="col-xs-6">
+	<input id="id_satellite" type="text" name="satellite" maxlength="100" class="form-control" placeholder="satellite.example.com"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Login</p>
+      </div>
+      <div class="col-xs-6">
+	<input id="id_loginname" type="text" name="loginname" maxlength="100" class="form-control" placeholder="username"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Password</p>
+      </div>
+      <div class="col-xs-6">
+	<input type="password" name="password" id="id_password" class="form-control" placeholder="" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-2">
+	<p>Environment</p>
+      </div>
+      <div class="col-xs-6">
+	<select name="environment">
+	  <option value="prod" selected="selected">Prod Env</option>
+	  <option value="stage" selected="selected">Stage Env</option>
+	  <option value="qa" selected="selected">QA Env</option>
+	  <option value="dev" selected="selected">Dev Env</option>
+	</select>
+      </div>
+    </div>
+    <br />
+    <input type="submit" name="submit" value="Get Packages affected by Errata" class="btn btn-info btn-lg">
   </form>
   <br />
   <hr />

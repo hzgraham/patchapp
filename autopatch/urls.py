@@ -39,6 +39,8 @@ urlpatterns = [
     url(r'^security/', views.security),
     # Re-calculate new host totals for each env
     url(r'^hosttotals/', views.hostTotals, name="hosttotals"),
+    # Get the packages needed for errata
+    url(r'^erratapackages/', views.ErrataPackages, name="erratapackages"),
 
     # Satellite task that gets SatIDs and Errata
     url(r'^satinfo/', views.SatInfo),
