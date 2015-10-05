@@ -52,3 +52,10 @@ class Audit(models.Model):
     comments = models.TextField(max_length=256, null=True, blank=True)
     user = models.CharField(max_length=128)
     mod_date = models.DateTimeField(auto_now=True, null=True)
+
+# Model that contains a list of packages affected by each errata
+class Packages(models.Model):
+    # errata is the name of the errata
+    errata = models.CharField(max_length=128, null=True, blank=True)
+    # python list of packages that affect the corresponding errata
+    pkgs = models.TextField(max_length=2000, null=True, blank=True)
