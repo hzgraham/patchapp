@@ -1,5 +1,5 @@
 import urllib.request, urllib.error, git, shutil, os, glob, random, xmlrpc.client, xmlrpc.server
-from .models import Server,Hosttotal,Errata,Owner
+from .models import Server,Hosttotal,Errata,Owner,Packages
 
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -320,6 +320,23 @@ class ModMaint():
         else:
             owners_list = []
         return owners_list
+
+    def errataPackages(self, errata_dict):
+        for errata in errata_dict:
+            print("Errata and dict value:",errata,errata_dict[errata])
+            if not Packages.objects.filter(errata=errata).exists():
+                p = Packages(errata=errata)
+                p.pkgs = errata_dict[errata]
+                print("The errata doesn't exist in the model ", p)
+                p.save()
+            else:
+                print("The errata already does exists: ", errata)
+        for each in Packages.objects.all():
+            print("From the model", each.errata, each.pkgs)
+            print("Packages and type", each.pkgs, type(each.pkgs))
+            pkg_list = eval(each.pkgs)
+            print("The evaluated pkgs list: ", type(pkg_list))
+        return True
 
 def encouragement():
     return random.choice(['You are wonderful.',

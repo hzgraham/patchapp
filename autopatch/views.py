@@ -355,11 +355,11 @@ def ErrataPackages(request):
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
             # Get list of hosts in an env
-            host_list = Server.objects.all().filter(env=env).order_by('server')[:10]
+            host_list = Server.objects.all().filter(env=env).order_by('server')[:6]
             # Loop through each host and get satellite ID
             client = xmlrpc.client.Server(URL, verbose=0)
+            errata_dict = {}
             for host in host_list:
-                errata_dict = {}
                 servername = host.server
                 # TaskScripts().parseServerForm("This is the Server's name", servername)
                 try:
@@ -374,17 +374,29 @@ def ErrataPackages(request):
                                 # TaskScripts().parseServerForm("This is a package name", package['name'])
                                 if package['name'] not in errata_packages:
                                     errata_packages.append(package['name'])
+                                    # TaskScripts().parseServerForm("Errata packages: ", errata_packages)
                                 else:
                                     pass
-                            errata_dict.update({errata: errata_packages})
+                            if errata not in errata_dict:
+                                errata_dict.update({errata: errata_packages})
+                                TaskScripts().parseServerForm("This errata not in errata_dict:", errata)
+                            else:
+                                TaskScripts().parseServerForm("This errata is already in errata_dict:", errata)
+                                pass
                             # TaskScripts().parseServerForm("This is the packages in the errata:", errata_packages)
                         else:
                             pass
-                    # TaskScripts().parseServerForm("The errata dictionary", errata_dict)
-                    # TaskScripts().parseServerForm("For host: ", host)
+                    # for each in Packages.objects.all().order_by('errata'):
+                    #     TaskScripts().parseServerForm("The errata name", errata.errata)
+                    #     TaskScripts().parseServerForm("The errata name", errata.pkgs)
+                    TaskScripts().parseServerForm("The errata dictionary", errata_dict)
+                    TaskScripts().parseServerForm("For host: ", host)
                 except:
                     pass
             client.auth.logout(session)
+            # for errata in errata_dict:
+            #     TaskScripts().parseServerForm(errata,errata_dict[errata])
+            ModMaint().errataPackages(errata_dict)
     else:
         pass
     return HttpResponseRedirect(reverse('autopatch:tasks'), context)
