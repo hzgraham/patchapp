@@ -338,6 +338,14 @@ class ModMaint():
             print("The evaluated pkgs list: ", type(pkg_list))
         return True
 
+    def errataExcluded(self, servername):
+        s = Server.objects.filter(server=servername)
+        excluded_packages = s.exclude
+        for each in Packages.objects.all():
+            errata = each.errata
+            pkg_list = eval(each.pkgs)
+        return True
+
 def encouragement():
     return random.choice(['You are wonderful.',
                           'You have a phenomenal attitude.',
