@@ -393,6 +393,7 @@ def ErrataPackages(request):
                     TaskScripts().parseServerForm("For host: ", host)
                 except:
                     pass
+                ModMaint().errataExcluded(host)
             client.auth.logout(session)
             # for errata in errata_dict:
             #     TaskScripts().parseServerForm(errata,errata_dict[errata])

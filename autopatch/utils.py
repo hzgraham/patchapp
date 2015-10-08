@@ -339,11 +339,18 @@ class ModMaint():
         return True
 
     def errataExcluded(self, servername):
-        s = Server.objects.filter(server=servername)
-        excluded_packages = s.exclude
+        print("The servername input to errataExcluded is: ", servername)
+        s = Server.objects.get(server=servername)
+        print("The server:", s.server, "the syspatch_yum_excludes", s.exclude)
+        excluded_packages = s.exclude.replace(" ",",").split(",")
+        print("These are the excluded packages for: ", s.server,"excludes in list for:", excluded_packages)
         for each in Packages.objects.all():
             errata = each.errata
             pkg_list = eval(each.pkgs)
+            if any(x in pkg_list for x in excluded_packages):
+                print("This errata IS SOO excluded", errata)
+            else:
+                print("The following errata is NOT exlcuded", errata)
         return True
 
 def encouragement():
