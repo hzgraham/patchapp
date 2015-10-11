@@ -357,9 +357,10 @@ class ModMaint():
                 new_errata.append(errata)
         new_errata = set(new_errata)
         new_errata = str(new_errata).replace("'",'"')
+        s.plerrata = new_errata
+        s.save()
         print("This is the new_errata set: ", new_errata, type(new_errata))
         print("############################################")
-        return True
 
 def encouragement():
     return random.choice(['You are wonderful.',
