@@ -355,7 +355,7 @@ def ErrataPackages(request):
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
             # Get list of hosts in an env
-            host_list = Server.objects.all().filter(env=env).order_by('server')[:6]
+            host_list = Server.objects.all().filter(env=env).order_by('server')[:25]
             # Loop through each host and get satellite ID
             client = xmlrpc.client.Server(URL, verbose=0)
             errata_dict = {}
@@ -398,6 +398,8 @@ def ErrataPackages(request):
             # for errata in errata_dict:
             #     TaskScripts().parseServerForm(errata,errata_dict[errata])
             ModMaint().errataPackages(errata_dict)
+            for host in host_list:
+                ModMaint().errataExcluded(host)
     else:
         pass
     return HttpResponseRedirect(reverse('autopatch:tasks'), context)

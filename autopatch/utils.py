@@ -348,13 +348,18 @@ class ModMaint():
         print("These are the excluded packages for: ", s.server,"excludes in list for:", excluded_packages)
         for each in Packages.objects.all():
             errata = each.errata
-            print("This is the list of errata and type", s.plerrata, type(s.plerrata))
+            # print("This is the list of errata and type", s.plerrata, type(s.plerrata))
+            plerrata = eval(s.plerrata)
+            # print("THIS is the PLERRATA and type:", plerrata, type(plerrata))
             pkg_list = eval(each.pkgs)
             if any(x in pkg_list for x in excluded_packages):
                 print("This errata IS SOO excluded", errata)
-            else:
+            elif errata in plerrata:
                 print("The following errata is NOT exlcuded", errata)
                 new_errata.append(errata)
+            else:
+                print("This ERRATA DEFINATELY does not need updates:", errata)
+                pass
         new_errata = set(new_errata)
         new_errata = str(new_errata).replace("'",'"')
         s.plerrata = new_errata
