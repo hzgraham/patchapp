@@ -430,17 +430,18 @@ def SatInfo(request):
             client = xmlrpc.client.Server(URL, verbose=0)
             for host in host_list:
                 servername = host.server
-                if not host.satid:
-                    data = client.system.getId(session, servername)
-                    if data:
-                        getid = data[0].get('id')
-                        host.satid = getid
-                    else:
-                        pass
+                # if not host.satid:
+                data = client.system.getId(session, servername)
+                if data:
+                    getid = data[0].get('id')
+                    host.satid = getid
                 else:
                     pass
+                # else:
+                #     pass
                 # If the host has a satid then check for avail updates
                 if host.satid:
+                    # TaskScripts().parseServerForm(host, host.satid)
                     updates = []
                     errata_list = client.system.getRelevantErrata(session,host.satid)
                     # If a list of errata is returned from satellite
@@ -460,8 +461,16 @@ def SatInfo(request):
                         host.updates = "{"+auto_format+"}"
                         host.save()
                     else:
-                        pass
+                        host.updates = ""
+                        host.plerrata = None
+                        host.uptodate = 1
+                        host.save()
                 else:
+                    host.updates = ""
+                    host.plerrata = None
+                    host.uptodate = 1
+                    host.save()
+                    # TaskScripts().parseServerForm(host, "Does not have a SatID!")
                     pass
             client.auth.logout(session)
     else:
