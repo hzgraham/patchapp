@@ -4,9 +4,9 @@
 <div class="container">
   <a href="/autopatch/{{server.env}}">&#8617; Back to {{server.env}}</a>
   <h3 style="color: #38978D;">{{ server.server }}</h3>
-  {% if not host.satid %}
+  {% if not server.satid %}
   <p>N/A - server does not have a Satellite ID</p>
-  {% elif host.uptodate %}
+  {% elif server.uptodate %}
   <p><span class="fui-check"></span> &nbsp; <em>This host is up to date</em></p>
   {% else %}
   <p><span class="fui-cross"></span> &nbsp; <em>This host is not up to date</em></p>
