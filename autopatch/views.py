@@ -409,7 +409,7 @@ def ErrataPackages(request):
 @login_required
 @user_passes_test(is_member,login_url='autopatch:denied', redirect_field_name=None)
 def SatInfo(request):
-    # SatId will get the ID of each server in Satellite
+    # SatId will get the ID and errata available for each server in Satellite
     # There are 4 buttons on the patching tasks page, one for each env
     context = {'encouragement': encouragement()}
     if request.POST:
@@ -457,15 +457,18 @@ def SatInfo(request):
                         else:
                             host.plerrata = None
                             host.uptodate = 1
+                        # matching the format that is created by patchautomate.git's app.py
                         auto_format = str(all_updates).replace('"','').replace("'","").strip('[]').replace(" ","")
                         host.updates = "{"+auto_format+"}"
                         host.save()
                     else:
+                        # found no available errata so making sure none is in the db
                         host.updates = ""
                         host.plerrata = None
                         host.uptodate = 1
                         host.save()
                 else:
+                    # found no Sat ID so no errata in db for the host
                     host.updates = ""
                     host.plerrata = None
                     host.uptodate = 1
@@ -510,6 +513,7 @@ def resultView(request, pk):
     return HttpResponseRedirect(reverse('autopatch:detail', kwargs={'pk':id_number}), context)
 
 def DetailView(request, pk):
+    # Provides the information for the results.html template
     server = get_object_or_404(Server, pk=pk)
     if server.updates != None:
         server.updates = server.updates.strip('{}').replace('"','').replace(' ', '').split(',')
