@@ -379,9 +379,9 @@ def ErrataPackages(request):
                                     pass
                             if errata not in errata_dict:
                                 errata_dict.update({errata: errata_packages})
-                                TaskScripts().parseServerForm("This errata not in errata_dict:", errata)
+                                # TaskScripts().parseServerForm("This errata not in errata_dict:", errata)
                             else:
-                                TaskScripts().parseServerForm("This errata is already in errata_dict:", errata)
+                                # TaskScripts().parseServerForm("This errata is already in errata_dict:", errata)
                                 pass
                             # TaskScripts().parseServerForm("This is the packages in the errata:", errata_packages)
                         else:
@@ -389,8 +389,8 @@ def ErrataPackages(request):
                     # for each in Packages.objects.all().order_by('errata'):
                     #     TaskScripts().parseServerForm("The errata name", errata.errata)
                     #     TaskScripts().parseServerForm("The errata name", errata.pkgs)
-                    TaskScripts().parseServerForm("The errata dictionary", errata_dict)
-                    TaskScripts().parseServerForm("For host: ", host)
+                    # TaskScripts().parseServerForm("The errata dictionary", errata_dict)
+                    # TaskScripts().parseServerForm("For host: ", host)
                 except:
                     pass
                 ModMaint().errataExcluded(host)

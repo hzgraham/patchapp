@@ -323,29 +323,30 @@ class ModMaint():
 
     def errataPackages(self, errata_dict):
         for errata in errata_dict:
-            print("Errata and dict value:",errata,errata_dict[errata])
+            # print("Errata and dict value:",errata,errata_dict[errata])
             if not Packages.objects.filter(errata=errata).exists():
                 p = Packages(errata=errata)
                 p.pkgs = errata_dict[errata]
-                print("The errata doesn't exist in the model ", p)
+                # print("The errata doesn't exist in the model ", p)
                 p.save()
             else:
-                print("The errata already does exists: ", errata)
-        for each in Packages.objects.all():
-            print("From the model", each.errata, each.pkgs)
-            print("Packages and type", each.pkgs, type(each.pkgs))
-            pkg_list = eval(each.pkgs)
-            print("The evaluated pkgs list: ", type(pkg_list))
+                # print("The errata already does exists: ", errata)
+                pass
+        # for each in Packages.objects.all():
+            # print("From the model", each.errata, each.pkgs)
+            # print("Packages and type", each.pkgs, type(each.pkgs))
+            # pkg_list = eval(each.pkgs)
+            # print("The evaluated pkgs list: ", type(pkg_list))
         return True
 
     def errataExcluded(self, servername):
-        print("############################################")
-        print("The servername input to errataExcluded is: ", servername)
+        # print("############################################")
+        # print("The servername input to errataExcluded is: ", servername)
         new_errata = []
         s = Server.objects.get(server=servername)
-        print("The server:", s.server, "the syspatch_yum_excludes", s.exclude)
+        # print("The server:", s.server, "the syspatch_yum_excludes", s.exclude)
         excluded_packages = s.exclude.replace(" ",",").split(",")
-        print("These are the excluded packages for: ", s.server,"excludes in list for:", excluded_packages)
+        # print("These are the excluded packages for: ", s.server,"excludes in list for:", excluded_packages)
         for each in Packages.objects.all():
             errata = each.errata
             # print("This is the list of errata and type", s.plerrata, type(s.plerrata))
@@ -353,19 +354,20 @@ class ModMaint():
             # print("THIS is the PLERRATA and type:", plerrata, type(plerrata))
             pkg_list = eval(each.pkgs)
             if any(x in pkg_list for x in excluded_packages):
-                print("This errata IS SOO excluded", errata)
+                # print("This errata IS SOO excluded", errata)
+                pass
             elif errata in plerrata:
-                print("The following errata is NOT exlcuded", errata)
+                # print("The following errata is NOT exlcuded", errata)
                 new_errata.append(errata)
             else:
-                print("This ERRATA DEFINATELY does not need updates:", errata)
+                # print("This ERRATA DEFINATELY does not need updates:", errata)
                 pass
         new_errata = set(new_errata)
         new_errata = str(new_errata).replace("'",'"')
         s.plerrata = new_errata
         s.save()
-        print("This is the new_errata set: ", new_errata, type(new_errata))
-        print("############################################")
+        # print("This is the new_errata set: ", new_errata, type(new_errata))
+        # print("############################################")
 
 def encouragement():
     return random.choice(['You are wonderful.',
