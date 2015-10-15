@@ -355,7 +355,7 @@ def ErrataPackages(request):
             client = xmlrpc.client.Server(URL, verbose=0)
             session = client.auth.login(user, pswd)
             # Get list of hosts in an env
-            host_list = Server.objects.all().filter(env=env).order_by('server')[:25]
+            host_list = Server.objects.all().filter(env=env).order_by('server')
             # Loop through each host and get satellite ID
             client = xmlrpc.client.Server(URL, verbose=0)
             errata_dict = {}
