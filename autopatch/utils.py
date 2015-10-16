@@ -363,9 +363,13 @@ class ModMaint():
                 # print("This ERRATA DEFINATELY does not need updates:", errata)
                 pass
         new_errata = set(new_errata)
-        new_errata = str(new_errata).replace("'",'"')
-        s.plerrata = new_errata
-        s.save()
+        if new_errata:
+            new_errata = str(new_errata).replace("'",'"')
+            s.plerrata = new_errata
+        else:
+            s.plerrata = None
+            s.uptodate = 1
+        s.save
         # print("This is the new_errata set: ", new_errata, type(new_errata))
         # print("############################################")
 
