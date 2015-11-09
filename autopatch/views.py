@@ -471,6 +471,7 @@ def SatInfo(request):
                         host.updates = ""
                         host.plerrata = None
                         host.uptodate = 1
+                        TaskScripts().parseServerForm("This host is up-to-date:",host)
                         host.save()
                 else:
                     # found no Sat ID so no errata in db for the host
@@ -478,8 +479,9 @@ def SatInfo(request):
                     host.plerrata = None
                     host.uptodate = 1
                     host.save()
-                    # TaskScripts().parseServerForm(host, "Does not have a SatID!")
+                    TaskScripts().parseServerForm(host, "Does not have a SatID!")
                     pass
+            TaskScripts().parseServerForm("All done, logging out","")
             client.auth.logout(session)
     else:
         pass
