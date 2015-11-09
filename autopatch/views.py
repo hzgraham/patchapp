@@ -460,6 +460,11 @@ def SatInfo(request):
                         # matching the format that is created by patchautomate.git's app.py
                         auto_format = str(all_updates).replace('"','').replace("'","").strip('[]').replace(" ","")
                         host.updates = "{"+auto_format+"}"
+                        if host.plerrata:
+                            des_errata = host.plerrata[:20]
+                        else:
+                            des_errata = None
+                        TaskScripts().parseServerForm(host,des_errata)
                         host.save()
                     else:
                         # found no available errata so making sure none is in the db
