@@ -67,7 +67,7 @@
 		"creationTimestamp": null
 	    },
 	    "spec": {
-		"dockerImageRepository": "abutcher/python-33-centos7",
+		"dockerImageRepository": "hzgraham/python-33-centos7",
 		"tags": [
 		    {
 			"name": "latest"
