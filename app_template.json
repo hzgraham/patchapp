@@ -80,10 +80,6 @@
 			    "tags": "builder,python",
 			    "supports": "python:3.3,python",
 			    "version": "3.3"
-			},
-			"from": {
-			    "Kind": "ImageStreamTag",
-			    "Name": "latest"
 			}
 		    }
 		]
