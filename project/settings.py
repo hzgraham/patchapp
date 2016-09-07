@@ -106,11 +106,10 @@ if not os.path.exists(LDAP_CACERTFILE):
         try:
             with urllib.request.urlopen(LDAP_CACERT_URL) as response, open(LDAP_CACERTFILE, 'wb') as out_file:
                 shutil.copyfileobj(response, out_file)
-        except(socket.gaierror):
+        except:
             print("CACERT URL is inaccessible")
     else:
         print("No LDAP_CACERT_URL")
-        pass
 elif os.path.exists(LDAP_CACERTFILE):
     AUTH_LDAP_START_TLS = True
 else:
