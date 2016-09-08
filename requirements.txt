@@ -12,6 +12,8 @@ virtualenv>=12.0.7
 BeautifulSoup4==4.4.0
 pyflakes
 pep8
-#django-python3-ldap
-git+https://github.com/jonge-democraten/python-ldap.git@py3
-django-auth-ldap
+django-python3-ldap
+#git+https://github.com/jonge-democraten/python-ldap.git@py3
+ldap3
+#django-auth-ldap
+pyldap
